@@ -1,0 +1,79 @@
+/* Hero Section */
+.hero-section {
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../../assets/images/register.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 80vh;
+    display: block;
+    align-items: center;
+    color: white;
+    text-align: center;
+    padding: 0 15px;
+    margin-bottom: 3rem;
+}
+
+.hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+    .hero-content h1 {
+        font-size: 3.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        margin-top: 2rem;
+    }
+
+    .hero-content .lead {
+        font-size: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+.span {
+    display: flex;
+    align-items: center;
+}
+
+.cta-button {
+    background-color: #141414;
+    border: none;
+    font-weight: 600;
+    border-radius: 30px;
+    transition: all 0.3s ease-out;
+}
+
+    .cta-button:hover {
+        background-color: white;
+        color:#141414;
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+
+
+        svg:not(:root).svg-inline--fa,
+        svg:not(:host).svg-inline--fa {
+            overflow: visible;
+            box-sizing: content-box;
+            margin-left: 5px;   }
+
+/* Shimmer effect for hero text */
+.shimmer-text {
+  position: relative;
+  color: #fff;
+  background: linear-gradient(90deg, #fff 0%, #FFD700 20%, #fff8dc 40%, #fff 100%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 8s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
+  animation-delay: 1.5s;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}

@@ -1,0 +1,70 @@
+/* AdminDashboard.css */
+.modern-table-container {
+    padding: 1rem;
+}
+
+.table-controls {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.table-title {
+    color: #ffffff;
+    font-weight: 600;
+    /* margin-bottom: 1.5rem; */
+}
+
+.page-size-selector {
+    width: auto;
+}
+
+.table-pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #b0b0b0;
+}
+
+.payments-table {
+    --bs-table-bg: transparent;
+}
+
+.payments-table th {
+    background-color: #333;
+    position: sticky;
+    top: 0;
+}
+
+.payment-id {
+    font-family: monospace;
+    color: #b0b0b0;
+}
+
+.customer-name {
+    font-weight: 500;
+    color: #b0b0b0;
+}
+
+.payment-amount {
+    font-weight: 600;
+    color: #28a745;
+}
+
+.payment-date {
+    white-space: nowrap;
+    color: #b0b0b0;
+}
+
+.payment-products {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;    
+}
+
+.product-name {
+    background: #333;
+    color: #b0b0b0;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    display: inline-block; 
+}

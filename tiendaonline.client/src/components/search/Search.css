@@ -1,0 +1,114 @@
+.search-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+.search-input {
+    border-radius: 25px 0 0 25px !important;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    box-shadow: none !important;
+}
+
+.search-input::placeholder {
+    color: #9e9e9e;
+    opacity: 1;
+}
+
+.search-btn {
+    border-radius: 0 25px 25px 0 !important;
+    padding: 0 1.5rem;
+    background-color: #141414 !important;
+    border: none !important;
+    transition: all 0.3s ease;
+}
+
+.search-btn:hover {
+    background-color: white !important;
+    transform: translateY(-1px);
+}
+
+/* Cambia el color del icono cuando el botón está en hover */
+.search-btn:hover .serach-icon {
+    color: #141414 !important;
+}
+
+/* Cambia el color del icono cuando el cursor pasa directamente sobre él */
+.search-btn:hover .icon-search {
+    color: #141414 !important;
+}
+
+.clear-btn:hover {
+    color: #ff4d4d !important;
+    transform: scale(1.1);
+}
+
+.search-results-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: #2d2d2d;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 5px;
+}
+
+.dropdown-menu {
+    border: none;
+    padding: 0;
+}
+
+.dropdown-item {
+    display: flex;
+        justify-content: start;
+        align-items: center;
+    color: white;
+    background-color: #2d2d2d;
+    padding: 0.5rem 1rem;
+    transition: background-color 0.2s;
+}
+
+.dropdown-item-see-all {
+    display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        background-color: #2d2d2d;
+        padding: 0.5rem 1rem;
+        transition: background-color 0.2s;
+}
+
+.dropdown-item:hover {
+  color: white;
+    background-color: #191919;
+}
+
+.dropdown-item-text {
+    padding: 0.5rem 1rem;
+    color: #6c757d;
+}
+
+.dropdown-divider {
+    margin: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .search-container {
+        padding: 0.5rem;
+    }
+
+    .search-input {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+    }
+
+    .search-btn {
+        padding: 0 1rem;
+    }
+}

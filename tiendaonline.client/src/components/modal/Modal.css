@@ -1,0 +1,121 @@
+/* Estilos base del modal */
+.modal-content {
+    background-color: #1e1e1e;
+    border: 1px solid #3d3d3d;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Header del modal */
+.modal-header {
+    border-bottom: 1px solid #3d3d3d;
+    padding: 1rem 1.5rem;
+}
+
+.modal-title {
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 1.25rem;
+}
+
+/* Botón de cerrar */
+.btn-close {
+    filter: invert(1) brightness(0.7);
+    opacity: 0.8;
+    transition: opacity 0.2s;
+}
+
+.btn-close:hover {
+    opacity: 1;
+    filter: invert(1) brightness(1);
+}
+
+/* Cuerpo del modal */
+.modal-body {
+    padding: 1.5rem;
+    color: #b0b0b0;
+}
+
+/* Footer del modal */
+.modal-footer {
+    border-top: 1px solid #3d3d3d;
+    padding: 1rem 1.5rem;
+    justify-content: flex-end;
+}
+
+/* Botones del modal */
+.modal-btn {
+    min-width: 100px;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.modal-btn-primary {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+    color: white;
+}
+
+.modal-btn-primary:hover {
+    background-color: #0b5ed7;
+    border-color: #0a58ca;
+}
+
+.modal-btn-secondary {
+    background-color: #2d2d2d;
+    border-color: #3d3d3d;
+    color: #ffffff;
+}
+
+.modal-btn-secondary:hover {
+    background-color: #3d3d3d;
+    border-color: #4d4d4d;
+}
+
+/* Efectos de backdrop */
+.modal-backdrop {
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(2px);
+}
+
+/* Transiciones */
+.modal.fade .modal-content {
+    transform: translateY(-20px);
+    transition: transform 0.3s ease-out, opacity 0.3s ease;
+}
+
+.modal.show .modal-content {
+    transform: translateY(0);
+}
+
+/* Estilos para formularios dentro del modal */
+.modal-form .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.modal-form .form-label {
+    color: #b0b0b0;
+    margin-bottom: 0.5rem;
+    font-weight: 400;
+}
+
+/* Scroll para contenido largo */
+.modal-scrollable {
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+/* Tamaños especiales */
+.modal-xl .modal-content {
+    max-width: 1140px;
+}
+
+.modal-lg .modal-content {
+    max-width: 800px;
+}
+
+.modal-sm .modal-content {
+    max-width: 400px;
+}

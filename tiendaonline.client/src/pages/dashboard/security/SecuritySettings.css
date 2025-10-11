@@ -1,0 +1,198 @@
+.modern-table-container {
+  padding: 1.5rem;
+  background-color: #1e1e1e;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin: 20px;
+}
+.table-title {
+  color: #ffffff;
+  font-weight: 600;
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+.card {
+  background-color: #23272b;
+  color: #fff;
+  border: none;
+}
+.table-dark {
+  --bs-table-bg: #23272b;
+  --bs-table-color: #b0b0b0;
+  --bs-table-border-color: #3d3d3d;
+}
+.table-dark th, .table-dark td {
+  border-color: #3d3d3d;
+}
+
+/* Inputs oscuros para la vista de seguridad */
+.card .form-control[readonly],
+.card .form-control[disabled],
+.card .form-control {
+  background-color: #2d2d2d;
+  border-color: #3d3d3d;
+  color: #fff;
+}
+.card .form-control:focus {
+  background-color: #2d2d2d;
+  border-color: #4d4d4d;
+  color: #fff;
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
+}
+
+.security-table-container {
+  margin-top: 1.5rem;
+}
+
+.security-table {
+  --bs-table-bg: transparent;
+  --bs-table-color: #b0b0b0;
+  --bs-table-border-color: #3d3d3d;
+  margin-bottom: 0;
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.security-table th {
+  background-color: #2d2d2d;
+  color: #ffffff;
+  position: sticky;
+  top: 0;
+  border-bottom: 1px solid #3d3d3d;
+  font-weight: 500;
+}
+.security-table td {
+  border-bottom: 1px solid #3d3d3d;
+  vertical-align: middle;
+}
+.security-table tr:hover td {
+  background-color: #2d2d2d;
+  color: #ffffff;
+}
+
+/* Inputs oscuros y consistentes */
+.card .form-control[readonly],
+.card .form-control[disabled],
+.card .form-control {
+  background-color: #2d2d2d;
+  border-color: #3d3d3d;
+  color: #fff;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+.card .form-control:focus {
+  background-color: #2d2d2d;
+  border-color: #4d4d4d;
+  color: #fff;
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
+}
+
+.security-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.security-card-icon {
+  font-size: 5.5rem; /* antes 3.5rem */
+  opacity: 0.18;
+  position: absolute;
+  top: 1.2rem;
+  right: 1.5rem;
+  pointer-events: none;
+  transition: transform 0.5s cubic-bezier(.68,-0.55,.27,1.55), opacity 0.3s;
+  z-index: 1;
+}
+.security-card:hover .security-card-icon {
+  transform: translateY(-12px) scale(1.15) rotate(-8deg);
+  opacity: 0.32;
+  filter: drop-shadow(0 4px 16px rgba(0,0,0,0.18));
+}
+
+.security-card .card-title {
+  position: relative;
+  z-index: 2;
+}
+.security-card .card-text,
+.security-card form {
+  position: relative;
+  z-index: 2;
+}
+
+/* Mejorar legibilidad y separación en las cards */
+.security-card .form-label {
+  color: #e0e0e0;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+.security-card .form-control {
+  margin-bottom: 0.2rem;
+}
+
+.security-card-title {
+  font-size: 2.1rem;
+  font-weight: 800;
+  letter-spacing: -1px;
+  color: #fff;
+  margin-bottom: 0.2rem;
+  line-height: 1.1;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.12);
+}
+.security-card-subtitle {
+  font-size: 1.1rem;
+  color: #e0e0e0;
+  font-weight: 500;
+  opacity: 0.85;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.2px;
+}
+.security-card-desc {
+  font-size: 1.05rem;
+  color: #d0d0d0;
+  font-weight: 400;
+  opacity: 0.92;
+  line-height: 1.5;
+}
+.security-card-contact {
+  font-size: 1.13rem;
+  color: #fff;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  background: rgba(255,255,255,0.07);
+  border-radius: 6px;
+  padding: 0.1rem 0.5rem;
+  margin-left: 0.2rem;
+}
+.security-card .badge {
+  font-size: 1rem;
+  padding: 0.5em 1em;
+  border-radius: 1.5em;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.earnings-card {
+  background: linear-gradient(135deg, #003d33 0%, #145a32 100%);
+  color: white;
+}
+.completed-card {
+  background: linear-gradient(135deg, #0a2342 0%, #1e3c72 100%);
+  color: white;
+}
+.pending-card {
+  background: linear-gradient(135deg, #3d2c00 0%, #6e3b0c 100%);
+  color: #fff;
+}
+
+@media (max-width: 576px) {
+  .modern-table-container {
+    padding: 0.5rem;
+    margin: 0;
+  }
+  .security-table th, .security-table td {
+    font-size: 0.95rem;
+    padding: 0.5rem;
+  }
+}

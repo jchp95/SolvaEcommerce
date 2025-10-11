@@ -1,0 +1,69 @@
+
+/* Variables de color para tema oscuro premium */
+:root {
+    --primary: #4361ee;
+    --primary-light: #4895ef;
+    --primary-dark: #3a0ca3;
+    --secondary: #3f37c9;
+    --dark: #0f0f12;
+    --darker: #0a0a0c;
+    --dark-card: #1a1a21;
+    --dark-card-hover: #21212b;
+    --light: #f8f9fa;
+    --danger: #f72585;
+    --success: #4cc9f0;
+    --warning: #f8961e;
+    --gray: #adb5bd;
+    --text-light: #e0e0e0;
+    --text-lighter: #ffffff;
+    --text-muted: #9e9e9e;
+    --glass-color: rgba(30, 30, 39, 0.5);
+    --glass-border: rgba(255, 255, 255, 0.1);
+}
+
+.home-container {
+    background-color: var(--darker);
+    background-image:
+        radial-gradient(circle at 10% 20%, rgba(67, 97, 238, 0.15) 0%, transparent 20%),
+        radial-gradient(circle at 90% 80%, rgba(72, 149, 239, 0.15) 0%, transparent 20%);
+}
+
+.container-home {
+    text-align: center;
+}
+
+.title-section-products {
+    display: flex;
+    justify-content: center;
+    color: #ffffffca;
+    font-size: xx-large;
+    font-weight: 500;
+}
+
+.list-category {
+    margin-top: 5px;
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: center;
+    color: #ffffff69;
+    font-size: large;
+    font-weight: 500;
+}
+
+.sidebar-toggle-button {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 1000;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+/* Asegúrate que el sidebar no cubra otros elementos cuando esté abierto */
+.offcanvas {
+    z-index: 1050;
+}
+

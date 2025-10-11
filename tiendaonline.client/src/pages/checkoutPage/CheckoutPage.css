@@ -1,0 +1,108 @@
+.checkout-page {
+    background-color: #121212;
+    color: #e0e0e0;
+    padding: 2rem;
+    min-height: 100vh;
+}
+
+.checkout-page .card {
+    background-color: #2a2a2a !important;
+    color: #e0e0e0;
+    border: 1px solid #444; }
+
+.checkout-card .card-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 1rem;
+}
+
+.checkout-card {
+    color: #e0e0e0;
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.card.checkout-subcard {
+    background-color: #2a2a2a !important;
+    border: 1px solid #444;
+    border-radius: 10px;
+    color: #e0e0e0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25); }
+
+.checkout-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 1rem;
+}
+
+.checkout-form-control {
+    background-color: #2a2a2a;
+    border: 1px solid #444;
+    color: #e0e0e0;
+}
+
+.checkout-form-control.is-invalid {
+    border-color: #e74c3c;
+}
+
+.checkout-form-control.is-invalid:focus {
+    box-shadow: 0 0 0 0.2rem rgba(231, 76, 60, 0.25);
+}
+
+.checkout-form-control::placeholder {
+    color: #888;
+}
+
+.checkout-form-control:focus {
+    background-color: #2a2a2a;
+    border-color: #8884d8;
+    color: #fff;
+    box-shadow: 0 0 0 0.2rem rgba(136, 132, 216, 0.25);
+}
+
+.checkout-summary-item {
+    background-color: transparent;
+    border-color: #444;
+    color: #e0e0e0;
+}
+
+.checkout-total {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.checkout-button {
+    background-color: #00b894;
+    border: none;
+    color: white;
+    transition: background-color 0.3s ease;
+}
+
+.checkout-button:hover {
+    background-color: #019875;
+}
+
+.checkout-card .card-body>.card {
+    background-color: #2a2a2a;
+    border: 1px solid #444;
+    color: #e0e0e0;
+}
+
+.checkout-page {
+    animation: fadeIn 0.4s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

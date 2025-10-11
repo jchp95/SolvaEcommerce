@@ -1,0 +1,77 @@
+/* src/styles/sweetAlertStyles.css */
+:root {
+    --swal-dark-bg: #1e1e2d;
+    --swal-dark-text: #e1e1e1;
+    --swal-dark-border: #2d2d3d;
+    --swal-dark-input-bg: #2a2a3c;
+    --swal-dark-input-border: #3d3d4d;
+    --swal-dark-success: #50cd89;
+    --swal-dark-error: #f1416c;
+    --swal-dark-warning: #ffc700;
+    --swal-dark-info: #7239ea;
+}
+
+/* Estilos base para el modo oscuro */
+.swal2-popup {
+    background-color: var(--swal-dark-bg) !important;
+    color: var(--swal-dark-text) !important;
+    border: 1px solid var(--swal-dark-border) !important;
+    border-radius: 0.5rem !important;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Títulos */
+.swal2-title {
+    color: var(--swal-dark-text) !important;
+    font-size: 1.5rem !important;
+    font-weight: 600 !important;
+}
+
+/* Texto contenido */
+.swal2-content {
+    color: var(--swal-dark-text) !important;
+    opacity: 0.9 !important;
+}
+
+/* Botones */
+.swal2-actions {
+    margin: 1.5rem auto 0 !important;
+}
+
+.swal2-styled {
+    border-radius: 0.4rem !important;
+    padding: 0.65rem 1.5rem !important;
+    font-weight: 500 !important;
+    transition: all 0.2s ease !important;
+}
+
+.swal2-styled:focus {
+    box-shadow: none !important;
+}
+
+/* Inputs */
+.swal2-input,
+.swal2-file,
+.swal2-textarea,
+.swal2-select,
+.swal2-radio,
+.swal2-checkbox {
+    background-color: var(--swal-dark-input-bg) !important;
+    border-color: var(--swal-dark-input-border) !important;
+    color: var(--swal-dark-text) !important;
+}
+
+.swal2-input:focus,
+.swal2-file:focus,
+.swal2-textarea:focus {
+    border-color: var(--swal-dark-info) !important;
+    box-shadow: 0 0 0 2px rgba(114, 57, 234, 0.25) !important;
+}
+
+/* Footer */
+.swal2-footer {
+    border-top: 1px solid var(--swal-dark-border) !important;
+    color: var(--swal-dark-text) !important;
+    opacity: 0.7 !important;
+}
+
