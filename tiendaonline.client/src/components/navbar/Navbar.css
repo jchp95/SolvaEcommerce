@@ -18,10 +18,12 @@
     }
 
 .navbar-brand .brand-name {
-    font-size: 1.5rem;
-    font-weight: 700;
+    font-size: 2rem;
+    font-weight: bold;
+    text-shadow: 4px 11px 1px rgb(0 0 0);
     color: white;
-    transition: color 0.3s ease;
+    transition: color 0.3s 
+ease;
 }
 
 .navbar-brand:hover .brand-name {
@@ -51,19 +53,22 @@
     transition: all 0.3s ease;
     margin: 5px;
     transition: all 0.3s ease !important;
+    text-shadow: 6px 3px 8px rgb(0 0 0);
 }
 .nav-link-site {
     font-weight: 500;
     color: white !important;
-    transition: all 0.3s ease;
+    transition: all 0.3s 
+ease;
     margin: 15px;
-    transition: all 0.3s ease !important;
+    transition: all 0.3s 
+ease !important;
+    text-shadow: 6px 3px 8px rgb(0 0 0);
 }
 
     .nav-link:hover {
         color: #65a4f8d3 !important;
     }
-
 
 .icons {
   margin: 0 5px 0 0;   }
