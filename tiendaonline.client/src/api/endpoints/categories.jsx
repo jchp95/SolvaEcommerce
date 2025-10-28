@@ -9,6 +9,17 @@ export const CategoryService = {
         apiClient.get(`/categories/${id}`)
             .then(response => response.data),
 
+    // NUEVOS MÉTODOS
+    getByLevel: (parentId = null) =>
+        apiClient.get('/categories/level', {
+            params: { parentId }
+        }).then(response => response.data),
+
+    search: (term) =>
+        apiClient.get('/categories/search', {
+            params: { term }
+        }).then(response => response.data),
+
     checkExists: (name, currentId = null) =>
         apiClient.get('/categories/check-exists', {
             params: { name, currentId }

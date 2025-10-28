@@ -1,8 +1,11 @@
-/* Admin Dashboard Styles - Dark Mode */
+/* Admin Dashboard Styles - Glass Morphism Premium */
 .admin-dashboard {
     padding: 2rem 0;
     min-height: 100vh;
-    background-color: #121212;
+    background-color: #0a0a0c;
+    background-image:
+        radial-gradient(circle at 10% 20%, rgba(67, 97, 238, 0.15) 0%, transparent 20%),
+        radial-gradient(circle at 90% 80%, rgba(72, 149, 239, 0.15) 0%, transparent 20%);
     color: #e0e0e0;
 }
 
@@ -25,41 +28,86 @@
 }
 
 .period-selector {
-    background-color: #1e1e1e;
-    border: 1px solid #333;
+    background: rgba(26, 26, 33, 0.8) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
     border-radius: 10px;
     padding: 0.5rem 1rem;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-    color: #e0e0e0;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    color: #e0e0e0 !important;
+    transition: all 0.3s ease;
 }
 
-/* Summary Cards (manteniendo los mismos estilos de color) */
+.period-selector:focus {
+    background: rgba(33, 33, 43, 0.9) !important;
+    border-color: rgba(67, 97, 238, 0.4) !important;
+    box-shadow: 0 0 0 0.2rem rgba(67, 97, 238, 0.25), 0 4px 16px rgba(0, 0, 0, 0.3);
+    outline: none;
+}
+
+/* Summary Cards - Glass Morphism Premium */
 .summary-card {
     border: none;
     border-radius: 15px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background: rgba(26, 26, 33, 0.8) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
     height: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.summary-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+    pointer-events: none;
+    z-index: 0;
 }
 
 .summary-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    transform: translateY(-8px);
+    background: rgba(33, 33, 43, 0.9) !important;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(67, 97, 238, 0.2);
+    border-color: rgba(67, 97, 238, 0.3);
 }
 
 .earnings-card {
-    background: linear-gradient(135deg, #00b894, #55efc4);
+    background: rgba(26, 26, 33, 0.8) !important;
+    border-left: 4px solid #00b894;
     color: white;
+}
+
+.earnings-card .dashboard-card-icon {
+    color: #00b894;
 }
 
 .completed-card {
-    background: linear-gradient(135deg, #0984e3, #74b9ff);
+    background: rgba(26, 26, 33, 0.8) !important;
+    border-left: 4px solid #0984e3;
     color: white;
 }
 
+.completed-card .dashboard-card-icon {
+    color: #0984e3;
+}
+
 .pending-card {
-    background: linear-gradient(135deg, #fdcb6e, #ffeaa7);
-    color: #2d3436;
+    background: rgba(26, 26, 33, 0.8) !important;
+    border-left: 4px solid #fdcb6e;
+    color: white;
+}
+
+.pending-card .dashboard-card-icon {
+    color: #fdcb6e;
 }
 
 .card-title {
@@ -68,12 +116,16 @@
     letter-spacing: 1px;
     opacity: 0.9;
     margin-bottom: 0.5rem;
+    position: relative;
+    z-index: 1;
 }
 
 .card-value {
     font-size: 2rem;
     font-weight: 700;
     margin-bottom: 0;
+    position: relative;
+    z-index: 1;
 }
 
 .card-icon {
@@ -116,23 +168,57 @@
     border-radius: 3px;
 }
 
-/* Chart Card */
+/* Chart Card - Glass Morphism */
 .chart-card {
     border: none;
     border-radius: 15px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-    background-color: #1e1e1e;
+    background: rgba(26, 26, 33, 0.8) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.chart-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+    pointer-events: none;
+    z-index: 0;
+}
+
+.chart-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(67, 97, 238, 0.2);
 }
 
 .chart-title {
     color: #ffffff;
     font-weight: 600;
     margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 1;
+}
+
+.table-title {
+    color: #ffffff;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 1;
 }
 
 .chart-container {
     height: 300px;
     position: relative;
+    z-index: 1;
 }
 
 .earnings-chart {
@@ -215,12 +301,35 @@
     margin-bottom: 1rem;
 }
 
-/* Table Card */
+/* Table Card - Glass Morphism */
 .table-card {
     border: none;
     border-radius: 15px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-    background-color: #1e1e1e;
+    background: rgba(26, 26, 33, 0.8) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.table-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+    pointer-events: none;
+    z-index: 0;
+}
+
+.table-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
 }
 
 .table-title {

@@ -1,11 +1,28 @@
 import apiClient from '../client';
 
+// Función para generar un sessionId único
+const generateSessionId = () => {
+    const timestamp = Date.now();
+    const randomString = Math.random().toString(36).substring(2, 15);
+    return `session_${timestamp}_${randomString}`;
+};
+
+// Función para obtener o crear sessionId
+const getSessionId = () => {
+    let sessionId = sessionStorage.getItem("sessionId");
+    if (!sessionId) {
+        sessionId = generateSessionId();
+        sessionStorage.setItem("sessionId", sessionId);
+    }
+    return sessionId;
+};
+
 export const CartItemService = {
     getAll: async () => {
         try {
             const response = await apiClient.get('/cartItems', {
                 headers: {
-                    'X-Session-Id': sessionStorage.getItem("sessionId") || ''
+                    'X-Session-Id': getSessionId()
                 }
             });
             return response.data;
@@ -19,7 +36,7 @@ export const CartItemService = {
         try {
             const response = await apiClient.get(`/cartItems/${id}`, {
                 headers: {
-                    'X-Session-Id': sessionStorage.getItem("sessionId") || ''
+                    'X-Session-Id': getSessionId()
                 }
             });
             return response.data;
@@ -31,10 +48,9 @@ export const CartItemService = {
 
     create: async (data) => {
         try {
-            const sessionId = sessionStorage.getItem("sessionId") || '';
             const response = await apiClient.post('/cartItems', data, {
                 headers: {
-                    'X-Session-Id': sessionId
+                    'X-Session-Id': getSessionId()
                 }
             });
             return response.data;
@@ -49,7 +65,7 @@ export const CartItemService = {
         try {
             const response = await apiClient.put(`/cartItems/${id}`, data, {
                 headers: {
-                    'X-Session-Id': sessionStorage.getItem("sessionId") || ''
+                    'X-Session-Id': getSessionId()
                 }
             });
             return response.data;
@@ -64,7 +80,7 @@ export const CartItemService = {
         try {
             const response = await apiClient.delete(`/cartItems/${id}`, {
                 headers: {
-                    'X-Session-Id': sessionStorage.getItem("sessionId") || ''
+                    'X-Session-Id': getSessionId()
                 }
             });
             return response.data;
@@ -76,9 +92,9 @@ export const CartItemService = {
 
     clear: async () => {
         try {
-            const response = await apiClient.delete('/cartitems/clear', {
+            const response = await apiClient.delete('/cartItems/clear', {
                 headers: {
-                    'X-Session-Id': sessionStorage.getItem("sessionId") || ''
+                    'X-Session-Id': getSessionId()
                 }
             });
             return response.data;
@@ -93,7 +109,7 @@ export const CartItemService = {
             const response = await apiClient.get('/cartItems', {
                 params: { sessionId },
                 headers: {
-                    'X-Session-Id': sessionStorage.getItem("sessionId") || ''
+                    'X-Session-Id': getSessionId()
                 }
             });
             return response.data;
@@ -102,4 +118,7 @@ export const CartItemService = {
             throw error;
         }
     }
+
+    // Función de utilidad para obtener el sessionId
+    ,getSessionId
 };

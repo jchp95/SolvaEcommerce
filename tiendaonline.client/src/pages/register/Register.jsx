@@ -24,6 +24,7 @@ import {
     faFacebook
 } from '@fortawesome/free-brands-svg-icons';
 import '../login/LoginPage.css';
+import { Link } from 'react-router-dom';
 
 const RegisterPage = ({ onRegister, onNavigate }) => {
     const [formData, setFormData] = useState({
@@ -274,8 +275,8 @@ const RegisterPage = ({ onRegister, onNavigate }) => {
                         <Col className="text-center">
                             <p className="text-muted mb-0">
                                 Already have an account?{' '}
-                                <a
-                                    href="#"
+                                <Link
+                                    to="/login"
                                     onClick={(e) => {
                                         e.preventDefault();
                                         onNavigate('login');
@@ -283,7 +284,7 @@ const RegisterPage = ({ onRegister, onNavigate }) => {
                                     className="register-link p-0 text-decoration-none"
                                 >
                                     Sign in
-                                </a>
+                                </Link>
                             </p>
                         </Col>
                     </Row>

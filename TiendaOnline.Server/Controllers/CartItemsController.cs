@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TiendaOnline.Server.Context;
 using TiendaOnline.Server.Models;
+using TiendaOnline.Server.DTO;
 
 namespace TiendaOnline.Server.Controllers
 {
@@ -22,9 +23,18 @@ namespace TiendaOnline.Server.Controllers
 
         private string GetSessionId()
         {
-            // Aquí puedes obtener el sessionId desde cookies, encabezados, etc.
-            // Por ahora asumiremos un header personalizado
-            return Request.Headers["X-Session-Id"].ToString();
+            // Primero intenta obtener el sessionId del header
+            var sessionId = Request.Headers["X-Session-Id"].FirstOrDefault();
+            
+            // Si no existe, genera uno nuevo basado en IP y timestamp
+            if (string.IsNullOrEmpty(sessionId))
+            {
+                var userAgent = Request.Headers["User-Agent"].FirstOrDefault() ?? "";
+                var ip = Request.HttpContext.Connection.RemoteIpAddress?.ToString() ?? "";
+                sessionId = $"anonymous_{ip}_{DateTime.UtcNow.Ticks}_{userAgent.GetHashCode()}".Replace(" ", "");
+            }
+            
+            return sessionId;
         }
 
         [HttpGet]
@@ -36,18 +46,23 @@ namespace TiendaOnline.Server.Controllers
             {
                 var sessionId = GetSessionId();
 
-                var items = await (from c in _context.CartItems
-                                   join p in _context.Products on c.ProductId equals p.Id
-                                   where c.SessionId == sessionId
-                                   select new CartItemReadDto
-                                   {
-                                       Id = c.Id,
-                                       ProductId = p.Id,
-                                       Quantity = c.Quantity,
-                                       Name = p.Name,
-                                       Price = p.Price,
-                                       ImageUrl = p.ImageUrl
-                                   }).ToListAsync();
+                // Usar los snapshots del CartItem en lugar de JOIN con Products
+                var items = await _context.CartItems
+                    .Where(c => c.SessionId == sessionId)
+                    .Select(c => new CartItemReadDto
+                    {
+                        Id = c.Id,
+                        ProductId = c.ProductId,
+                        Quantity = c.Quantity,
+                        Name = c.ProductName,
+                        Price = c.UnitPrice,
+                        ImageUrl = c.ProductImage,
+                        Sku = c.ProductSku,
+                        CreatedAt = c.CreatedAt,
+                        UpdatedAt = c.UpdatedAt,
+                        TotalPrice = c.TotalPrice
+                    })
+                    .ToListAsync();
 
                 return Ok(new ApiResponse<IEnumerable<CartItemReadDto>>(true, "Carrito obtenido con éxito", items));
             }
@@ -58,27 +73,39 @@ namespace TiendaOnline.Server.Controllers
         }
 
         [HttpGet("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
         public async Task<ActionResult<ApiResponse<CartItemReadDto>>> GetCartItemById(int id)
         {
-            var item = await (from c in _context.CartItems
-                              join p in _context.Products on c.ProductId equals p.Id
-                              where c.Id == id
-                              select new CartItemReadDto
-                              {
-                                  Id = c.Id,
-                                  ProductId = c.ProductId,
-                                  Quantity = c.Quantity,
-                                  Name = p.Name,
-                                  Price = p.Price,
-                                  ImageUrl = p.ImageUrl
-                              }).FirstOrDefaultAsync();
-
-            if (item == null)
+            try
             {
-                return NotFound(new ApiResponse<string>(false, "Item no encontrado", null!));
-            }
+                var cartItem = await _context.CartItems.FindAsync(id);
 
-            return Ok(new ApiResponse<CartItemReadDto>(true, "Item obtenido", item));
+                if (cartItem == null)
+                {
+                    return NotFound(new ApiResponse<string>(false, "Item no encontrado", null!));
+                }
+
+                var item = new CartItemReadDto
+                {
+                    Id = cartItem.Id,
+                    ProductId = cartItem.ProductId,
+                    Quantity = cartItem.Quantity,
+                    Name = cartItem.ProductName,
+                    Price = cartItem.UnitPrice,
+                    ImageUrl = cartItem.ProductImage,
+                    Sku = cartItem.ProductSku,
+                    CreatedAt = cartItem.CreatedAt,
+                    UpdatedAt = cartItem.UpdatedAt,
+                    TotalPrice = cartItem.TotalPrice
+                };
+
+                return Ok(new ApiResponse<CartItemReadDto>(true, "Item obtenido", item));
+            }
+            catch (System.Exception ex)
+            {
+                return StatusCode(500, new ApiResponse<string>(false, $"Error al obtener item: {ex.Message}", null!));
+            }
         }
 
 
@@ -90,9 +117,9 @@ namespace TiendaOnline.Server.Controllers
         {
             try
             {
-                if (dto.Quantity < 1)
+                if (!ModelState.IsValid)
                 {
-                    return BadRequest(new ApiResponse<string>(false, "La cantidad debe ser al menos 1", null!));
+                    return BadRequest(new ApiResponse<string>(false, "Datos inválidos", null!));
                 }
 
                 var sessionId = GetSessionId();
@@ -103,12 +130,15 @@ namespace TiendaOnline.Server.Controllers
                     return NotFound(new ApiResponse<string>(false, "Producto no encontrado", null!));
                 }
 
+                // Verificar si el producto ya existe en el carrito
                 var existing = await _context.CartItems
                     .FirstOrDefaultAsync(c => c.ProductId == dto.ProductId && c.SessionId == sessionId);
 
                 if (existing != null)
                 {
+                    // Actualizar cantidad y fecha
                     existing.Quantity += dto.Quantity;
+                    existing.UpdatedAt = DateTime.UtcNow;
                     await _context.SaveChangesAsync();
 
                     return Ok(new ApiResponse<CartItemReadDto>(true, "Cantidad actualizada", new CartItemReadDto
@@ -116,18 +146,29 @@ namespace TiendaOnline.Server.Controllers
                         Id = existing.Id,
                         ProductId = existing.ProductId,
                         Quantity = existing.Quantity,
-                        Name = product.Name,
-                        Price = product.Price,
-                        ImageUrl = product.ImageUrl
+                        Name = existing.ProductName,
+                        Price = existing.UnitPrice,
+                        ImageUrl = existing.ProductImage,
+                        Sku = existing.ProductSku,
+                        CreatedAt = existing.CreatedAt,
+                        UpdatedAt = existing.UpdatedAt,
+                        TotalPrice = existing.TotalPrice
                     }));
                 }
 
+                // Crear nuevo item con snapshots del producto
                 var newItem = new CartItem
                 {
                     ProductId = dto.ProductId,
                     Quantity = dto.Quantity,
                     SessionId = sessionId,
-                    IdentityId = 0
+                    IdentityId = 0,
+                    // Snapshots del producto al momento de agregar al carrito
+                    UnitPrice = product.Price,
+                    ProductName = product.Name,
+                    ProductImage = product.ImageUrl ?? "",
+                    ProductSku = product.Sku,
+                    CreatedAt = DateTime.UtcNow
                 };
 
                 _context.CartItems.Add(newItem);
@@ -138,9 +179,13 @@ namespace TiendaOnline.Server.Controllers
                     Id = newItem.Id,
                     ProductId = newItem.ProductId,
                     Quantity = newItem.Quantity,
-                    Name = product.Name,
-                    Price = product.Price,
-                    ImageUrl = product.ImageUrl
+                    Name = newItem.ProductName,
+                    Price = newItem.UnitPrice,
+                    ImageUrl = newItem.ProductImage,
+                    Sku = newItem.ProductSku,
+                    CreatedAt = newItem.CreatedAt,
+                    UpdatedAt = newItem.UpdatedAt,
+                    TotalPrice = newItem.TotalPrice
                 };
 
                 return CreatedAtAction(nameof(GetCartItemById), new { id = newItem.Id },
@@ -153,16 +198,44 @@ namespace TiendaOnline.Server.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<ApiResponse<CartItem>>> UpdateCartItem(int id, [FromBody] CartItemUpdateDto dto)
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        public async Task<ActionResult<ApiResponse<CartItemReadDto>>> UpdateCartItem(int id, [FromBody] CartItemUpdateDto dto)
         {
-            var item = await _context.CartItems.FindAsync(id);
-            if (item == null)
-                return NotFound(new ApiResponse<string>(false, "Item no encontrado", null!));
+            try
+            {
+                var item = await _context.CartItems.FindAsync(id);
+                if (item == null)
+                    return NotFound(new ApiResponse<string>(false, "Item no encontrado", null!));
 
-            item.Quantity = dto.Quantity;
-            await _context.SaveChangesAsync();
+                if (dto.Quantity < 1)
+                    return BadRequest(new ApiResponse<string>(false, "La cantidad debe ser al menos 1", null!));
 
-            return Ok(new ApiResponse<CartItem>(true, "Cantidad actualizada", item));
+                item.Quantity = dto.Quantity;
+                item.UpdatedAt = DateTime.UtcNow;
+                await _context.SaveChangesAsync();
+
+                var result = new CartItemReadDto
+                {
+                    Id = item.Id,
+                    ProductId = item.ProductId,
+                    Quantity = item.Quantity,
+                    Name = item.ProductName,
+                    Price = item.UnitPrice,
+                    ImageUrl = item.ProductImage,
+                    Sku = item.ProductSku,
+                    CreatedAt = item.CreatedAt,
+                    UpdatedAt = item.UpdatedAt,
+                    TotalPrice = item.TotalPrice
+                };
+
+                return Ok(new ApiResponse<CartItemReadDto>(true, "Cantidad actualizada", result));
+            }
+            catch (System.Exception ex)
+            {
+                return StatusCode(500, new ApiResponse<string>(false, $"Error al actualizar item: {ex.Message}", null!));
+            }
         }
 
         [HttpDelete("{id}")]
@@ -191,12 +264,26 @@ namespace TiendaOnline.Server.Controllers
         }
 
         [HttpDelete("clear")]
-        public async Task<IActionResult> ClearCart()
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<ApiResponse<string>>> ClearCart()
         {
-            var items = await _context.CartItems.ToListAsync();
-            _context.CartItems.RemoveRange(items);
-            await _context.SaveChangesAsync();
-            return Ok(new { success = true });
+            try
+            {
+                var sessionId = GetSessionId();
+                var items = await _context.CartItems
+                    .Where(c => c.SessionId == sessionId)
+                    .ToListAsync();
+                
+                _context.CartItems.RemoveRange(items);
+                await _context.SaveChangesAsync();
+                
+                return Ok(new ApiResponse<string>(true, $"Carrito limpiado. {items.Count} items eliminados.", "success"));
+            }
+            catch (System.Exception ex)
+            {
+                return StatusCode(500, new ApiResponse<string>(false, $"Error al limpiar carrito: {ex.Message}", null!));
+            }
         }
     }
 }

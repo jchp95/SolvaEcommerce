@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { useCart } from '../../context/CartContext';
 import {
   Container,
@@ -8,23 +9,51 @@ import {
   Form,
   Button,
   ListGroup,
-  Alert
+  Spinner
 } from 'react-bootstrap';
 import './CheckoutPage.css';
 import { useNavigate } from 'react-router-dom';
 import { Image } from 'react-bootstrap';
 import { formatImageUrl } from '../../utils/Images';
+import { OrderService } from '../../api/endpoints/orders';
+import AlertService from '../../services/AlertService';
 
 const CheckoutPage = () => {
   const { cartItems, clearCart } = useCart();
-
   const navigate = useNavigate();
+  const { user, token } = useSelector((state) => state.auth);
+  
   const [formData, setFormData] = useState({
-    fullName: '',
-    email: '',
-    address: '',
-    city: '',
-    zipCode: '',
+    // Información personal (pre-llenar con datos del usuario)
+    fullName: user ? `${user.firstName || ''} ${user.lastName || ''}`.trim() : '',
+    email: user?.email || '',
+    phone: user?.phoneNumber || '',
+    
+    // Dirección de facturación
+    billingStreet: '',
+    billingCity: '',
+    billingState: '',
+    billingPostalCode: '',
+    billingCountry: 'España',
+    billingAdditionalInfo: '',
+    
+    // Dirección de envío
+    sameAsBilling: true,
+    shippingStreet: '',
+    shippingCity: '',
+    shippingState: '',
+    shippingPostalCode: '',
+    shippingCountry: 'España',
+    shippingAdditionalInfo: '',
+    
+    // Método de envío y pago
+    shippingMethod: 'standard',
+    paymentMethod: 'pending',
+    
+    // Notas del cliente
+    customerNotes: '',
+    
+    // Información de tarjeta (para futuro)
     cardNumber: '',
     cardName: '',
     expiryDate: '',
@@ -32,39 +61,59 @@ const CheckoutPage = () => {
   });
 
   const [errors, setErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
 
-  const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  // Verificar autenticación
+  useEffect(() => {
+    if (!token || !user) {
+      // Si no está autenticado, redirigir al login
+      alert('Debes iniciar sesión para realizar un pedido');
+      navigate('/login', { state: { returnUrl: '/checkout' } });
+      return;
+    }
+  }, [token, user, navigate]);
+
+  // Calcular totales
+  const subtotal = cartItems.reduce((sum, item) => {
+    const itemTotal = item.totalPrice || (item.price * item.quantity);
+    return sum + itemTotal;
+  }, 0);
+  
+  const taxTotal = subtotal * 0.10; // 10% de impuestos
+  const shippingTotal = subtotal > 50 ? 0 : 5.99; // Envío gratis si >$50
+  const total = subtotal + taxTotal + shippingTotal;
 
   const validateForm = () => {
     let newErrors = {};
+    
+    // Validación de información personal
     if (!formData.fullName.trim()) newErrors.fullName = 'El nombre completo es requerido.';
     if (!formData.email.trim()) {
       newErrors.email = 'El correo electrónico es requerido.';
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = 'El correo electrónico no es válido.';
     }
-    if (!formData.address.trim()) newErrors.address = 'La dirección es requerida.';
-    if (!formData.city.trim()) newErrors.city = 'La ciudad es requerida.';
-    if (!formData.zipCode.trim()) {
-      newErrors.zipCode = 'El código postal es requerido.';
-    } else if (!/^\d{5}(-\d{4})?$/.test(formData.zipCode)) {
-      newErrors.zipCode = 'El código postal no es válido.';
+    
+    // Validación de dirección de facturación
+    if (!formData.billingStreet.trim()) newErrors.billingStreet = 'La dirección de facturación es requerida.';
+    if (!formData.billingCity.trim()) newErrors.billingCity = 'La ciudad de facturación es requerida.';
+    if (!formData.billingState.trim()) newErrors.billingState = 'El estado/provincia de facturación es requerido.';
+    if (!formData.billingPostalCode.trim()) {
+      newErrors.billingPostalCode = 'El código postal de facturación es requerido.';
+    } else if (!/^\d{5}(-\d{4})?$/.test(formData.billingPostalCode)) {
+      newErrors.billingPostalCode = 'El código postal no es válido.';
     }
-    if (!formData.cardNumber.trim()) {
-      newErrors.cardNumber = 'El número de tarjeta es requerido.';
-    } else if (!/^\d{16}$/.test(formData.cardNumber.replace(/\s/g, ''))) {
-      newErrors.cardNumber = 'El número de tarjeta debe tener 16 dígitos.';
-    }
-    if (!formData.cardName.trim()) newErrors.cardName = 'El nombre en la tarjeta es requerido.';
-    if (!formData.expiryDate.trim()) {
-      newErrors.expiryDate = 'La fecha de vencimiento es requerida.';
-    } else if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(formData.expiryDate)) {
-      newErrors.expiryDate = 'Formato de fecha inválido (MM/AA).';
-    }
-    if (!formData.cvv.trim()) {
-      newErrors.cvv = 'El CVV es requerido.';
-    } else if (!/^\d{3,4}$/.test(formData.cvv)) {
-      newErrors.cvv = 'El CVV debe tener 3 o 4 dígitos.';
+    
+    // Validación de dirección de envío (solo si es diferente)
+    if (!formData.sameAsBilling) {
+      if (!formData.shippingStreet.trim()) newErrors.shippingStreet = 'La dirección de envío es requerida.';
+      if (!formData.shippingCity.trim()) newErrors.shippingCity = 'La ciudad de envío es requerida.';
+      if (!formData.shippingState.trim()) newErrors.shippingState = 'El estado/provincia de envío es requerido.';
+      if (!formData.shippingPostalCode.trim()) {
+        newErrors.shippingPostalCode = 'El código postal de envío es requerido.';
+      } else if (!/^\d{5}(-\d{4})?$/.test(formData.shippingPostalCode)) {
+        newErrors.shippingPostalCode = 'El código postal de envío no es válido.';
+      }
     }
 
     setErrors(newErrors);
@@ -72,8 +121,10 @@ const CheckoutPage = () => {
   };
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({ ...prevData, [name]: value }));
+    const { name, value, type, checked } = e.target;
+    const newValue = type === 'checkbox' ? checked : value;
+    
+    setFormData((prevData) => ({ ...prevData, [name]: newValue }));
     if (errors[name]) {
       setErrors((prevErrors) => ({ ...prevErrors, [name]: '' }));
     }
@@ -81,29 +132,92 @@ const CheckoutPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validateForm()) {
-      const order = {
-        customer: formData,
-        products: cartItems.map(item => ({
-          id: item.id,
-          name: item.name,
-          quantity: item.quantity,
-          price: item.price,
-          imageUrl: item.imageUrl
-        })),
-        total: total,
-        date: new Date().toISOString(),
-        status: 'Completado'
+    
+    if (!validateForm()) {
+      return;
+    }
+
+    setIsLoading(true);
+    setErrors({});
+
+    try {
+      // Preparar datos para crear la orden
+      const orderData = {
+        customerEmail: formData.email,
+        customerPhone: formData.phone,
+        customerFullName: formData.fullName,
+        
+        billingAddress: {
+          street: formData.billingStreet,
+          city: formData.billingCity,
+          state: formData.billingState,
+          postalCode: formData.billingPostalCode,
+          country: formData.billingCountry,
+          additionalInfo: formData.billingAdditionalInfo
+        },
+        
+        shippingAddress: formData.sameAsBilling ? {
+          street: formData.billingStreet,
+          city: formData.billingCity,
+          state: formData.billingState,
+          postalCode: formData.billingPostalCode,
+          country: formData.billingCountry,
+          additionalInfo: formData.billingAdditionalInfo
+        } : {
+          street: formData.shippingStreet,
+          city: formData.shippingCity,
+          state: formData.shippingState,
+          postalCode: formData.shippingPostalCode,
+          country: formData.shippingCountry,
+          additionalInfo: formData.shippingAdditionalInfo
+        },
+        
+        shippingMethod: formData.shippingMethod,
+        paymentMethod: formData.paymentMethod,
+        customerNotes: formData.customerNotes
       };
-      await clearCart();
-      navigate('/orders', {
-        state: {
-          order,
-          successMessage: '¡Tu pedido fue realizado con éxito!',
-        }
-      }); // redirección con datos
-    } else {
-      alert('Por favor, corrige los errores en el formulario.');
+
+      // Crear la orden
+      const response = await OrderService.createFromCart(orderData);
+      
+      if (response.success) {
+        // Limpiar el carrito después del éxito
+        await clearCart();
+        
+        // Mostrar alerta de éxito con AlertService
+        await AlertService.success({
+          title: '¡Pedido creado exitosamente! 🎉',
+          html: `
+            <div class="text-start">
+              <p><strong>Número de orden:</strong> ${response.data.orderNumber}</p>
+              <p><strong>Total:</strong> $${response.data.orderTotal.toFixed(2)}</p>
+              <p class="text-muted">Serás redirigido a la página de confirmación...</p>
+            </div>
+          `,
+          timer: 3000,
+          timerProgressBar: true
+        });
+        
+        // Navegar a la página de confirmación con los datos de la orden
+        navigate('/order-confirmation', { 
+          state: { 
+            order: response.data,
+            successMessage: '¡Tu pedido fue realizado con éxito!' 
+          } 
+        });
+      }
+      
+    } catch (error) {
+      console.error('Error al crear la orden:', error);
+      
+      // Mostrar alerta de error con AlertService
+      await AlertService.error({
+        title: 'Error al procesar el pedido',
+        text: error.response?.data?.message || 'Ha ocurrido un error inesperado. Por favor, inténtalo de nuevo.',
+        confirmButtonText: 'Intentar de nuevo'
+      });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -162,18 +276,33 @@ const CheckoutPage = () => {
                       <Col className="d-flex flex-column justify-content-center ps-2">
                         <div className="fw-semibold text-light small">{item.name}</div>
                         <div className="text-muted small justify-content-start mb-0">Cantidad: {item.quantity}</div>
-                        <div className="text-muted small justify-content-start mb-0">Precio: {item.price}</div>
+                        <div className="text-muted small justify-content-start mb-0">Precio: ${item.price?.toFixed(2) || '0.00'}</div>
                       </Col>
                       <Col xs="auto" className="text-end">
-                        <div className="fw-bold text-light small">${(item.price * item.quantity).toFixed(2)}</div>
+                        <div className="fw-bold text-light small">
+                          ${(item.totalPrice || (item.price * item.quantity)).toFixed(2)}
+                        </div>
                       </Col>
                     </Row>
                   </ListGroup.Item>
                 ))}
 
+                {/* Desglose de totales */}
+                <ListGroup.Item className="d-flex justify-content-between align-items-center bg-transparent border-0 text-light">
+                  <span>Subtotal:</span>
+                  <span>${subtotal.toFixed(2)}</span>
+                </ListGroup.Item>
+                <ListGroup.Item className="d-flex justify-content-between align-items-center bg-transparent border-0 text-light">
+                  <span>Impuestos (10%):</span>
+                  <span>${taxTotal.toFixed(2)}</span>
+                </ListGroup.Item>
+                <ListGroup.Item className="d-flex justify-content-between align-items-center bg-transparent border-0 text-light">
+                  <span>Envío:</span>
+                  <span>{shippingTotal === 0 ? 'GRATIS' : `$${shippingTotal.toFixed(2)}`}</span>
+                </ListGroup.Item>
                 <ListGroup.Item className="d-flex justify-content-between align-items-center bg-transparent border-top text-light">
-                  <span className="fw-bold">Total:</span>
-                  <span className="checkout-total">${total.toFixed(2)}</span>
+                  <span className="fw-bold fs-5">Total:</span>
+                  <span className="checkout-total fw-bold fs-5">${total.toFixed(2)}</span>
                 </ListGroup.Item>
               </ListGroup>
 
@@ -188,49 +317,157 @@ const CheckoutPage = () => {
           </Card>
         </Col>
 
-        {/* Formulario de Pago */}
+        {/* Formulario de Checkout */}
         <Col md={6}>
           <Card className="mb-4 checkout-subcard">
             <Card.Body>
               <Card.Title className="mb-3">Información de Envío y Pago</Card.Title>
+              
               <Form onSubmit={handleSubmit}>
-                {/* Información de Envío */}
+                {/* Información Personal */}
+                <Card className="mb-4 checkout-subcard">
+                  <Card.Body>
+                    <Card.Title as="h5" className="mb-3">Información Personal</Card.Title>
+                    {renderInputField('fullName', 'Nombre Completo')}
+                    {renderInputField('email', 'Correo Electrónico', 'email')}
+                    {renderInputField('phone', 'Teléfono', 'tel')}
+                  </Card.Body>
+                </Card>
+
+                {/* Dirección de Facturación */}
+                <Card className="mb-4 checkout-subcard">
+                  <Card.Body>
+                    <Card.Title as="h5" className="mb-3">Dirección de Facturación</Card.Title>
+                    {renderInputField('billingStreet', 'Dirección')}
+                    <Row>
+                      <Col md={6}>
+                        {renderInputField('billingCity', 'Ciudad')}
+                      </Col>
+                      <Col md={6}>
+                        {renderInputField('billingState', 'Estado/Provincia')}
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col md={6}>
+                        {renderInputField('billingPostalCode', 'Código Postal')}
+                      </Col>
+                      <Col md={6}>
+                        <Form.Group className="mb-3">
+                          <Form.Control
+                            className="checkout-form-control"
+                            type="text"
+                            name="billingCountry"
+                            value={formData.billingCountry}
+                            onChange={handleChange}
+                            readOnly
+                          />
+                        </Form.Group>
+                      </Col>
+                    </Row>
+                    {renderInputField('billingAdditionalInfo', 'Información adicional (opcional)')}
+                  </Card.Body>
+                </Card>
+
+                {/* Dirección de Envío */}
                 <Card className="mb-4 checkout-subcard">
                   <Card.Body>
                     <Card.Title as="h5" className="mb-3">Dirección de Envío</Card.Title>
-                    {renderInputField('fullName', 'Nombre Completo')}
-                    {renderInputField('email', 'Correo Electrónico', 'email')}
-                    {renderInputField('address', 'Dirección')}
-                    <Row>
-                      <Col md={6}>
-                        {renderInputField('city', 'Ciudad')}
-                      </Col>
-                      <Col md={6}>
-                        {renderInputField('zipCode', 'Código Postal')}
-                      </Col>
-                    </Row>
+                    
+                    <Form.Check
+                      type="checkbox"
+                      id="sameAsBilling"
+                      name="sameAsBilling"
+                      label="Usar la misma dirección de facturación"
+                      checked={formData.sameAsBilling}
+                      onChange={handleChange}
+                      className="mb-3 text-light"
+                    />
+
+                    {!formData.sameAsBilling && (
+                      <>
+                        {renderInputField('shippingStreet', 'Dirección de envío')}
+                        <Row>
+                          <Col md={6}>
+                            {renderInputField('shippingCity', 'Ciudad')}
+                          </Col>
+                          <Col md={6}>
+                            {renderInputField('shippingState', 'Estado/Provincia')}
+                          </Col>
+                        </Row>
+                        <Row>
+                          <Col md={6}>
+                            {renderInputField('shippingPostalCode', 'Código Postal')}
+                          </Col>
+                          <Col md={6}>
+                            <Form.Group className="mb-3">
+                              <Form.Control
+                                className="checkout-form-control"
+                                type="text"
+                                name="shippingCountry"
+                                value={formData.shippingCountry}
+                                onChange={handleChange}
+                                readOnly
+                              />
+                            </Form.Group>
+                          </Col>
+                        </Row>
+                        {renderInputField('shippingAdditionalInfo', 'Información adicional (opcional)')}
+                      </>
+                    )}
                   </Card.Body>
                 </Card>
 
-                {/* Información de Pago */}
+                {/* Método de Envío */}
                 <Card className="mb-4 checkout-subcard">
                   <Card.Body>
-                    <Card.Title as="h5" className="mb-3">Detalles de la Tarjeta</Card.Title>
-                    {renderInputField('cardNumber', 'Número de Tarjeta')}
-                    {renderInputField('cardName', 'Nombre en la Tarjeta')}
-                    <Row>
-                      <Col md={6}>
-                        {renderInputField('expiryDate', 'Fecha de Vencimiento (MM/AA)')}
-                      </Col>
-                      <Col md={6}>
-                        {renderInputField('cvv', 'CVV')}
-                      </Col>
-                    </Row>
+                    <Card.Title as="h5" className="mb-3">Método de Envío</Card.Title>
+                    <Form.Group className="mb-3">
+                      <Form.Select
+                        className="checkout-form-control"
+                        name="shippingMethod"
+                        value={formData.shippingMethod}
+                        onChange={handleChange}
+                      >
+                        <option value="standard">Envío Estándar (5-7 días) - {subtotal > 50 ? 'GRATIS' : '$5.99'}</option>
+                        <option value="express">Envío Express (2-3 días) - $12.99</option>
+                        <option value="overnight">Envío Nocturno (1 día) - $24.99</option>
+                      </Form.Select>
+                    </Form.Group>
                   </Card.Body>
                 </Card>
 
-                <Button variant="primary" type="submit" className="w-100 checkout-button">
-                  Confirmar Pedido
+                {/* Notas del Cliente */}
+                <Card className="mb-4 checkout-subcard">
+                  <Card.Body>
+                    <Card.Title as="h5" className="mb-3">Notas del Pedido (Opcional)</Card.Title>
+                    <Form.Group className="mb-3">
+                      <Form.Control
+                        as="textarea"
+                        rows={3}
+                        className="checkout-form-control"
+                        name="customerNotes"
+                        placeholder="Instrucciones especiales para el envío..."
+                        value={formData.customerNotes}
+                        onChange={handleChange}
+                      />
+                    </Form.Group>
+                  </Card.Body>
+                </Card>
+
+                <Button 
+                  variant="primary" 
+                  type="submit" 
+                  className="w-100 checkout-button"
+                  disabled={isLoading || cartItems.length === 0}
+                >
+                  {isLoading ? (
+                    <>
+                      <Spinner animation="border" size="sm" className="me-2" />
+                      Procesando pedido...
+                    </>
+                  ) : (
+                    `Confirmar Pedido - $${total.toFixed(2)}`
+                  )}
                 </Button>
               </Form>
             </Card.Body>

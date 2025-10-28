@@ -10,6 +10,21 @@ export const useCategories = () => {
         queryFn: CategoryService.getAll,
     });
 
+    // NUEVOS QUERIES
+    const useCategoriesByLevel = (parentId = null) => 
+        useQuery({
+            queryKey: ['categories', 'level', parentId],
+            queryFn: () => CategoryService.getByLevel(parentId),
+            enabled: parentId !== undefined,
+        });
+
+    const useSearchCategories = (searchTerm) => 
+        useQuery({
+            queryKey: ['categories', 'search', searchTerm],
+            queryFn: () => CategoryService.search(searchTerm),
+            enabled: !!searchTerm && searchTerm.length >= 2,
+        });
+
     const createMutation = useMutation({
         mutationFn: CategoryService.create,
         onSuccess: () => {
@@ -35,6 +50,9 @@ export const useCategories = () => {
         categories,
         isLoading,
         error,
+        // NUEVAS FUNCIONALIDADES EXPORTADAS
+        useCategoriesByLevel,
+        useSearchCategories,
         createCategory: createMutation.mutateAsync,
         updateCategory: updateMutation.mutateAsync,
         deleteCategory: deleteMutation.mutateAsync,

@@ -1,0 +1,322 @@
+.supplier-registration-container {
+    min-height: 100vh;
+    background-color: #0a0a0c;
+    background-image:
+        radial-gradient(circle at 10% 20%, rgba(67, 97, 238, 0.15) 0%, transparent 20%),
+        radial-gradient(circle at 90% 80%, rgba(72, 149, 239, 0.15) 0%, transparent 20%);
+    padding: 2rem;
+}
+
+.supplier-registration-card {
+    color: #e0e0e0;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    overflow: visible;
+}
+
+.supplier-registration-main-card {
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    overflow: visible;
+}
+
+.registration-header {
+    background: rgba(30, 30, 39, 0.8) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 20px !important;
+    color: #ffffff;
+    padding: 2rem !important;
+    position: relative;
+    margin-bottom: 2rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+}
+
+.registration-title {
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: #ffffff;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.registration-subtitle {
+    opacity: 0.9;
+    margin-bottom: 1rem;
+    color: #e0e0e0;
+}
+
+.status-badge {
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+}
+
+.registration-body {
+    padding: 2rem;
+    background: rgba(30, 30, 39, 0.8) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 20px !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+    color: #ffffff;
+}
+
+.process-info {
+    border-left: 4px solid rgba(23, 162, 184, 0.6);
+    background: rgba(23, 162, 184, 0.1);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 12px;
+    color: #e1f5fe;
+}
+
+.section-title {
+    color: #ffffff;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.document-alert {
+    border-left: 4px solid rgba(255, 193, 7, 0.6);
+    background: rgba(255, 193, 7, 0.1);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 12px;
+    color: #fff3cd;
+}
+
+.document-label {
+    font-weight: 600;
+    color: #ffffff;
+}
+
+.document-upload-area {
+    margin-bottom: 1rem;
+}
+
+.document-upload-label {
+    display: block;
+    border: 2px dashed rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    padding: 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: #b0b0b0;
+}
+
+.document-upload-label:hover {
+    border-color: rgba(13, 110, 253, 0.6);
+    background: rgba(13, 110, 253, 0.1);
+    color: #ffffff;
+}
+
+.document-upload-label.is-invalid {
+    border-color: rgba(220, 53, 69, 0.6);
+    background: rgba(220, 53, 69, 0.1);
+    color: #ffebee;
+}
+
+.document-preview {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.document-info {
+    display: flex;
+    align-items: center;
+    flex: 1;
+}
+
+.document-icon {
+    font-size: 1.5rem;
+    color: #b0b0b0;
+    margin-right: 1rem;
+}
+
+.document-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.document-name {
+    font-weight: 500;
+    color: #ffffff;
+}
+
+.document-size {
+    color: #b0b0b0;
+    font-size: 0.875rem;
+}
+
+.document-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #b0b0b0;
+}
+
+.upload-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    color: #b0b0b0;
+}
+
+.placeholder-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.submit-button {
+    padding: 0.75rem 3rem;
+    font-weight: 600;
+    border-radius: 50px;
+    background: linear-gradient(135deg, rgba(136, 132, 216, 0.8) 0%, rgba(136, 132, 216, 1) 100%);
+    border: 1px solid rgba(136, 132, 216, 0.5);
+    color: #ffffff;
+    transition: all 0.3s ease;
+}
+
+.submit-button:hover {
+    background: linear-gradient(135deg, rgba(136, 132, 216, 1) 0%, rgba(136, 132, 216, 0.9) 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(136, 132, 216, 0.3);
+}
+
+.back-button {
+    border-radius: 50px;
+    padding: 0.5rem 1.5rem;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #b0b0b0;
+    transition: all 0.3s ease;
+}
+
+.back-button:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Form controls consistent with Orders page */
+.supplier-registration-container .form-control,
+.supplier-registration-container .form-select {
+    background-color: #2d2d2d !important;
+    border-color: #3d3d3d !important;
+    color: #ffffff !important;
+    border-radius: 8px;
+}
+
+.supplier-registration-container .form-control:focus,
+.supplier-registration-container .form-select:focus {
+    background-color: #2d2d2d !important;
+    border-color: rgba(136, 132, 216, 0.6) !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 0 0.25rem rgba(136, 132, 216, 0.25) !important;
+}
+
+.supplier-registration-container .form-control::placeholder {
+    color: rgba(255, 255, 255, 0.6) !important;
+}
+
+.supplier-registration-container .form-label {
+    color: #ffffff !important;
+    font-weight: 500;
+}
+
+/* Status badge consistent styling */
+.supplier-registration-container .status-badge {
+    background: rgba(40, 167, 69, 0.2) !important;
+    border: 1px solid rgba(40, 167, 69, 0.3) !important;
+    color: #e8f5e8 !important;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+/* Alert styling consistent with Orders */
+.supplier-registration-container .alert {
+    background: rgba(220, 53, 69, 0.2) !important;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(220, 53, 69, 0.3) !important;
+    border-radius: 12px;
+    color: #ffebee !important;
+    box-shadow: 0 4px 15px rgba(220, 53, 69, 0.2);
+}
+
+.supplier-registration-container .alert-info {
+    background: rgba(23, 162, 184, 0.25) !important;
+    border-color: rgba(23, 162, 184, 0.4) !important;
+    color: #e1f5fe !important;
+    box-shadow: 0 4px 15px rgba(23, 162, 184, 0.2);
+}
+
+.supplier-registration-container .alert-warning {
+    background: rgba(255, 193, 7, 0.25) !important;
+    border-color: rgba(255, 193, 7, 0.4) !important;
+    color: #fff3cd !important;
+    box-shadow: 0 4px 15px rgba(255, 193, 7, 0.2);
+}
+
+/* Loading states */
+.supplier-registration-container .spinner-border {
+    color: rgba(136, 132, 216, 0.8) !important;
+    filter: drop-shadow(0 0 5px rgba(136, 132, 216, 0.3));
+}
+
+/* Invalid feedback */
+.supplier-registration-container .invalid-feedback {
+    color: #ffebee !important;
+}
+
+.supplier-registration-container .is-invalid {
+    border-color: rgba(220, 53, 69, 0.6) !important;
+    box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25) !important;
+}
+
+/* Enhanced glass morphism card effect */
+.supplier-registration-main-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.registration-header,
+.registration-body {
+    position: relative;
+    z-index: 1;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .registration-body {
+        padding: 1.5rem;
+    }
+    
+    .document-preview {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+    }
+    
+    .document-info {
+        justify-content: center;
+    }
+}

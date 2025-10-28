@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TiendaOnline.Server.DTO;
 
@@ -18,6 +19,7 @@ namespace TiendaOnline.Server.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
@@ -78,6 +80,7 @@ namespace TiendaOnline.Server.Controllers
         }
 
         [HttpDelete("{fileType}/{fileName}")]
+        [Authorize]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]

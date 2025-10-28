@@ -1,12 +1,12 @@
 /* eslint-disable no-undef */
 import { useState, useEffect } from "react";
-import { Form, InputGroup, Button, Spinner, Dropdown } from "react-bootstrap";
+import { Form, InputGroup, Button, Spinner } from "react-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import useDebounce from "../../hooks/useDebounce";
 import { useNavigate } from "react-router-dom";
 import "./Search.css";
-import defaultImage from '../../assets/images/register.jpeg';
+import defaultImage from '../../assets/images/register.jpg';
 
 function Search() {
     const [searchTerm, setSearchTerm] = useState("");
@@ -53,6 +53,7 @@ function Search() {
         return imageUrl;
     };
 
+    console.log('VITE_API_BASE_URL en Search:', import.meta.env.VITE_API_BASE_URL);
 
     const handleSearch = (e) => {
         e.preventDefault();
@@ -67,7 +68,7 @@ function Search() {
     };
 
     return (
-        <div className="search-container position-relative">
+        <div className="search-container">
             <Form onSubmit={handleSearch}>
                 <InputGroup>
                     <Form.Control
@@ -108,41 +109,45 @@ function Search() {
                             </div>
                         ) : (
                             <>
-                                {results.slice(0, 5).map((product) => (
-                                    <div
-                                        key={product.id}
-                                        onClick={() => handleProductClick(product.slug)}
-                                        className="dropdown-item py-2"
-                                        style={{ cursor: 'pointer' }}
-                                    >
-                                        <div className="d-flex align-items-center">
-                                            {product.imageUrl && (
-                                                <img
-                                                    src={getImageUrl(product.imageUrl)}
-                                                    alt={product.name}
-                                                    width="40"
-                                                    height="40"
-                                                    className="me-3 rounded"
-                                                    onError={(e) => {
-                                                        e.target.onerror = null;
-                                                        e.target.src = '/placeholder-product.png';
-                                                    }}
-                                                    style={{ objectFit: 'cover' }}
-                                                />
-                                            )}
-
-                                            <div className="fw-semibold">{product.name}</div>
-                                            <div><small className="text-muted">
-                                                {product.price?.toLocaleString('en-US', {
-                                                    style: 'currency',
-                                                    currency: 'USD'
-                                                })}
-                                            </small></div>
-
+                                {results.slice(0, 5).map((product) => {
+                                    console.log('Producto en resultados de búsqueda:', product);
+                                    return (
+                                        <div
+                                            key={product.id}
+                                            onClick={() => handleProductClick(product.slug)}
+                                            className="dropdown-item py-2"
+                                            style={{ cursor: 'pointer' }}
+                                        >
+                                            <div className="d-flex align-items-center" style={{ width: '100%' }}>
+                                                {product.imageUrl && (
+                                                    <img
+                                                        src={getImageUrl(product.imageUrl)}
+                                                        alt={product.name}
+                                                        width="40"
+                                                        height="40"
+                                                        className="me-3 rounded"
+                                                        onError={(e) => {
+                                                            e.target.onerror = null;
+                                                            e.target.src = defaultImage;
+                                                        }}
+                                                        style={{ objectFit: 'cover' }}
+                                                    />
+                                                )}
+                                                <div style={{ flex: 1, minWidth: 0 }}>
+                                                    <div className="fw-semibold" style={{ whiteSpace: 'normal', wordBreak: 'break-word', fontSize: 15 }}>
+                                                        {product.name}
+                                                    </div>
+                                                </div>
+                                                <div style={{ marginLeft: 12 }}><small className="text-muted">
+                                                    {product.price?.toLocaleString('en-US', {
+                                                        style: 'currency',
+                                                        currency: 'USD'
+                                                    })}
+                                                </small></div>
+                                            </div>
                                         </div>
-
-                                    </div>
-                                ))}
+                                    );
+                                })}
                                 <div className="dropdown-divider"></div>
                                 <div
                                     onClick={() => {

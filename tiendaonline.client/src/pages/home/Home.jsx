@@ -11,16 +11,15 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { Container, Row, Button, Col, Alert } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { useProducts } from "../../features/products/hooks/useProducts";
-import { useSpinner } from "../../context/SpinnerContext";
+import { usePublicProducts } from "../../features/products/hooks/usePublicProducts";
+import { useSelector } from 'react-redux';
 
 function Home() {
     const [cartOpen, setCartOpen] = useState(false);
     const [categoriesOpen, setCategoriesOpen] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
-    const { showSpinner, hideSpinner } = useSpinner();
-    const { products, isLoading, error } = useProducts();
+    const { products, isLoading, error } = usePublicProducts();
 
     const openCart = () => setCartOpen(true);
     // Función para cerrar el carrito
@@ -34,15 +33,6 @@ function Home() {
             navigate(location.pathname, { replace: true, state: {} });
         }
     }, [location.state, navigate, location.pathname]);
-
-    useEffect(() => {
-        if (isLoading) {
-            showSpinner();
-            return () => hideSpinner();
-        } else {
-            hideSpinner();
-        }
-    }, [isLoading, showSpinner, hideSpinner]);
 
     const handleNavigate = (category) => {
         console.log("Categoría seleccionada:", category);
@@ -132,12 +122,16 @@ function Home() {
                     variants={containerVariants}
                 >
                     <Row className="mt-1">
-                        {products && products.length > 0 ? (
+                        {isLoading ? (
+                            <Col className="text-center"><span>Cargando productos...</span></Col>
+                        ) : error ? (
+                            <Col className="text-center"><Alert variant="danger">{error}</Alert></Col>
+                        ) : products && products.length > 0 ? (
                             products.map(product => (
                                 <Col key={product.id} xs={12} sm={6} md={4} lg={3} className="mb-4">
                                     <Card
                                         product={product}
-                                        onAddToCartSuccess={openCart} // <-- pasar la función para abrir carrito
+                                        onAddToCartSuccess={openCart}
                                     />
                                 </Col>
                             ))

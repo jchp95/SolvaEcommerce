@@ -1,0 +1,188 @@
+/* ContactUs.css - estilos para la página de contacto, siguiendo la línea visual del sitio */
+
+.cu-page {
+  min-height: 100vh;
+  background-color: var(--darker);
+  background-image:
+    radial-gradient(circle at 10% 20%, rgba(67, 97, 238, 0.15) 0%, transparent 20%),
+    radial-gradient(circle at 90% 80%, rgba(72, 149, 239, 0.15) 0%, transparent 20%);
+  padding: 3rem; /* padding superior e inferior más compacto */
+}
+
+@media (max-width: 576px) {
+  .cu-page {
+    padding: 0.5rem 0 1rem 0;
+  }
+}
+
+.cu-gradient-card {
+  background: linear-gradient(135deg, #4361ee 0%, #48a9ef 100%);
+  color: #fff;
+  border: none;
+  box-shadow: 0 2px 16px 0 rgba(67,97,238,0.08);
+  transition: transform 0.15s;
+}
+.cu-gradient-card:hover {
+  transform: translateY(-4px) scale(1.03);
+  box-shadow: 0 4px 24px 0 rgba(67,97,238,0.15);
+}
+.cu-gradient-card .cu-icon {
+  color: #fff;
+}
+
+.cu-map-card {
+  background: #181c2a;
+  border: none;
+  box-shadow: 0 2px 16px 0 rgba(67,97,238,0.08);
+  overflow: hidden;
+}
+
+.cu-contact-card {
+  background: linear-gradient(135deg, #4361ee 0%, #48a9ef 100%);
+  color: #fff;
+  border: none;
+  box-shadow: 0 2px 16px 0 rgba(67,97,238,0.08);
+  transition: transform 0.35s cubic-bezier(.22,1,.36,1), box-shadow 0.35s cubic-bezier(.22,1,.36,1);
+  overflow: hidden;
+  position: relative;
+}
+.cu-contact-card:hover {
+  transform: translateY(-8px) scale(1.04);
+  box-shadow: 0 8px 32px 0 rgba(67,97,238,0.18);
+}
+.cu-contact-card-icon {
+  font-size: 5.5rem;
+  opacity: 0.18;
+  position: absolute;
+  left: 80%;
+  bottom: 2.2rem; /* aumenta el espacio inferior para todos los iconos */
+  transform: translateX(-50%);
+  pointer-events: none;
+  transition: transform 0.5s cubic-bezier(.68,-0.55,.27,1.55), opacity 0.3s;
+  z-index: 1;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: 100%;
+}
+.cu-contact-card:hover .cu-contact-card-icon {
+  transform: translateX(-50%) translateY(-12px) scale(1.15) rotate(-8deg);
+  opacity: 0.32;
+  filter: drop-shadow(0 4px 16px rgba(0,0,0,0.18));
+}
+.cu-contact-card-title {
+  font-size: 2.1rem;
+  font-weight: 800;
+  letter-spacing: -1px;
+  color: #fff;
+  margin-bottom: 0.2rem;
+  line-height: 1.1;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.12);
+  position: relative;
+  z-index: 2;
+}
+.cu-contact-card-subtitle {
+  font-size: 1.1rem;
+  color: #e0e0e0;
+  font-weight: 500;
+  opacity: 0.85;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.2px;
+  position: relative;
+  z-index: 2;
+}
+.cu-contact-card-link {
+  font-size: 1.13rem;
+  color: #fff;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  background: rgba(255,255,255,0.07);
+  border-radius: 6px;
+  padding: 0.1rem 0.5rem;
+  margin-left: 0.2rem;
+  text-decoration: none;
+  position: relative;
+  z-index: 2;
+  transition: background 0.2s, color 0.2s;
+}
+.cu-contact-card-link:hover {
+  background: rgba(255,255,255,0.18);
+  color: #ffe;
+  text-decoration: underline;
+}
+
+.cu-hero-gradient {
+  background: linear-gradient(135deg, #7b4397 0%, #dc2430 100%); /* degradado morado-rosado */
+  color: #fff;
+  border: none;
+  box-shadow: 0 2px 16px 0 rgba(123,67,151,0.10);
+  position: relative;
+  overflow: hidden;
+}
+.cu-hero-logo-bg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 180px;
+  height: 180px;
+  transform: translate(-50%, -50%);
+  opacity: 0.13;
+  z-index: 1;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.5s cubic-bezier(.68,-0.55,.27,1.55), opacity 0.3s;
+}
+.cu-hero-badge.cu-hero-gradient:hover .cu-hero-logo-bg {
+  transform: translate(-50%, -62px) scale(1.15) rotate(-8deg);
+  opacity: 0.22;
+  filter: drop-shadow(0 4px 16px rgba(0,0,0,0.18));
+}
+.cu-hero-logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 16px rgba(0,0,0,0.10));
+}
+.cu-hero-badge.cu-hero-gradient > *:not(.cu-hero-logo-bg) {
+  position: relative;
+  z-index: 2;
+}
+
+.cu-hero-title {
+  font-size: 2.2rem;
+  font-weight: 800;
+  letter-spacing: -1px;
+  color: #fff;
+  margin-bottom: 0.2rem;
+  line-height: 1.1;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.12);
+}
+.cu-hero-subtitle {
+  font-size: 1.1rem;
+  color: #e0e0e0;
+  font-weight: 500;
+  opacity: 0.85;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.2px;
+}
+
+@media (max-width: 576px) {
+  .cu-contact-card-title {
+    font-size: 1.3rem;
+  }
+  .cu-contact-card-icon {
+    font-size: 2.5rem;
+    top: 0.7rem;
+    right: 0.7rem;
+  }
+  .cu-hero-logo-bg {
+    width: 100px;
+    height: 100px;
+  }
+  .cu-hero-title {
+    font-size: 1.3rem;
+  }
+}
+

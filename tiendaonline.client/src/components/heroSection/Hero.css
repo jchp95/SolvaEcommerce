@@ -1,32 +1,47 @@
 /* Hero Section */
 .hero-section {
-    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../../assets/images/register.jpg');
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.6), rgba(134, 0, 0, 0.3)), url('../../assets/images/register.jpg');
     background-size: cover;
     background-position: center;
-    height: 80vh;
-    display: block;
-    align-items: center;
+    min-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     color: white;
     text-align: center;
     padding: 0 15px;
     margin-bottom: 3rem;
+    position: relative;
 }
 
 .hero-content {
-    max-width: 800px;
+    max-width: 1200px;
     margin: 0 auto;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex-grow: 1;
+    gap: 4rem;
 }
 
-    .hero-content h1 {
-        font-size: 3.5rem;
+.hero-main {
+    margin-top: 2rem;
+}
+
+    .hero-main h1 {
+        font-size: 4rem;
         font-weight: 700;
-        margin-bottom: 1rem;
-        margin-top: 2rem;
+        margin-bottom: 1.5rem;
+        line-height: 1.1;
     }
 
-    .hero-content .lead {
-        font-size: 1.5rem;
-        margin-bottom: 2rem;
+    .hero-subtitle {
+        font-size: 1.6rem;
+        margin-bottom: 2.5rem;
+        opacity: 0.95;
+        font-weight: 300;
+        letter-spacing: 0.5px;
     }
 
 .span {
@@ -34,46 +49,210 @@
     align-items: center;
 }
 
-.cta-button {
-    background-color: #141414;
+/* Hero Actions */
+.hero-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.primary-cta {
+    background: linear-gradient(135deg, #860000, #a00000);
     border: none;
+    color: white;
     font-weight: 600;
-    border-radius: 30px;
-    transition: all 0.3s ease-out;
+    border-radius: 50px;
+    padding: 1rem 2.5rem;
+    font-size: 1.1rem;
+    letter-spacing: 0.5px;
+    transition: all 0.4s ease;
+    box-shadow: 0 8px 25px rgba(134, 0, 0, 0.3);
 }
 
-    .cta-button:hover {
-        background-color: white;
-        color:#141414;
-        transform: translateY(-3px);
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-    }
+.primary-cta:hover {
+    background: linear-gradient(135deg, #a00000, #860000);
+    transform: translateY(-3px);
+    box-shadow: 0 15px 35px rgba(134, 0, 0, 0.4);
+}
 
-
-        svg:not(:root).svg-inline--fa,
-        svg:not(:host).svg-inline--fa {
-            overflow: visible;
-            box-sizing: content-box;
-            margin-left: 5px;   }
-
-/* Shimmer effect for hero text */
+/* Static Text Styling */
 .shimmer-text {
-  position: relative;
-  color: #fff;
-  background: linear-gradient(90deg, #fff 0%, #FFD700 20%, #fff8dc 40%, #fff 100%);
-  background-size: 200% 100%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: shimmer 8s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
-  animation-delay: 1.5s;
+    display: inline-block;
+    color: #ffffff;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
-@keyframes shimmer {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
+/* Supplier Promo Section */
+.supplier-promo-section {
+    margin-bottom: 3rem;
+}
+
+.supplier-promo-card {
+    background: linear-gradient(135deg, 
+        rgba(255, 215, 0, 0.15) 0%, 
+        rgba(255, 255, 255, 0.1) 50%, 
+        rgba(255, 215, 0, 0.1) 100%);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-radius: 20px;
+    padding: 2.5rem;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.2),
+        0 0 0 1px rgba(255, 215, 0, 0.1) inset,
+        0 1px 0 rgba(255, 255, 255, 0.2) inset;
+    max-width: 600px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.supplier-promo-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255, 215, 0, 0.1), 
+        transparent);
+    transition: left 0.6s ease;
+}
+
+.supplier-promo-card:hover::before {
+    left: 100%;
+}
+
+.supplier-promo-card:hover {
+    transform: translateY(-8px);
+    background: linear-gradient(135deg, 
+        rgba(255, 215, 0, 0.25) 0%, 
+        rgba(255, 255, 255, 0.15) 50%, 
+        rgba(255, 215, 0, 0.2) 100%);
+    border-color: rgba(255, 215, 0, 0.5);
+    box-shadow: 
+        0 20px 50px rgba(0, 0, 0, 0.3),
+        0 0 0 1px rgba(255, 215, 0, 0.2) inset,
+        0 1px 0 rgba(255, 255, 255, 0.3) inset,
+        0 0 30px rgba(255, 215, 0, 0.2);
+}
+
+.supplier-promo-icon {
+    font-size: 3rem;
+    color: #ffd700;
+    min-width: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, 
+        rgba(255, 215, 0, 0.2) 0%, 
+        rgba(255, 215, 0, 0.1) 100%);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    box-shadow: 
+        0 4px 20px rgba(255, 215, 0, 0.2),
+        0 0 0 1px rgba(255, 215, 0, 0.1) inset;
+    position: relative;
+    z-index: 2;
+}
+
+.supplier-promo-content {
+    text-align: left;
+    flex: 1;
+}
+
+.supplier-promo-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: #fff;
+}
+
+.supplier-promo-text {
+    font-size: 1rem;
+    opacity: 0.9;
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+}
+
+.supplier-cta-button {
+    background: linear-gradient(135deg, 
+        rgba(255, 215, 0, 0.1) 0%, 
+        transparent 100%);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 215, 0, 0.6);
+    color: #ffd700;
+    font-weight: 600;
+    border-radius: 50px;
+    padding: 0.75rem 2rem;
+    font-size: 1rem;
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.supplier-cta-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255, 215, 0, 0.2), 
+        transparent);
+    transition: left 0.6s ease;
+}
+
+.supplier-cta-button:hover::before {
+    left: 100%;
+}
+
+.supplier-cta-button:hover {
+    background: linear-gradient(135deg, 
+        rgba(255, 215, 0, 0.9) 0%, 
+        rgba(255, 223, 0, 0.8) 100%);
+    color: #000;
+    border-color: #ffd700;
+    transform: translateY(-3px);
+    box-shadow: 
+        0 10px 25px rgba(255, 215, 0, 0.4),
+        0 0 30px rgba(255, 215, 0, 0.2);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .hero-main h1 {
+        font-size: 2.5rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.2rem;
+    }
+    
+    .supplier-promo-card {
+        flex-direction: column;
+        text-align: center;
+        padding: 2rem;
+    }
+    
+    .supplier-promo-content {
+        text-align: center;
+    }
+    
+    .supplier-promo-icon {
+        margin-bottom: 1rem;
+    }
 }

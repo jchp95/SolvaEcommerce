@@ -1,9 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from 'react';
-import { ProductService, CategoryService } from '../../api/endpoints/products';
+import { useDispatch } from 'react-redux';
+import { CategoryService } from '../../api/endpoints/products';
+import { createProduct, updateProduct, fetchProductById } from '../../features/reduxSlices/products/productsSlice';
+import { showSpinner, hideSpinner } from '../../features/reduxSlices/spinner/spinnerSlice';
 import PropTypes from 'prop-types';
-import { Form, Alert, Row, Col } from 'react-bootstrap';
-import { useSpinner } from '../../context/SpinnerContext';
+import { Form, Alert, Row, Col, Button } from 'react-bootstrap';
 import AlertService from '../../services/AlertService';
 import Modal from './Modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -16,82 +18,120 @@ const ModalProducts = ({
     initialData = {
         name: '',
         description: '',
+        shortDescription: '',
         price: 0,
+        compareAtPrice: null,
         stock: 0,
+        brand: '',
+        sku: '',
+        features: [],
+        specs: {},
+        badges: [],
+        expiryDate: '',
         categoryId: '',
         imageUrl: '',
         imageFileName: '',
-        identityId: 0
+        identityId: 0,
+        isPublished: false,
+        isFeatured: false,
+        hasFreeShipping: false
     },
     isEditing = false,
     productId = null
 }) => {
+    const dispatch = useDispatch();
     const [formData, setFormData] = useState(initialData);
     const [errors, setErrors] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [categories, setCategories] = useState([]);
-    const { showSpinner, hideSpinner } = useSpinner();
 
-    // Cargar categorías al montar el componente
+    // Cargar datos al mostrar el modal
     useEffect(() => {
-        const loadCategories = async () => {
-            try {
-                showSpinner();
-                const response = await CategoryService.getAll();
-                setCategories(response.data);
-                hideSpinner();
-            } catch {
-                hideSpinner();
-                setErrors({ submit: 'Error al cargar categorías' });
-            }
-        };
-
         if (show) {
             loadCategories();
-        }
-    }, [show]);
-
-    // Resetear el formulario cuando cambia el modo (crear/editar)
-    useEffect(() => {
-        if (show) {
+            
             if (isEditing && productId) {
-                if (Object.values(formData).every(val => !val)) {
+                if (!formData.name) { // Solo cargar si no hay datos
                     loadProductData();
                 }
             } else if (!isEditing) {
-                setFormData({
-                    name: '',
-                    description: '',
-                    price: 0,
-                    stock: 0,
-                    categoryId: '',
-                    imageUrl: '',
-                    imageFileName: '',
-                    identityId: 0
-                });
+                resetForm();
             }
             setErrors({});
         }
     }, [show, isEditing, productId]);
 
+    const resetForm = () => {
+        setFormData({
+            name: '',
+            description: '',
+            shortDescription: '',
+            price: 0,
+            compareAtPrice: null,
+            stock: 0,
+            brand: '',
+            sku: '',
+            features: [],
+            specs: {},
+            badges: [],
+            expiryDate: '',
+            categoryId: '',
+            imageUrl: '',
+            imageFileName: '',
+            identityId: 0,
+            isPublished: false,
+            isFeatured: false,
+            hasFreeShipping: false
+        });
+    };
+
+    const loadCategories = async () => {
+        try {
+            dispatch(showSpinner());
+            const response = await CategoryService.getAll();
+            setCategories(response.data || []);
+            dispatch(hideSpinner());
+        } catch (error) {
+            dispatch(hideSpinner());
+            console.error('Error loading categories:', error);
+            setErrors({ submit: 'Error al cargar categorías' });
+        }
+    };
+
+
+
     const loadProductData = async () => {
         try {
-            showSpinner();
-            const product = await ProductService.getById(productId);
+            dispatch(showSpinner());
+            const product = await dispatch(fetchProductById(productId)).unwrap();
+            
+            // Mapear datos del producto al formulario (asegurar que strings no sean null)
             setFormData({
                 name: product.name || '',
                 description: product.description || '',
+                shortDescription: product.shortDescription || '',
                 price: product.price || 0,
+                compareAtPrice: product.compareAtPrice || null,
                 stock: product.stock || 0,
+                brand: product.brand || '',
+                sku: product.sku || '',
+                features: product.featuresList || [],
+                specs: product.specsDictionary || {},
+                badges: product.badgesList || [],
+                expiryDate: product.expiryDate || '',
                 categoryId: product.categoryId || '',
                 imageUrl: product.imageUrl || '',
                 imageFileName: product.imageFileName || '',
-                identityId: product.identityId || 0
+                identityId: product.identityId || 0,
+                isPublished: Boolean(product.isPublished),
+                isFeatured: Boolean(product.isFeatured),
+                hasFreeShipping: Boolean(product.hasFreeShipping)
             });
-            hideSpinner();
+            dispatch(hideSpinner());
         } catch (err) {
-            hideSpinner();
-            setErrors({ submit: err.message });
+            dispatch(hideSpinner());
+            console.error('Error loading product:', err);
+            setErrors({ submit: err.message || 'Error al cargar el producto' });
             await AlertService.error({
                 text: 'Error al cargar el producto',
             });
@@ -116,11 +156,21 @@ const ModalProducts = ({
             newErrors.description = 'La descripción no puede exceder los 500 caracteres';
         }
 
+        // Validación para la descripción corta
+        if (formData.shortDescription && formData.shortDescription.length > 200) {
+            newErrors.shortDescription = 'La descripción corta no puede exceder los 200 caracteres';
+        }
+
         // Validación para el precio
         if (formData.price <= 0) {
             newErrors.price = 'El precio debe ser mayor que 0';
         } else if (formData.price > 1000000) {
             newErrors.price = 'El precio no puede exceder 1,000,000';
+        }
+
+        // Validación para el precio de comparación
+        if (formData.compareAtPrice && formData.compareAtPrice <= 0) {
+            newErrors.compareAtPrice = 'El precio de comparación debe ser mayor que 0';
         }
 
         // Validación para el stock
@@ -133,23 +183,45 @@ const ModalProducts = ({
             newErrors.categoryId = 'Debe seleccionar una categoría';
         }
 
+        // Validación para la marca
+        if (!formData.brand.trim()) {
+            newErrors.brand = 'La marca es requerida';
+        } else if (formData.brand.length > 100) {
+            newErrors.brand = 'La marca no puedee exceder los 100 caracteres';
+        }
+
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
 
     const handleInputChange = (e) => {
-        const { name, value } = e.target;
+        const { name, value, type, checked } = e.target;
+        
         setFormData(prev => ({
             ...prev,
-            [name]: name === 'price' || name === 'stock' || name === 'categoryId' || name === 'identityId'
-                ? Number(value)
-                : value
+            [name]: type === 'checkbox' ? checked : 
+                   name === 'price' || name === 'compareAtPrice' || name === 'stock' || 
+                   name === 'categoryId' || name === 'identityId' 
+                   ? (value === '' ? null : Number(value))
+                   : value
         }));
 
         // Limpiar error cuando el usuario escribe
         if (errors[name]) {
             setErrors(prev => ({ ...prev, [name]: '' }));
         }
+        
+        // Limpiar error de submit cuando el usuario modifica campos relevantes
+        if (errors.submit && (name === 'name' || name === 'description' || name === 'brand')) {
+            setErrors(prev => ({ ...prev, submit: '' }));
+        }
+    };
+
+    const handleJsonFieldChange = (fieldName, value) => {
+        setFormData(prev => ({
+            ...prev,
+            [fieldName]: value
+        }));
     };
 
     const handleImageUpload = (e) => {
@@ -165,7 +237,6 @@ const ModalProducts = ({
         }
     };
 
-
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -175,70 +246,49 @@ const ModalProducts = ({
 
         try {
             setIsSubmitting(true);
-            showSpinner();
+            dispatch(showSpinner());
 
+            // Preparar datos para enviar
             const payload = {
                 name: formData.name.trim(),
                 description: formData.description.trim(),
+                shortDescription: formData.shortDescription?.trim() || '',
                 price: parseFloat(formData.price),
+                compareAtPrice: formData.compareAtPrice ? parseFloat(formData.compareAtPrice) : null,
                 stock: parseInt(formData.stock),
+                brand: formData.brand.trim(),
+                sku: formData.sku?.trim() || '',
+                features: Array.isArray(formData.features) ? formData.features : [],
+                specs: typeof formData.specs === 'object' ? formData.specs : {},
+                badges: Array.isArray(formData.badges) ? formData.badges : [],
+                expiryDate: formData.expiryDate || null,
                 categoryId: parseInt(formData.categoryId),
                 identityId: parseInt(formData.identityId) || 0,
+                isPublished: Boolean(formData.isPublished),
+                isFeatured: Boolean(formData.isFeatured),
+                hasFreeShipping: Boolean(formData.hasFreeShipping),
                 imageFile: formData.imageFile || null
             };
 
-            let response; // ✅ Declaramos response aquí
+            console.log('Enviando payload:', payload);
 
-            if (isEditing) {
-                // Para edición: verificar si existe, excluyendo el producto actual
-                try {
-                    await ProductService.checkExists(payload.name, productId);
-                    response = await ProductService.update(productId, payload);
-                } catch (err) {
-                    if (err.response?.status === 409) {
-                        setErrors({
-                            name: 'Ya existe un producto con ese nombre'
-                        });
-                        hideSpinner();
-                        setIsSubmitting(false);
-                        return;
-                    }
-                    throw err;
-                }
+            let response;
+            if (isEditing && productId) {
+                response = await dispatch(updateProduct({ 
+                    id: productId, 
+                    data: payload 
+                })).unwrap();
             } else {
-                // Para creación: verificar si existe
-                try {
-                    await ProductService.checkExists(payload.name);
-                    response = await ProductService.create(payload);
-                } catch (err) {
-                    if (err.response?.status === 409) {
-                        setErrors({
-                            name: 'Ya existe un producto con ese nombre'
-                        });
-                        hideSpinner();
-                        setIsSubmitting(false);
-                        return;
-                    }
-                    throw err;
-                }
+                response = await dispatch(createProduct(payload)).unwrap();
             }
 
-            hideSpinner();
+            // Solo si todo es exitoso, cerramos el modal
+            dispatch(hideSpinner());
             setIsSubmitting(false);
 
-            if (onSuccess) onSuccess(response.data);
-
+            if (onSuccess) onSuccess(response);
             onHide();
-            setFormData({
-                name: '',
-                description: '',
-                price: 0,
-                stock: 0,
-                categoryId: '',
-                imageUrl: '',
-                imageFileName: '',
-                identityId: 0
-            });
+            resetForm();
 
             await AlertService.success({
                 text: isEditing
@@ -246,34 +296,48 @@ const ModalProducts = ({
                     : 'Producto creado exitosamente',
             });
         } catch (err) {
-            hideSpinner();
+            console.error('Error en handleSubmit ModalProducts:', err);
+            dispatch(hideSpinner());
             setIsSubmitting(false);
-            console.error('Error detallado:', err.response?.data || err.message);
-
-            if (!errors.name) {
-                setErrors({
-                    submit: err.response?.data?.message ||
-                        'Error al procesar la solicitud'
-                });
-                await AlertService.error({
-                    text: isEditing
-                        ? 'Error al actualizar el producto'
-                        : 'Error al crear el producto',
-                });
+            
+            // Manejo mejorado del mensaje de error para Redux Toolkit y respuestas de API
+            let errorMessage = 'Error al procesar la solicitud';
+            
+            // Si es un error de Redux Toolkit (rejectWithValue)
+            if (err && typeof err === 'object') {
+                if (err.message && typeof err.message === 'string') {
+                    // Error directo con message
+                    errorMessage = err.message;
+                } else if (err.success === false && err.message) {
+                    // Respuesta de API con formato { success: false, message: "..." }
+                    errorMessage = err.message;
+                } else if (err.response?.data?.message) {
+                    // Error de Axios con respuesta
+                    errorMessage = err.response.data.message;
+                } else if (typeof err === 'string') {
+                    // Error como string directo
+                    errorMessage = err;
+                }
             }
+            
+            // Mostrar el error en el modal (mantener el modal abierto)
+            setErrors({
+                submit: errorMessage
+            });
+            
+            // Mostrar alert de error pero NO cerrar el modal
+            await AlertService.error({
+                text: errorMessage,
+                title: isEditing ? 'Error al actualizar producto' : 'Error al crear producto'
+            });
+
+            // IMPORTANTE: NO llamar onHide() ni resetForm() aquí
+            // El modal debe permanecer abierto para que el usuario pueda corregir el error
         }
     };
 
-
     const handleCancel = () => {
-        setFormData({
-            name: '',
-            description: '',
-            price: 0,
-            stock: 0,
-            categoryId: '',
-            imageUrl: ''
-        });
+        resetForm();
         setErrors({});
         onHide();
     };
@@ -321,6 +385,7 @@ const ModalProducts = ({
                                 className="form-input-dark"
                                 required
                                 maxLength={100}
+                                placeholder="Ingrese el nombre del producto"
                             />
                             {errors.name && (
                                 <Form.Text className="text-danger">
@@ -333,34 +398,98 @@ const ModalProducts = ({
 
                     <Col md={6}>
                         <Form.Group className="mb-3">
-                            <Form.Label>Categoría *</Form.Label>
-                            <Form.Select
-                                name="categoryId"
-                                value={formData.categoryId}
+                            <Form.Label>Marca *</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="brand"
+                                value={formData.brand}
                                 onChange={handleInputChange}
-                                isInvalid={!!errors.categoryId}
+                                isInvalid={!!errors.brand}
                                 className="form-input-dark"
                                 required
-                            >
-                                <option value="">Seleccionar categoría</option>
-                                {categories.map(category => (
-                                    <option key={category.id} value={category.id}>
-                                        {category.name}
-                                    </option>
-                                ))}
-                            </Form.Select>
-                            {errors.categoryId && (
+                                maxLength={100}
+                                placeholder="Ingrese la marca"
+                            />
+                            {errors.brand && (
                                 <Form.Text className="text-danger">
                                     <FontAwesomeIcon icon={faExclamationTriangle} className="me-1" />
-                                    {errors.categoryId}
+                                    {errors.brand}
                                 </Form.Text>
                             )}
                         </Form.Group>
                     </Col>
-                </Row>
+                </Row>                <Form.Group className="mb-3">
+                    <Form.Label>Categoría *</Form.Label>
+                    <Form.Select
+                        name="categoryId"
+                        value={formData.categoryId}
+                        onChange={handleInputChange}
+                        isInvalid={!!errors.categoryId}
+                        className="form-input-dark"
+                        required
+                    >
+                        <option value="">Seleccionar categoría</option>
+                        {categories.map(category =>
+                            category && category.id != null ? (
+                            <option key={category.id} value={category.id}>
+                                {category.name ?? 'Sin nombre'}
+                            </option>
+                            ) : null
+                        )}
+                    </Form.Select>
+                    {errors.categoryId && (
+                        <Form.Text className="text-danger">
+                            <FontAwesomeIcon icon={faExclamationTriangle} className="me-1" />
+                            {errors.categoryId}
+                        </Form.Text>
+                    )}
+                </Form.Group>
+
+                <Form.Group className="mb-3">
+                    <Form.Label>Descripción *</Form.Label>
+                    <Form.Control
+                        as="textarea"
+                        rows={3}
+                        name="description"
+                        value={formData.description || ''}
+                        onChange={handleInputChange}
+                        isInvalid={!!errors.description}
+                        className="form-input-dark"
+                        required
+                        maxLength={500}
+                        placeholder="Descripción completa del producto"
+                    />
+                    {errors.description && (
+                        <Form.Text className="text-danger">
+                            <FontAwesomeIcon icon={faExclamationTriangle} className="me-1" />
+                            {errors.description}
+                        </Form.Text>
+                    )}
+                </Form.Group>
+
+                <Form.Group className="mb-3">
+                    <Form.Label>Descripción Corta</Form.Label>
+                    <Form.Control
+                        as="textarea"
+                        rows={2}
+                        name="shortDescription"
+                        value={formData.shortDescription || ''}
+                        onChange={handleInputChange}
+                        isInvalid={!!errors.shortDescription}
+                        className="form-input-dark"
+                        maxLength={200}
+                        placeholder="Descripción breve para listados (opcional)"
+                    />
+                    {errors.shortDescription && (
+                        <Form.Text className="text-danger">
+                            <FontAwesomeIcon icon={faExclamationTriangle} className="me-1" />
+                            {errors.shortDescription}
+                        </Form.Text>
+                    )}
+                </Form.Group>
 
                 <Row>
-                    <Col md={6}>
+                    <Col md={4}>
                         <Form.Group className="mb-3">
                             <Form.Label>Precio *</Form.Label>
                             <Form.Control
@@ -373,6 +502,7 @@ const ModalProducts = ({
                                 required
                                 min="0.01"
                                 step="0.01"
+                                placeholder="0.00"
                             />
                             {errors.price && (
                                 <Form.Text className="text-danger">
@@ -383,9 +513,32 @@ const ModalProducts = ({
                         </Form.Group>
                     </Col>
 
-                    <Col md={6}>
+                    <Col md={4}>
                         <Form.Group className="mb-3">
-                            <Form.Label>Stock</Form.Label>
+                            <Form.Label>Precio Comparación</Form.Label>
+                            <Form.Control
+                                type="number"
+                                name="compareAtPrice"
+                                value={formData.compareAtPrice || ''}
+                                onChange={handleInputChange}
+                                isInvalid={!!errors.compareAtPrice}
+                                className="form-input-dark"
+                                min="0.01"
+                                step="0.01"
+                                placeholder="Precio anterior (opcional)"
+                            />
+                            {errors.compareAtPrice && (
+                                <Form.Text className="text-danger">
+                                    <FontAwesomeIcon icon={faExclamationTriangle} className="me-1" />
+                                    {errors.compareAtPrice}
+                                </Form.Text>
+                            )}
+                        </Form.Group>
+                    </Col>
+
+                    <Col md={4}>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Stock *</Form.Label>
                             <Form.Control
                                 type="number"
                                 name="stock"
@@ -395,6 +548,7 @@ const ModalProducts = ({
                                 className="form-input-dark"
                                 required
                                 min="0"
+                                placeholder="0"
                             />
                             {errors.stock && (
                                 <Form.Text className="text-danger">
@@ -406,54 +560,99 @@ const ModalProducts = ({
                     </Col>
                 </Row>
 
-                <Form.Group className="mb-4">
-                    <Form.Label>Descripción *</Form.Label>
-                    <Form.Control
-                        as="textarea"
-                        rows={3}
-                        name="description"
-                        value={formData.description}
-                        onChange={handleInputChange}
-                        isInvalid={!!errors.description}
-                        className="form-input-dark"
-                        required
-                        maxLength={500}
-                    />
-                    {errors.description && (
-                        <Form.Text className="text-danger">
-                            <FontAwesomeIcon icon={faExclamationTriangle} className="me-1" />
-                            {errors.description}
-                        </Form.Text>
-                    )}
-                </Form.Group>
+                <Row>
+                    <Col md={6}>
+                        <Form.Group className="mb-3">
+                            <Form.Label>SKU</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="sku"
+                                value={formData.sku || ''}
+                                onChange={handleInputChange}
+                                className="form-input-dark"
+                                maxLength={50}
+                                placeholder="Código SKU (opcional)"
+                            />
+                        </Form.Group>
+                    </Col>
+
+                    <Col md={6}>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Fecha de Vencimiento</Form.Label>
+                            <Form.Control
+                                type="date"
+                                name="expiryDate"
+                                value={formData.expiryDate || ''}
+                                onChange={handleInputChange}
+                                className="form-input-dark"
+                            />
+                        </Form.Group>
+                    </Col>
+                </Row>
+
+                <Row className="mb-3">
+                    <Col md={4}>
+                        <Form.Check
+                            type="checkbox"
+                            name="isPublished"
+                            label="Publicado"
+                            checked={formData.isPublished}
+                            onChange={handleInputChange}
+                            className="form-check-dark"
+                        />
+                    </Col>
+                    <Col md={4}>
+                        <Form.Check
+                            type="checkbox"
+                            name="isFeatured"
+                            label="Destacado"
+                            checked={formData.isFeatured}
+                            onChange={handleInputChange}
+                            className="form-check-dark"
+                        />
+                    </Col>
+                    <Col md={4}>
+                        <Form.Check
+                            type="checkbox"
+                            name="hasFreeShipping"
+                            label="Envío Gratis"
+                            checked={formData.hasFreeShipping}
+                            onChange={handleInputChange}
+                            className="form-check-dark"
+                        />
+                    </Col>
+                </Row>
 
                 <Row className="mb-3 align-items-start">
                     <Col md={6}>
                         <Form.Group>
-                            <Form.Label>Imagen del producto</Form.Label>
+                            <Form.Label>Imagen del Producto</Form.Label>
                             <Form.Control
                                 type="file"
                                 accept="image/*"
                                 onChange={handleImageUpload}
                                 className="form-input-dark"
                             />
+                            <Form.Text className="text-muted">
+                                Formatos: JPG, PNG, GIF. Tamaño máximo: 5MB
+                            </Form.Text>
                         </Form.Group>
                     </Col>
 
                     {formData.imageUrl && (
                         <Col md={6}>
-                            <div>
+                            <div className="text-center">
                                 <img
                                     src={formData.imageUrl}
                                     alt="Vista previa"
                                     style={{
                                         maxWidth: '150px',
                                         maxHeight: '150px',
-                                        borderRadius: '4px',
-                                        display: 'block'
+                                        borderRadius: '8px',
+                                        border: '1px solid #dee2e6'
                                     }}
                                 />
-                                <p className="small text-muted mt-1 justify-content-start">
+                                <p className="small text-muted mt-2">
                                     {formData.imageFileName || 'Imagen actual'}
                                 </p>
                             </div>
@@ -465,6 +664,7 @@ const ModalProducts = ({
     );
 };
 
+// PropTypes actualizados (remover supplierId)
 ModalProducts.propTypes = {
     show: PropTypes.bool.isRequired,
     onHide: PropTypes.func.isRequired,
@@ -472,12 +672,23 @@ ModalProducts.propTypes = {
     initialData: PropTypes.shape({
         name: PropTypes.string,
         description: PropTypes.string,
+        shortDescription: PropTypes.string,
         price: PropTypes.number,
+        compareAtPrice: PropTypes.number,
         stock: PropTypes.number,
+        brand: PropTypes.string,
+        sku: PropTypes.string,
+        features: PropTypes.array,
+        specs: PropTypes.object,
+        badges: PropTypes.array,
+        expiryDate: PropTypes.string,
         categoryId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         imageUrl: PropTypes.string,
         imageFileName: PropTypes.string,
-        identityId: PropTypes.number
+        identityId: PropTypes.number,
+        isPublished: PropTypes.bool,
+        isFeatured: PropTypes.bool,
+        hasFreeShipping: PropTypes.bool
     }),
     isEditing: PropTypes.bool,
     productId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
@@ -488,12 +699,23 @@ ModalProducts.defaultProps = {
     initialData: {
         name: '',
         description: '',
+        shortDescription: '',
         price: 0,
+        compareAtPrice: null,
         stock: 0,
+        brand: '',
+        sku: '',
+        features: [],
+        specs: {},
+        badges: [],
+        expiryDate: '',
         categoryId: '',
         imageUrl: '',
         imageFileName: '',
-        identityId: 0
+        identityId: 0,
+        isPublished: false,
+        isFeatured: false,
+        hasFreeShipping: false
     },
     isEditing: false,
     productId: null,

@@ -9,30 +9,31 @@ import {
   getSortedRowModel,
 } from '@tanstack/react-table';
 import { Table, Button, ButtonGroup, Form, Alert, Badge } from 'react-bootstrap';
-import { useSpinner } from '../../../context/SpinnerContext';
+import { useDispatch } from 'react-redux';
+import { showSpinner, hideSpinner } from '../../../features/reduxSlices/spinner/spinnerSlice';
 import ModalUser from '../../../components/modal/ModalUser';
 import { useNavigate } from 'react-router-dom';
 import './UsersList.css';
 
 const UsersList = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [users, setUsers] = useState([]);
   const [error, setError] = useState(null);
   const [globalFilter, setGlobalFilter] = useState('');
   const [showCreateModal, setShowCreateModal] = useState(false); // Para futuro modal de crear usuario
   const [editingUser, setEditingUser] = useState(null); // Para futuro modal de editar usuario
-  const { showSpinner, hideSpinner } = useSpinner();
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        showSpinner();
+        dispatch(showSpinner());
         const response = await UsersService.getAll();
         setUsers(response.data);
       } catch (err) {
         setError(err.message);
       } finally {
-        hideSpinner();
+        dispatch(hideSpinner());
       }
     };
     fetchUsers();
@@ -85,7 +86,7 @@ const UsersList = () => {
 
   const handleUpdateSuccess = async (updatedUser) => {
     try {
-      showSpinner();
+      dispatch(showSpinner());
       await UsersService.update(updatedUser.id, {
         id: updatedUser.id,
         email: updatedUser.email,
@@ -103,7 +104,7 @@ const UsersList = () => {
     } catch (err) {
       setError('Error al actualizar el usuario');
     } finally {
-      hideSpinner();
+      dispatch(hideSpinner());
     }
   };
 

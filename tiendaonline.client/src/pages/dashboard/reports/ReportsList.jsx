@@ -1,5 +1,6 @@
-import { useMemo, useState, useEffect } from 'react';
-import { ReportsService } from '../../../api/endpoints/reports';
+import { useMemo, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchReports } from '../../../features/reduxSlices/reports/reportsSlice';
 import {
   useReactTable,
   getCoreRowModel,
@@ -9,31 +10,22 @@ import {
   getSortedRowModel,
 } from '@tanstack/react-table';
 import { Table, ButtonGroup, Button, Form, Alert, Badge } from 'react-bootstrap';
-import { useSpinner } from '../../../context/SpinnerContext';
 import { useNavigate } from 'react-router-dom';
 import '../reports/ReportsList.css';
+import { showSpinner, hideSpinner } from '../../../features/reduxSlices/spinner/spinnerSlice';
 
 const ReportsPage = () => {
   const navigate = useNavigate();
-  const [reports, setReports] = useState([]);
-  const [error, setError] = useState(null);
+  const dispatch = useDispatch();
+  const reports = useSelector((state) => state.reports.items);
+  const loading = useSelector((state) => state.reports.loading);
+  const error = useSelector((state) => state.reports.error);
   const [globalFilter, setGlobalFilter] = useState('');
-  const { showSpinner, hideSpinner } = useSpinner();
 
   useEffect(() => {
-    const fetchReports = async () => {
-      try {
-        showSpinner();
-        const response = await ReportsService.getAll();
-        setReports(response.data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        hideSpinner();
-      }
-    };
-    fetchReports();
-  }, []);
+    dispatch(showSpinner());
+    dispatch(fetchReports()).finally(() => dispatch(hideSpinner()));
+  }, [dispatch]);
 
   const columns = useMemo(
     () => [

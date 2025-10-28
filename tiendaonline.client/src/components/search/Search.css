@@ -1,7 +1,8 @@
 .search-container {
+    display: contents;
     max-width: 600px;
-    margin: 0 auto;
     padding: 1rem;
+    justify-content: center;
 }
 
 .search-input {

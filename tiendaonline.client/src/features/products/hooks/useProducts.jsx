@@ -1,49 +1,28 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { ProductService } from '../../../api/endpoints/products';
+import { useSelector, useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import {
+  fetchProducts,
+  createProduct,
+  updateProduct,
+  deleteProduct
+} from '../../reduxSlices/products/productsSlice';
 
 export const useProducts = () => {
-    const queryClient = useQueryClient();
+  const dispatch = useDispatch();
+  const products = useSelector((state) => state.products.items);
+  const isLoading = useSelector((state) => state.products.loading);
+  const error = useSelector((state) => state.products.error);
 
-    const {
-        data: response,
-        isLoading,
-        error,
-        isError
-    } = useQuery({
-        queryKey: ['products'],
-        queryFn: ProductService.getAll,
-        select: (data) => data.data, // Extraemos solo el array de productos
-        staleTime: 5 * 60 * 1000, // 5 minutos de caché
-    });
+  useEffect(() => {
+    dispatch(fetchProducts());
+  }, [dispatch]);
 
-    const createMutation = useMutation({
-        mutationFn: (productData) => ProductService.create(productData),
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['products'] });
-        },
-    });
-
-    const updateMutation = useMutation({
-        mutationFn: ({ id, data }) => ProductService.update(id, data),
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['products'] });
-        },
-    });
-
-    const deleteMutation = useMutation({
-        mutationFn: (id) => ProductService.delete(id),
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['products'] });
-        },
-    });
-
-    return {
-        products: response || [], // Aseguramos que siempre sea un array
-        isLoading,
-        error,
-        isError,
-        createProduct: createMutation.mutateAsync,
-        updateProduct: updateMutation.mutateAsync,
-        deleteProduct: deleteMutation.mutateAsync,
-    };
+  return {
+    products,
+    isLoading,
+    error,
+    createProduct: (data) => dispatch(createProduct(data)),
+    updateProduct: ({ id, data }) => dispatch(updateProduct({ id, data })),
+    deleteProduct: (id) => dispatch(deleteProduct(id)),
+  };
 };

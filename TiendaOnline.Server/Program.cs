@@ -10,8 +10,14 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Text;
 using TiendaOnline;
 using TiendaOnline.Server.Context;
+using TiendaOnline.Server.Models; // ← AGREGAR este using
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.AspNetCore.Http.Features;
+using TiendaOnline.Server.Services;
+using TiendaOnline.Interfaces;
+using TiendaOnline.Server.Interfaces.Categories;
+using TiendaOnline.Server.Services.Categories;
+using TiendaOnline.Server.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,23 +36,38 @@ builder.Services.AddSingleton<MeilisearchClient>(sp =>
     )
 );
 
-// Agrega Identity
-builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
+// ✅ CONFIGURACIÓN CORREGIDA: Usar ApplicationUser y ApplicationRole
+builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
 {
     // Configuración de Lockout
     options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
     options.Lockout.MaxFailedAccessAttempts = 5;
     options.Lockout.AllowedForNewUsers = true;
 
-    // Configuración de contraseña (opcional)
+    // Configuración de contraseña
     options.Password.RequireDigit = true;
     options.Password.RequiredLength = 8;
     options.Password.RequireNonAlphanumeric = false;
     options.Password.RequireUppercase = true;
     options.Password.RequireLowercase = true;
+
+    // Configuración de User
+    options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+    options.User.RequireUniqueEmail = true;
+
+    // Configuración de SignIn
+    options.SignIn.RequireConfirmedEmail = false;
 })
 .AddEntityFrameworkStores<ApplicationDbContext>()
 .AddDefaultTokenProviders();
+
+// ✅ ORDEN CORRECTO: Primero servicios personalizados
+builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<MeiliProductIndexService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<ISupplierService, SupplierService>();
 
 // Configurar el tamaño máximo de archivos para uploads
 builder.Services.Configure<IISServerOptions>(options =>
@@ -56,18 +77,17 @@ builder.Services.Configure<IISServerOptions>(options =>
 
 builder.Services.Configure<KestrelServerOptions>(options =>
 {
-    options.Limits.MaxRequestBodySize = int.MaxValue; // if don't set default value is: 30 MB
+    options.Limits.MaxRequestBodySize = int.MaxValue;
 });
 
 builder.Services.Configure<FormOptions>(x =>
 {
     x.ValueLengthLimit = int.MaxValue;
-    x.MultipartBodyLengthLimit = int.MaxValue; // if don't set default value is: 128 MB
+    x.MultipartBodyLengthLimit = int.MaxValue;
     x.MultipartHeadersLengthLimit = int.MaxValue;
 });
 
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
 builder.Environment.WebRootPath = Path.Combine(builder.Environment.ContentRootPath, "wwwroot");
@@ -81,7 +101,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
            .LogTo(Console.WriteLine, LogLevel.Information);
 });
 
-// En Program.cs - versión mejorada y depurada
+// Configuración CORS
 var corsSettings = builder.Configuration.GetSection("CorsSettings");
 var allowOrigins = corsSettings.GetSection("AllowedOrigins").Get<string[]>();
 
@@ -99,40 +119,66 @@ builder.Services.AddCors(options =>
               .AllowAnyHeader()
               .AllowCredentials();
 
-        // Log para depuración
         Console.WriteLine($"Orígenes CORS permitidos: {string.Join(", ", allowOrigins)}");
     });
 });
 
-// Configuraci�n de autenticaci�n JWT
+// ✅ CONFIGURACIÓN DE AUTENTICACIÓN MEJORADA
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
 })
-.AddJwtBearer(options =>
+.AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
 {
+    var jwtSecretKey = builder.Configuration["Jwt:SecretKey"];
+    if (string.IsNullOrEmpty(jwtSecretKey))
+    {
+        throw new InvalidOperationException("JWT Secret Key is not configured");
+    }
+
+    // ✅ VALIDACIÓN MÁS ROBUSTA
     options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(
-            Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
-        ValidateIssuer = false,  // Cambiado a true para validar el emisor
-        ValidIssuer = builder.Configuration["Jwt:Issuer"],
-        ValidateAudience = false,  // Cambiado a true para validar la audiencia
-        ValidAudience = builder.Configuration["Jwt:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecretKey)), // ← CAMBIADO a UTF8
+        ValidateIssuer = true, // ← ACTIVADO
+        ValidateAudience = true, // ← ACTIVADO
         ValidateLifetime = true,
-        ClockSkew = TimeSpan.Zero  // Elimina el margen de tiempo para la expiraci�n
+        ClockSkew = TimeSpan.Zero,
+        ValidIssuer = builder.Configuration["Jwt:Issuer"], // ← AGREGADO
+        ValidAudience = builder.Configuration["Jwt:Audience"] // ← AGREGADO
     };
 
-    // Opcional: Configuraci�n para usar en desarrollo
-    if (builder.Environment.IsDevelopment())
+    options.Events = new JwtBearerEvents
     {
-        options.RequireHttpsMetadata = false;
-    }
+        OnMessageReceived = context =>
+        {
+            var accessToken = context.Request.Query["access_token"];
+            var path = context.HttpContext.Request.Path;
+            
+            if (!string.IsNullOrEmpty(accessToken) && 
+                path.StartsWithSegments("/chathub"))
+            {
+                context.Token = accessToken;
+            }
+            return Task.CompletedTask;
+        },
+        OnAuthenticationFailed = context =>
+        {
+            Console.WriteLine($"Authentication failed: {context.Exception.Message}");
+            return Task.CompletedTask;
+        },
+        OnTokenValidated = context =>
+        {
+            Console.WriteLine($"Token validated for user: {context.Principal?.Identity?.Name}");
+            return Task.CompletedTask;
+        }
+    };
 });
 
-// Configuraci�n de Claims
+// ✅ CONFIGURACIÓN DE AUTORIZACIÓN
 builder.Services.AddAuthorization(options =>
 {
     // Política para SuperAdmin (acceso total)
@@ -162,7 +208,7 @@ builder.Services.AddAuthorization(options =>
     // Política para endpoints públicos (visitantes)
     options.AddPolicy("AllowVisitors", policy =>
         policy.RequireAssertion(context =>
-            !context.User.Identity.IsAuthenticated));
+            !context.User.Identity?.IsAuthenticated ?? true));
 
     // Política combinada para usuarios registrados (todos menos visitantes)
     options.AddPolicy("RegisteredUsers", policy =>
@@ -183,7 +229,7 @@ builder.Services.AddAuthorization(options =>
         policy.RequireRole("SuperAdmin", "Gestor", "Proveedor"));
 });
 
-// Configuraci�n del logging
+// Configuración del logging
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 
@@ -203,7 +249,7 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 
-    // Configuración de seguridad JWT para Swagger (SÓLO UNA VEZ)
+    // Configuración de seguridad JWT para Swagger
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
@@ -233,14 +279,12 @@ builder.Services.AddSwaggerGen(c =>
     c.OperationFilter<AuthResponsesOperationFilter>();
 });
 
-
 var app = builder.Build();
 
 app.UseDefaultFiles();
-
 app.MapStaticAssets();
 
-app.UseStaticFiles(); // For wwwroot
+app.UseStaticFiles();
 app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(
@@ -257,7 +301,6 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
@@ -265,40 +308,21 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// Orden correcto de middlewares:
+// ✅ ORDEN CORRECTO DE MIDDLEWARES
 app.UseCors("CustomCorsPolicy");
-if (app.Environment.IsDevelopment())
-{
-    // Permite cualquier origen en desarrollo (solo para pruebas)
-    app.UseCors(builder => builder
-        .AllowAnyOrigin()
-        .AllowAnyMethod()
-        .AllowAnyHeader());
-
-    // Log adicional
-    app.Use(async (context, next) =>
-    {
-        Console.WriteLine($"Solicitud recibida desde: {context.Request.Headers["Origin"]}");
-        await next();
-    });
-}
-
-app.UseAuthentication();        // 2. Autenticaci�n
-app.UseAuthorization();
-
-
+app.UseAuthentication(); // ← PRIMERO Authentication
+app.UseAuthorization();  // ← LUEGO Authorization
 
 app.MapControllers();
-
 app.MapFallbackToFile("/index.html");
 
-// Inicializaci�n de la base de datos
+// Inicialización de la base de datos
 await InitializeDatabase(app);
 
 await app.RunAsync();
 
 // ===============================
-// M�TODOS AUXILIARES
+// MÉTODOS AUXILIARES
 // ===============================
 
 async Task InitializeDatabase(WebApplication app)

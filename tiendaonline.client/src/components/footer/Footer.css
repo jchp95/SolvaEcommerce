@@ -1,24 +1,29 @@
 ﻿.site-footer {
-    background: linear-gradient(135deg, #2c3e50, #34495e);
+    min-height: auto;
+    background: transparent;
     display: flex;
     justify-content: center;
-    color: #ecf0f1;
+    color: #e0e0e0;
     padding: 4rem 0 2rem;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     position: relative;
     overflow: hidden;
-    margin-top: 40px;
+    margin-top: 0;
 }
 
-    .site-footer::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 4px;
-        background: linear-gradient(90deg, #3498db, #9b59b6);
-    }
+
+
+.site-footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent 0%, #4361ee 25%, #4895ef 50%, #4361ee 75%, transparent 100%);
+    box-shadow: 0 1px 8px rgba(67, 97, 238, 0.1);
+}
     
 .footer-content {
     margin-bottom: 2rem;
@@ -41,25 +46,31 @@
 
 .brand-icon {
     font-size: 2rem;
-    color: #3498db;
+    color: #4895ef;
     margin-right: 0.75rem;
+    filter: drop-shadow(0 2px 8px rgba(72, 149, 239, 0.3));
 }
 
 .brand-name {
     font-size: 1.8rem;
     font-weight: 700;
-    color: #fff;
+    background: linear-gradient(90deg, #4361ee, #4895ef);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
 }
 
 .footer-description {
-    color: #bdc3c7;
+    color: #b0b0b0;
     line-height: 1.6;
     margin-bottom: 1.5rem;
     font-size: 0.95rem;
+    opacity: 0.9;
 }
 
 .section-title {
-    color: #fff;
+    color: #ffffff;
     font-size: 1.2rem;
     font-weight: 600;
     margin-bottom: 1.5rem;
@@ -67,15 +78,16 @@
     padding-bottom: 0.5rem;
 }
 
-    .section-title::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 50px;
-        height: 2px;
-        background: #3498db;
-    }
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 50px;
+    height: 2px;
+    background: linear-gradient(90deg, #4361ee, #4895ef);
+    box-shadow: 0 2px 8px rgba(67, 97, 238, 0.4);
+}
 
 .footer-menu {
     list-style: none;
@@ -87,19 +99,20 @@
         margin-bottom: 0.8rem;
     }
 
-    .footer-menu a {
-        color: #bdc3c7;
-        text-decoration: none;
-        transition: all 0.3s ease;
-        font-size: 0.95rem;
-        display: inline-block;
-        position: relative;
-    }
+.footer-menu a {
+    color: #b0b0b0;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+    display: inline-block;
+    position: relative;
+}
 
-        .footer-menu a:hover {
-            color: #3498db;
-            transform: translateX(5px);
-        }
+.footer-menu a:hover {
+    color: #4895ef;
+    transform: translateX(5px);
+    text-shadow: 0 2px 8px rgba(72, 149, 239, 0.5);
+}
 
         .footer-menu a::before {
             content: '→';
@@ -125,9 +138,10 @@
 }
 
 .contact-icon {
-    color: #3498db;
+    color: #4895ef;
     margin-right: 0.8rem;
     font-size: 1.1rem;
+    filter: drop-shadow(0 2px 6px rgba(72, 149, 239, 0.3));
 }
 
 .vendor-form {
@@ -139,38 +153,41 @@
 }
 
 .form-control {
-    background-color: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: #fff;
-    border-radius: 4px;
+    background-color: rgba(26, 26, 33, 0.8) !important;
+    backdrop-filter: blur(6px) !important;
+    -webkit-backdrop-filter: blur(6px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: #e0e0e0 !important;
+    border-radius: 8px !important;
     padding: 0.75rem 1rem;
     transition: all 0.3s ease;
 }
 
-    .form-control:focus {
-        background-color: rgba(255, 255, 255, 0.15);
-        border-color: #3498db;
-        box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
-        color: #fff;
-    }
+.form-control:focus {
+    background-color: rgba(33, 33, 43, 0.9) !important;
+    border-color: #4361ee !important;
+    box-shadow: 0 0 0 0.2rem rgba(67, 97, 238, 0.25) !important;
+    color: #ffffff !important;
+}
 
-    .form-control::placeholder {
-        color: rgba(255, 255, 255, 0.5);
-    }
+.form-control::placeholder {
+    color: rgba(158, 158, 158, 0.8) !important;
+}
 
 .invalid-feedback {
     font-size: 0.8rem;
     margin-top: 0.3rem;
-    color: #e74c3c;
+    color: #f72585;
 }
 
 .is-invalid {
-    border-color: #e74c3c;
+    border-color: #f72585 !important;
+    box-shadow: 0 0 0 0.2rem rgba(247, 37, 133, 0.25) !important;
 }
 
 .submit-btn {
-    background: linear-gradient(135deg, #3498db, #2980b9);
-    border: none;
+    background: linear-gradient(135deg, #4361ee, #4895ef) !important;
+    border: none !important;
     padding: 0.75rem 2rem;
     font-weight: 500;
     letter-spacing: 0.5px;
@@ -178,29 +195,33 @@
     font-size: 0.9rem;
     width: 100%;
     transition: all 0.3s ease;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 16px rgba(67, 97, 238, 0.3);
 }
 
-    .submit-btn:hover {
-        background: linear-gradient(135deg, #2980b9, #3498db);
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    }
+.submit-btn:hover {
+    background: linear-gradient(135deg, #3a0ca3, #4361ee) !important;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(67, 97, 238, 0.4) !important;
+}
 
-    .submit-btn:disabled {
-        opacity: 0.7;
-        transform: none !important;
-    }
+.submit-btn:disabled {
+    opacity: 0.7;
+    transform: none !important;
+}
 
 .custom-alert {
-    border-radius: 8px;
+    border-radius: 12px !important;
     margin-bottom: 1.5rem;
     padding: 1rem 1.25rem;
-    border: none;
-    background-color: #333;
-    color: #fff;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(76, 201, 240, 0.3) !important;
+    background: rgba(30, 30, 39, 0.9) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    color: #e0e0e0 !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
     transition: all 0.3s ease;
-    border-left: 4px solid #4caf50;
+    border-left: 4px solid #4cc9f0 !important;
 }
 
     .custom-alert .btn-close {
@@ -231,13 +252,13 @@
     font-size: 1rem;
     font-weight: 600;
     margin-bottom: 0.25rem;
-    color: #2e7d32;
+    color: #4cc9f0;
 }
 
 .alert-text {
     font-size: 0.9rem;
     margin-bottom: 0;
-    color: #ecf0f1;
+    color: #e0e0e0;
     line-height: 1.4;
 }
 
@@ -270,8 +291,9 @@
 
 .footer-divider {
     height: 1px;
-    background: rgba(255, 255, 255, 0.1);
-    margin: 1.5rem 0;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    margin: 2rem 0;
+    box-shadow: 0 1px 8px rgba(67, 97, 238, 0.1);
 }
 
 .footer-bottom {
@@ -283,7 +305,7 @@
 }
 
 .copyright {
-    color: #7f8c8d;
+    color: #9e9e9e;
     font-size: 0.85rem;
     margin-bottom: 1rem;
 }
@@ -294,24 +316,29 @@
     gap: 1.5rem;
 }
 
-    .social-links a {
-        color: #bdc3c7;
-        font-size: 1.2rem;
-        transition: all 0.3s ease;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 36px;
-        height: 36px;
-        border-radius: 50%;
-        background: rgba(255, 255, 255, 0.1);
-    }
+.social-links a {
+    color: #b0b0b0;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(26, 26, 33, 0.6) !important;
+    backdrop-filter: blur(6px) !important;
+    -webkit-backdrop-filter: blur(6px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
 
-        .social-links a:hover {
-            color: #fff;
-            background: #3498db;
-            transform: translateY(-3px);
-        }
+.social-links a:hover {
+    color: #fff !important;
+    background: linear-gradient(135deg, #4361ee, #4895ef) !important;
+    transform: translateY(-3px) scale(1.1);
+    box-shadow: 0 8px 24px rgba(67, 97, 238, 0.4);
+}
 
 .footer-bottom {
     padding: 20px

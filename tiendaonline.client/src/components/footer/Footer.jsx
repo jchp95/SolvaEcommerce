@@ -29,7 +29,7 @@ function Footer() {
     }, [dispatch]);
 
     useEffect(() => {
-        console.log('datos:', siteSettings)
+        
         if (siteSettings) {
             setFormData({
                 siteName: siteSettings.siteName || '',
@@ -46,7 +46,7 @@ function Footer() {
         setIsSubmitting(true);
         try {
             await new Promise(resolve => setTimeout(resolve, 1000));
-            console.log("Formulario enviado:", data);
+          
             setShowSuccess(true);
             reset();
             setTimeout(() => setShowSuccess(false), 5000);

@@ -1,0 +1,40 @@
+/* About.css - estilos para la página About, siguiendo la línea visual de ContactUs */
+
+.about-page {
+  min-height: 100vh;
+  background: none;
+}
+
+.about-title {
+  font-size: 2.2rem;
+  font-weight: 800;
+  letter-spacing: -1px;
+  color: #fff;
+  margin-bottom: 0.2rem;
+  line-height: 1.1;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.12);
+}
+
+.about-section-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 0.5rem;
+}
+
+.about-desc {
+  font-size: 1.1rem;
+  color: #e0e0e0;
+  font-weight: 500;
+  opacity: 0.92;
+  margin-bottom: 0.5rem;
+}
+
+@media (max-width: 576px) {
+  .about-title {
+    font-size: 1.3rem;
+  }
+  .about-section-title {
+    font-size: 1.05rem;
+  }
+}

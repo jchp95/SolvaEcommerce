@@ -35,6 +35,9 @@ const CartItem = memo(({ item, handleRemoveItem, handleUpdateQuantity }) => (
             </Col>
             <Col className="d-flex flex-column align-items-start">
                 <div className="fw-semibold text-light small mb-1 text-break">{item.name}</div>
+                {item.sku && (
+                    <div className="text-muted small mb-1">SKU: {item.sku}</div>
+                )}
                 <div className="text-muted small justify-content-start align-items-center mb-1">
                     Cantidad:
                     <Button
@@ -54,7 +57,12 @@ const CartItem = memo(({ item, handleRemoveItem, handleUpdateQuantity }) => (
                         <span className='span-plus'>+</span>
                     </Button>
                 </div>
-                <div className="text-muted justify-content-start small mb-0">Precio: ${item.price.toFixed(2)}</div>
+                <div className="text-muted justify-content-start small mb-0">
+                    Precio: ${item.price?.toFixed(2) || '0.00'}
+                </div>
+                <div className="text-warning small">
+                    Total: ${item.totalPrice?.toFixed(2) || (item.price * item.quantity).toFixed(2)}
+                </div>
             </Col>
             <Col xs="auto" className="d-flex align-items-center">
                 <Trash
@@ -78,7 +86,11 @@ const CartSidebar = ({ isOpen, onClose }) => {
     }, [isOpen, loadCartItems]);
 
     const total = useMemo(() => {
-        return cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
+        return cartItems.reduce((acc, item) => {
+            // Usar totalPrice si está disponible, sino calcular
+            const itemTotal = item.totalPrice || (item.price * item.quantity);
+            return acc + itemTotal;
+        }, 0);
     }, [cartItems]);
 
     const handleUpdateQuantity = (id, newQuantity) => {

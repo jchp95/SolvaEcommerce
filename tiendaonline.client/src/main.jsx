@@ -8,11 +8,9 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js'
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import './index.css'
 import App from './App.jsx'
-import { SpinnerProvider } from './context/SpinnerContext.jsx'
 import { CartProvider } from './context/CartContext'
 import { Provider } from 'react-redux' // Importa el Provider de React Redux
 import store from './store/index.js'
-
 
 const queryClient = new QueryClient()
 
@@ -24,19 +22,14 @@ if (!sessionStorage.getItem("sessionId")) {
 
 
 createRoot(document.getElementById('root')).render(
-
-  
-    <StrictMode>
-      <QueryClientProvider client={queryClient}>
-        <SpinnerProvider>
-          <CartProvider>
-            <Provider store={store}> 
-              <App />
-              <ReactQueryDevtools initialIsOpen={false} />
-            </Provider>
-          </CartProvider>
-        </SpinnerProvider>
-      </QueryClientProvider>
-    </StrictMode>
- 
+  <StrictMode>
+    <QueryClientProvider client={queryClient}>
+      <CartProvider>
+        <Provider store={store}> 
+          <App />
+          <ReactQueryDevtools initialIsOpen={false} />
+        </Provider>
+      </CartProvider>
+    </QueryClientProvider>
+  </StrictMode>
 )

@@ -1,11 +1,14 @@
 import RouterPages from './RouterPages';
-
+import Spinner from './components/Spinner.jsx';
 
 function App() {
     return (
-        <div>
-            <RouterPages />
-        </div>
+        <>
+            <Spinner />
+            <div>
+                <RouterPages />
+            </div>
+        </>
     );
 }
 

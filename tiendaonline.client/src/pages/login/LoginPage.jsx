@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Container,
   Card,
@@ -18,20 +18,47 @@ import {
   faLock,
   faExclamationTriangle,
   faInfoCircle,
-  faSignInAlt
+  faSignInAlt,
+  faStore,
+  faHandshake
 } from '@fortawesome/free-solid-svg-icons';
 import {
   faGoogle,
   faFacebook
 } from '@fortawesome/free-brands-svg-icons';
+import { useNavigate } from 'react-router-dom';
 import './LoginPage.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { login as loginThunk } from '../../features/reduxSlices/auth/authSlice';
 
 const LoginPage = ({ onLogin, onNavigate }) => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { user, loading, error, token } = useSelector((state) => state.auth);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
+
+  useEffect(() => {
+    if (user && token) {
+      // Redirigir según el rol
+      if (user.roles?.includes('SuperAdmin') || user.roles?.includes('Proveedor') || user.roles?.includes('Gestor')) {
+        navigate('/dashboard', { replace: true });
+      } else if (user.roles?.includes('Cliente')) {
+        navigate('/', { replace: true });
+      } else {
+        navigate('/', { replace: true });
+      }
+    }
+  }, [user, token, navigate]);
+
+  useEffect(() => {
+    if (error) {
+      setErrors({ general: error });
+    }
+  }, [error]);
 
   const validateForm = () => {
     let newErrors = {};
@@ -58,18 +85,22 @@ const LoginPage = ({ onLogin, onNavigate }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validateForm()) {
-      setIsSubmitting(true);
-      // Simulamos un retraso en la autenticación
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
-      if (email === 'test@example.com' && password === 'password') {
-        onLogin();
-      } else {
-        setErrors({ general: 'Credenciales incorrectas. Usa test@example.com / password' });
-      }
+    if (!validateForm()) return;
+    setIsSubmitting(true);
+    setErrors({});
+    try {
+      await dispatch(loginThunk({ email, password })).unwrap();
+      // El redireccionamiento se maneja en el useEffect
+    } catch (err) {
+      setErrors({ general: err || 'Nombre de usuario o contraseña incorrectos.' });
+    } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const handleSupplierRegistration = (e) => {
+    e.preventDefault();
+    navigate('/supplier/register');
   };
 
   return (
@@ -218,7 +249,7 @@ const LoginPage = ({ onLogin, onNavigate }) => {
 
           {/* Footer */}
           <Col className="login-footer">
-            {/* Primera fila */}
+            {/* Primera fila - Registro de cliente */}
             <div className="text-center mb-2">
               <p className="text-muted mb-0">
                 Don't you have an account?{' '}
@@ -235,8 +266,8 @@ const LoginPage = ({ onLogin, onNavigate }) => {
               </p>
             </div>
 
-            {/* Segunda fila */}
-            <div className="forgot-password text-center">
+            {/* Segunda fila - Olvidé contraseña */}
+            <div className="forgot-password text-center mb-2">
               <a
                 href="#"
                 onClick={(e) => {

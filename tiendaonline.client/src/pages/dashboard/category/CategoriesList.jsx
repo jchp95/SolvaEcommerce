@@ -1,7 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 import { useMemo, useState, useEffect } from 'react';
-import { CategoryService } from '../../../api/endpoints/categories';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  fetchCategories,
+  deleteCategory
+} from '../../../features/reduxSlices/categories/categoriesSlice';
+import {
+  showSpinner,
+  hideSpinner
+} from '../../../features/reduxSlices/spinner/spinnerSlice';
 import {
   useReactTable,
   getCoreRowModel,
@@ -11,7 +19,6 @@ import {
   getSortedRowModel,
 } from '@tanstack/react-table';
 import { Table, Button, ButtonGroup, Form, Alert, Badge } from 'react-bootstrap';
-import { useSpinner } from '../../../context/SpinnerContext';
 import AlertService from '../../../services/AlertService';
 import ModalCategories from '../../../components/modal/ModalCategories';
 import { useNavigate } from 'react-router-dom';
@@ -19,32 +26,21 @@ import './CategoriesList.css';
 
 const CategoriesList = () => {
   const navigate = useNavigate();
-  const [categories, setCategories] = useState([]);
-  const [error, setError] = useState(null);
+  const dispatch = useDispatch();
+  const categories = useSelector((state) => state.categories.items);
+  const isLoading = useSelector((state) => state.categories.loading);
+  const error = useSelector((state) => state.categories.error);
   const [globalFilter, setGlobalFilter] = useState('');
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const [editingCategory, setEditingCategory] = useState(null); // Nuevo estado para edición
-  const { showSpinner, hideSpinner } = useSpinner();
+  const [editingCategory, setEditingCategory] = useState(null);
 
-  // Fetch categories from API
+  // Fetch categories from Redux slice
   useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        showSpinner();
-        const response = await CategoryService.getAll();
-        setCategories(response.data);
-      }
-      catch (err) {
-        setError(err.message);
-      }
-      finally {
-        hideSpinner();
-      }
-    };
-    fetchCategories();
-  }, []);
+    dispatch(showSpinner());
+    dispatch(fetchCategories()).finally(() => dispatch(hideSpinner()));
+  }, [dispatch]);
 
-  // Define table columns
+  // Define table columns - mantener useMemo como en la versión vieja
   const columns = useMemo(
     () => [
       {
@@ -59,6 +55,12 @@ const CategoriesList = () => {
         cell: info => <span className="category-name">{info.getValue()}</span>
       },
       {
+        header: 'Slug',
+        accessorKey: 'slug',
+        cell: info => <span className="category-slug">{info.getValue()}</span>,
+        size: 120
+      },
+      {
         header: 'Descripción',
         accessorKey: 'description',
         cell: info => (
@@ -68,6 +70,84 @@ const CategoriesList = () => {
         )
       },
       {
+        header: 'Categoría Padre',
+        accessorKey: 'parentCategoryId',
+        cell: info => {
+          const parentId = info.getValue();
+          if (!parentId) return <span className="text-muted">Ninguna</span>;
+          
+          const parentCategory = categories.find(cat => cat.id === parentId);
+          return (
+            <span className="category-parent">
+              {parentCategory ? parentCategory.name : `#${parentId}`}
+            </span>
+          );
+        },
+        size: 150
+      },
+      {
+        header: 'Meta Título',
+        accessorKey: 'metaTitle',
+        cell: info => (
+          <span className="category-metaTitle">
+            {info.getValue() || <span className="text-muted">Sin meta título</span>}
+          </span>
+        )
+      },
+      {
+        header: 'Meta Descripción',
+        accessorKey: 'metaDescription',
+        cell: info => (
+          <span className="category-metaDescription">
+            {info.getValue() || <span className="text-muted">Sin meta descripción</span>}
+          </span>
+        )
+      },
+      {
+        header: 'Orden',
+        accessorKey: 'displayOrder',
+        cell: info => <span className="category-order">{info.getValue()}</span>,
+        size: 80
+      },
+      {
+        header: 'Estado',
+        accessorKey: 'isActive',
+        cell: info => (
+          <Badge bg={info.getValue() ? 'success' : 'secondary'}>
+            {info.getValue() ? 'Activa' : 'Inactiva'}
+          </Badge>
+        ),
+        size: 100
+      },
+      {
+        header: 'Fecha Creación',
+        accessorKey: 'createdAt',
+        cell: info => {
+          const date = info.getValue();
+          if (!date) return <span className="text-muted">N/A</span>;
+          return (
+            <span className="category-createdAt">
+              {new Date(date).toLocaleDateString('es-ES')}
+            </span>
+          );
+        },
+        size: 120
+      },
+      {
+        header: 'Fecha Actualización',
+        accessorKey: 'updatedAt',
+        cell: info => {
+          const date = info.getValue();
+          if (!date) return <span className="text-muted">N/A</span>;
+          return (
+            <span className="category-updatedAt">
+              {new Date(date).toLocaleDateString('es-ES')}
+            </span>
+          );
+        },
+        size: 120
+      },
+      {
         header: 'Acciones',
         accessorKey: 'actions',
         cell: ({ row }) => (
@@ -75,7 +155,7 @@ const CategoriesList = () => {
             <Button
               variant="outline-primary"
               size="sm"
-              onClick={() => setEditingCategory(row.original)} // Actualizado para usar el modal
+              onClick={() => setEditingCategory(row.original)}
             >
               Editar
             </Button>
@@ -83,6 +163,7 @@ const CategoriesList = () => {
               variant="outline-danger"
               size="sm"
               onClick={() => handleDelete(row.original.id)}
+              disabled={!row.original.isActive}
             >
               Eliminar
             </Button>
@@ -91,7 +172,7 @@ const CategoriesList = () => {
         size: 150
       },
     ],
-    [categories]
+    [categories] // Mantener la misma dependencia que la versión vieja
   );
 
   // Table instance
@@ -118,35 +199,27 @@ const CategoriesList = () => {
     const result = await AlertService.confirm({
       text: "¿Estás seguro que deseas eliminar esta categoría?",
     });
-
     if (!result.isConfirmed) return;
-
     try {
-      showSpinner();
-      await CategoryService.delete(id);
-      setCategories(categories.filter(category => category.id !== id));
-      hideSpinner(); // Ocultar spinner antes de mostrar la alerta
+      dispatch(showSpinner());
+      await dispatch(deleteCategory(id)).unwrap();
+      dispatch(hideSpinner());
       await AlertService.success({
         text: 'La categoría ha sido eliminada.',
       });
     } catch (err) {
-      hideSpinner(); // Ocultar spinner en caso de error
-      setError('Error al eliminar la categoría');
+      dispatch(hideSpinner());
       await AlertService.error({
         text: 'No se pudo eliminar la categoría.',
       });
     }
   };
 
-  const handleCreateSuccess = (newCategory) => {
-    setCategories([...categories, newCategory]);
+  const handleCreateSuccess = () => {
     setShowCreateModal(false);
   };
 
-  const handleUpdateSuccess = (updatedCategory) => {
-    setCategories(categories.map(cat =>
-      cat.id === updatedCategory.id ? updatedCategory : cat
-    ));
+  const handleUpdateSuccess = () => {
     setEditingCategory(null);
   };
 
@@ -293,9 +366,15 @@ const CategoriesList = () => {
         categoryId={editingCategory?.id}
         initialData={{
           name: editingCategory?.name || '',
-          description: editingCategory?.description || ''
+          description: editingCategory?.description || '',
+          slug: editingCategory?.slug || '',
+          metaTitle: editingCategory?.metaTitle || '',
+          metaDescription: editingCategory?.metaDescription || '',
+          displayOrder: editingCategory?.displayOrder || 0,
+          parentCategoryId: editingCategory?.parentCategoryId || null,
+          isActive: editingCategory?.isActive || false,
         }}
-        key={editingCategory?.id || 'create'} // Key única para forzar recarga
+        key={editingCategory?.id || 'create'}
       />
     </div>
   );

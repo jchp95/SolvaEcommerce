@@ -6,6 +6,7 @@ using TiendaOnline.Server.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TiendaOnline.Server.Controllers
 {
@@ -21,6 +22,7 @@ namespace TiendaOnline.Server.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<ReportDto>>> GetReports()
         {
             try
@@ -37,13 +39,13 @@ namespace TiendaOnline.Server.Controllers
                 })
                 .ToListAsync();
 
-            return Ok(new ApiResponse<IEnumerable<ReportDto>>(true, "Reportes obtenidos con éxito", reports));
+                return Ok(new ApiResponse<IEnumerable<ReportDto>>(true, "Reportes obtenidos con éxito", reports));
             }
             catch (System.Exception ex)
             {
                 return StatusCode(500, new ApiResponse<string>(false, $"Error al obtener reportes: {ex.Message}", null!));
             }
-            
+
         }
     }
 }

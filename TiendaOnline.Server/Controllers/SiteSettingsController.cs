@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using TiendaOnline.Server.Context;
 using TiendaOnline.Server.Models;
 using TiendaOnline.Server.DTO;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TiendaOnline.Server.Controllers
 {
@@ -71,6 +72,7 @@ namespace TiendaOnline.Server.Controllers
         }
 
         [HttpPut]
+        [Authorize]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]

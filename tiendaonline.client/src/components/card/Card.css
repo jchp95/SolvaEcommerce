@@ -48,14 +48,12 @@
 
 .card-icon-button:hover {
     background: #ffffff !important;
-    /* Rojo más oscuro al hover */
     transform: scale(1.1);
 }
 
 .card-icon-button:hover .card-icon {
     font-size: 1.8rem;
     color: #860000 !important;
-    /* Color rojo sólido sin opacidad */
     transition: color 0.3s ease;
 }
 
@@ -78,7 +76,6 @@
     position: relative;
     z-index: 1;
     border-radius: 50% !important;
-
 }
 
 .cart-btn:hover {
@@ -92,12 +89,10 @@
 
 .card-icon-cart {
     font-size: 1.2rem;
-        color: white !important;
-        transition: color 0.3s ease;
-        opacity: 1 !important;
+    color: white !important;
+    transition: color 0.3s ease;
+    opacity: 1 !important;
 }
-
-
 
 .card-overlay {
     background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.5) 50%, transparent 100%) !important;
@@ -138,8 +133,22 @@
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
-.badge-price {
+/* Badge del precio en las cards - máxima especificidad para evitar sobreescritura */
+.card-product .badge-price,
+.card-product .badge.badge-price,
+.card-product .card-price .badge,
+.card-product .card-price .badge-price,
+.card-product span.badge.badge-price,
+.card-product .badge.bg-primary.badge-price,
+.card-product .badge.bg-info.badge-price {
     background-color: #860000 !important;
+    background: #860000 !important;
+    color: #ffffff !important;
+    border: none !important;
+    transform: none !important;
+    animation: none !important;
+    transition: none !important;
+    box-shadow: none !important;
 }
 
 .cart-control-container {
@@ -153,7 +162,8 @@
     width: 0;
 }
 
-.quantity-btn {
+/* Estilos específicos para botones de cantidad en las cards de productos */
+.card-product .quantity-btn {
     width: 28px;
     height: 28px;
     padding: 0;
@@ -165,8 +175,8 @@
     border: none;
 }
 
-/* Botón "-" (mordida derecha) */
-.decrement-btn {
+/* Botón de decrementar (menos) - curvatura hacia la derecha */
+.card-product .decrement-btn {
     display: flex;
     background-color: #860000;
     clip-path: path('M0,0 H24 Q16,14 24,28 H0 Z');
@@ -174,30 +184,470 @@
     border: none;
 }
 
-.increment-btn {
-    display: flex;
+/* Botón de incrementar (más) - curvatura hacia la izquierda */
+.card-product .increment-btn {
     background-color: #860000;
-    clip-path: path('M0,0 H24 Q16,14 24,28 H0 Z');
-    transform: scaleX(-1);
+    clip-path: path('M4,0 H28 V28 H4 Q12,14 4,0 Z');
+    border: none;
 }
 
-.quantity-btn:hover {
+/* Hover específico para botones de cantidad en las cards */
+.card-product .quantity-btn:hover {
     color: #333;
     background-color: white;
 }
 
-.btn .badge {
-    position: absolute;
-    top: -8px;
-    right: -8px;
+/* Badge del carrito en las cards de productos - máxima especificidad */
+.card-product .cart-btn .badge {
+    position: absolute !important;
+    top: -8px !important;
+    right: -8px !important;
     background-color: #ffffff !important;
-    color: #333;
+    color: #333 !important;
+    transform: none !important;
+    animation: none !important;
+    transition: none !important;
 }
 
-.span-minus {
+/* Posicionamiento específico para iconos en las cards */
+.card-product .span-minus {
     margin-left: 7px;
 }
 
-.span-plus {
+.card-product .span-plus {
     margin-left: 5px;
 }
+
+/* ----- ESTILOS DEL MODAL PERSONALIZADO ----- */
+.product-modal .modal-dialog {
+  max-width: 1000px;
+  margin: 2rem auto;
+}
+
+.product-modal .modal-content {
+  background: #18191a;
+  color: #f3f3f3;
+  border: none;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+  animation: modalFadeIn 0.35s ease;
+}
+
+/* Animación de entrada */
+@keyframes modalFadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Encabezado del modal */
+.product-modal-header {
+  background-color: #222326;
+  color: #fff;
+  border-bottom: none;
+}
+
+.product-modal-header .modal-title {
+  font-weight: bold;
+  font-size: 1.5rem;
+  color: #fff;
+}
+
+/* Cuerpo del modal: columnas responsivas */
+.product-modal-body {
+  background: #18191a;
+  color: #f3f3f3;
+  display: flex;
+  flex-direction: column;
+  padding: 0.8rem;
+}
+
+@media (min-width: 768px) {
+  .product-modal-body {
+    flex-direction: row;
+  }
+}
+
+/* Columna de la imagen */
+.product-modal-image {
+  flex: 1;
+  max-height: 400px;
+  background: #23272b;
+  border-right: 1px solid #23272b;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+.product-modal-image img {
+  width: 100%;
+  height: 320px;
+  object-fit: cover;
+  border-radius: 8px;
+  background: #23272b;
+  /* Eliminar cualquier borde blanco */
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Columna de detalles */
+.product-modal-details {
+  flex: 1;
+  background-color: #18191a;
+  color: #f3f3f3;
+  padding: 1rem;
+  padding-right: 0rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.product-description {
+  font-size: 1rem;
+  color: #bdbdbd;
+  margin-bottom: 1rem;
+}
+.product-price {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #ff4444;
+  margin-bottom: 1rem;
+}
+
+/* Controles de cantidad dentro del modal */
+.product-quantity-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+/* Botones de cantidad específicos para el modal del producto */
+.product-modal .product-quantity-btn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #860000;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+.product-modal .product-quantity-btn:hover {
+  background-color: #a00000;
+}
+.product-quantity-value {
+  font-weight: bold;
+  font-size: 1rem;
+  min-width: 20px;
+  text-align: center;
+}
+
+/* Botón de agregar al carrito dentro del modal */
+.product-add-btn {
+  background-color: #860000;
+  border: none;
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  transition: background-color 0.2s ease, transform 0.2s ease;
+  align-self: flex-start;
+}
+.product-add-btn:hover {
+  background-color: #a00000;
+  transform: translateY(-2px);
+}
+
+/* Pie del modal */
+.product-modal-footer {
+  background: #222326;
+  border-top: none;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* ---- Rating ---- */
+.rating-stars {
+  color: #f59e0b; /* ámbar */
+  font-size: 1rem;
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+.rating-stars .rating-value {
+  color: #f59e0b; /* ámbar brillante */
+  font-weight: 700;
+  margin-left: 6px;
+}
+
+/* ---- Badges estilo chip ---- */
+.product-badges { margin-bottom: .5rem; }
+.product-badge-chip {
+  display: inline-block;
+  background: linear-gradient(90deg, #ffe082 60%, #ffd600 100%);
+  color: #23272b !important;
+  font-weight: 700;
+  font-size: 13px;
+  padding: 0.35em 0.9em;
+  border-radius: 999px !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+  margin: 0;
+  letter-spacing: 0.01em;
+  transition: background 0.2s;
+}
+.product-badge-chip:not(:last-child) {
+  margin-right: 0.5em;
+}
+.product-badge-chip:hover {
+  background: linear-gradient(90deg, #ffd600 60%, #ffe082 100%);
+}
+
+/* ---- Meta (marca / rating) ---- */
+.product-meta-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+.product-brand {
+  font-size: 1rem;
+  letter-spacing: 0.01em;
+}
+.product-rating {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+}
+.reviews-link {
+  color: #f3f3f3;
+  font-weight: 600;
+  text-decoration: underline;
+}
+.product-eta {
+  color: #f59e0b;
+  font-weight: 700;
+  margin-top: 0.5rem;
+}
+.product-eta strong {
+  color: #fff;
+  font-weight: 700;
+}
+
+/* Eliminar borde blanco de la imagen en el modal */
+.card-modal-image {
+  border: none !important;
+  box-shadow: none !important;
+  background: #23272b !important;
+  border-radius: 8px !important;
+}
+
+/* ---- Bloque precio / envío ---- */
+.product-price-block {
+  display: grid;
+  gap: .25rem;
+  margin: .5rem 0 1rem;
+}
+.product-price {
+  font-size: 1.7rem;
+  font-weight: 800;
+  color: #860000;
+}
+.product-shipping {
+  color: #f3f3f3;
+  font-weight: 600;
+  letter-spacing: 0.1px;
+}
+.product-eta {
+  color: #f59e0b;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+.product-eta strong {
+  color: #fff;
+  font-weight: 800;
+}
+
+/* ---- Stock ---- */
+.product-availability { margin-bottom: .5rem; }
+.in-stock { color: #0f9d58; font-weight: 700; }
+.out-of-stock { color: #d93025; font-weight: 700; }
+
+/* ---- Grid de info breve ---- */
+.product-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .4rem .75rem;
+  font-size: .95rem;
+  margin-bottom: .75rem;
+}
+.product-info-grid .label { color: #6b7280; }
+
+/* ---- Bullets ---- */
+.product-features {
+  margin: .5rem 0 1rem;
+}
+.product-features li { margin-bottom: .25rem; }
+
+/* ---- Especificaciones (tabla simple) ---- */
+.product-specs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+  padding: .5rem 0;
+  margin-bottom: 1rem;
+}
+.product-specs li {
+  display: flex;
+  align-items: center;
+  background: #23272b;
+  border-radius: 8px;
+  padding: 0.3em 1em;
+  margin: 0;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 500;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+.spec-row { display: contents; }
+.spec-key {
+  color: #f59e0b;
+  font-weight: 600;
+  margin-right: 0.5em;
+}
+.spec-val { color: #fff; }
+
+/* Badge visual para cada especificación */
+.spec-badge {
+  display: flex;
+  align-items: center;
+  background: linear-gradient(90deg, #860000 60%, #a00000 100%);
+  border-radius: 999px;
+  padding: 0.35em 1.1em;
+  margin: 0;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+  gap: 0.5em;
+  transition: background 0.2s;
+}
+.spec-badge:hover {
+  background: linear-gradient(90deg, #a00000 60%, #860000 100%);
+}
+.spec-key {
+  color: #fff;
+  font-weight: 700;
+  margin-right: 0.3em;
+}
+.spec-val {
+  color: #ffe082;
+  font-weight: 600;
+}
+
+/* ---- Nota legal ---- */
+.product-legal {
+  margin-top: .75rem;
+  font-size: .9rem;
+  color: #6b7280;
+}
+
+/* --- PROVEEDOR --- */
+.provider-info {
+  background: #23272b !important;
+  color: #f3f3f3 !important;
+  border-radius: 8px;
+  padding: 1rem;
+  font-size: 1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  margin-top: 1.2rem;
+}
+.provider-title {
+  font-weight: 700;
+  color: #ff4444;
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+}
+.provider-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 4px;
+  align-items: center;
+}
+.provider-label {
+  color: #bdbdbd;
+  font-weight: 600;
+  min-width: 110px;
+  font-size: 0.98rem;
+}
+.provider-value {
+  color: #f3f3f3;
+  font-size: 0.98rem;
+  font-weight: 400;
+}
+
+/* Protección contra estilos globales que causan conflictos en las cards */
+.card-product * {
+    animation: none !important;
+}
+
+/* Permitir solo las animaciones específicas de las cards */
+.card-product .card-image {
+    animation: none !important;
+    transition: transform 0.5s ease !important;
+}
+
+.card-product.card-slide-up {
+    animation: none !important;
+    transition: transform 0.5s ease, box-shadow 0.3s ease !important;
+}
+
+/* Evitar que badges de otras páginas afecten las cards */
+.card-product .badge-price,
+.card-product .card-price .badge {
+    background-color: #860000 !important;
+    color: #ffffff !important;
+    transform: none !important;
+    animation: none !important;
+    transition: none !important;
+    box-shadow: none !important;
+    border: none !important;
+}
+
+/* Proteger botones de cantidad contra estilos globales */
+.card-product .quantity-btn {
+    transform: none !important;
+    animation: none !important;
+    transition: background-color 0.2s ease, color 0.2s ease !important;
+}
+
+.card-product .quantity-btn:hover {
+    transform: none !important;
+    animation: none !important;
+    box-shadow: none !important;
+}
+
+/* Proteger botón del carrito contra estilos globales */
+.card-product .cart-btn {
+    transform: none !important;
+    animation: none !important;
+    transition: background-color 0.3s ease !important;
+}
+
+.card-product .cart-btn:hover {
+    transform: none !important;
+    animation: none !important;
+    box-shadow: none !important;
+}
+
+.card-product .cart-btn:active {
+    transform: none !important;
+    animation: none !important;
+}
+

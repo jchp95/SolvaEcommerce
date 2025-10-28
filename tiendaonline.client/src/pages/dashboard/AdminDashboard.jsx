@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import PaymentsTable from '../../components/paymentTable/PaymentsTable';
-import DashboardSidebar from '../../components/sidebar/DashboardSidebar';
+import { DashboardSidebar } from '../../components/sidebar/DashboardSidebar';
 import {
   Container,
   Row,

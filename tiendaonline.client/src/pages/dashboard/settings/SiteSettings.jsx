@@ -23,7 +23,6 @@ import {
     InfoCircle
 } from 'react-bootstrap-icons';
 import { motion } from 'framer-motion';
-import { SiteSettingsService } from '../../../api/endpoints/siteSettings';
 import AlertService from '../../../services/AlertService';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';

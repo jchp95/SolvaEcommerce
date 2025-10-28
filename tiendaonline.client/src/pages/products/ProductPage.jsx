@@ -47,7 +47,9 @@ function ProductPage() {
     if (error) {
         return (
             <Container className="my-5 text-center">
-                <Alert variant="danger">{error}</Alert>
+                <Alert variant="danger">
+                    {typeof error === 'string' ? error : error?.message || 'Error al cargar el producto'}
+                </Alert>
                 <Button variant="primary" onClick={() => navigate("/")}>
                     Go Back Home
                 </Button>

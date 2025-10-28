@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TiendaOnline.Server.Context;
 using TiendaOnline.Server.DTO;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TiendaOnline.Server.Controllers
 {
@@ -27,6 +28,7 @@ namespace TiendaOnline.Server.Controllers
         /// Obtiene todos los usuarios
         /// </summary>
         [HttpGet]
+        [Authorize]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
         public async Task<ActionResult<ApiResponse<IEnumerable<UserReadDto>>>> GetUsers()
@@ -59,6 +61,7 @@ namespace TiendaOnline.Server.Controllers
         /// Edita los datos de un usuario
         /// </summary>
         [HttpPut("{id}")]
+        [Authorize]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]

@@ -1,6 +1,6 @@
 import { Route, BrowserRouter as Router, Routes, useLocation } from 'react-router-dom';
 // eslint-disable-next-line no-unused-vars
-import { AnimatePresence, motion } from 'framer-motion'; // Importa motion
+import { AnimatePresence, motion } from 'framer-motion';
 import Home from './pages/home/Home';
 import Layout from './layout/Layout';
 import ProtectedRoute from './ProtectedRoute';
@@ -13,201 +13,315 @@ import ProductsList from './pages/dashboard/product/ProductsList';
 import SearchResultsPage from './pages/products/SearchResultsPage';
 import ProductPage from './pages/products/ProductPage';
 import CheckoutPage from './pages/checkoutPage/CheckoutPage';
-import Orders from './pages/order/Orders';
+import Orders from './pages/dashboard/order/Orders';
+import OrderConfirmationPage from './pages/order/OrderConfirmationPage';
 import ReportsPage from './pages/dashboard/reports/ReportsList';
-import UsersList from './pages/dashboard/users/UsersList'; // Importa UsersList
-import SecuritySettings from './pages/dashboard/security/SecuritySettings'; // Importa SecuritySettings
-import SiteSettings from './pages/dashboard/settings/SiteSettings'; // Importa SiteSettings
+import UsersList from './pages/dashboard/users/UsersList';
+import SecuritySettings from './pages/dashboard/security/SecuritySettings';
+import SiteSettings from './pages/dashboard/settings/SiteSettings';
+import ContactUs from './pages/contact/ContactUs';
+import About from './pages/about/About';
+import SupplierRegistration from './pages/supplierRegister/SupplierRegistration';
+import SupplierProfile from './pages/dashboard/supplier/SupplierProfile';
+import CustomerProfile from './pages/profile/CustomerProfile';
 
 
 // Componente para manejar la animación de las rutas
 const AnimatedRoutes = () => {
     const location = useLocation();
-
+    
     return (
         <AnimatePresence mode="wait">
             <Routes location={location} key={location.pathname}>
-                {/* Ruta principal con Layout */}
+                {/* Rutas públicas */}
                 <Route path="/" element={<Layout />}>
                     <Route
                         index
                         element={
-                            <ProtectedRoute>
-                                <motion.div
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    exit={{ opacity: 0 }}
-                                    transition={{ duration: 0.3 }}
-                                >
-                                    <Home />
-                                </motion.div>
-                            </ProtectedRoute>
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                transition={{ duration: 0.3 }}
+                            >
+                                <Home />
+                            </motion.div>
                         }
+                    />
+                    <Route path="store" element={<div>Store pública</div>} />
+                    <Route 
+                        path="about" 
+                        element={
+                            <motion.div 
+                                initial={{ opacity: 0 }} 
+                                animate={{ opacity: 1 }} 
+                                exit={{ opacity: 0 }} 
+                                transition={{ duration: 0.3 }}
+                            >
+                                <About />
+                            </motion.div>
+                        } 
+                    />
+                    <Route 
+                        path="contact" 
+                        element={
+                            <motion.div 
+                                initial={{ opacity: 0 }} 
+                                animate={{ opacity: 1 }} 
+                                exit={{ opacity: 0 }} 
+                                transition={{ duration: 0.3 }}
+                            >
+                                <ContactUs />
+                            </motion.div>
+                        } 
                     />
                 </Route>
 
-                {/* Otras rutas con animación */}
-                <Route
-                    path="/login"
+                {/* Registro de proveedor (pública) */}
+                <Route 
+                    path="/supplier/register" 
                     element={
                         <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            transition={{ duration: 0.3 }}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -20 }}
+                            transition={{ duration: 0.4 }}
                         >
-                            <LoginPage />
+                            <SupplierRegistration />
                         </motion.div>
-                    }
+                    } 
                 />
 
-                <Route
-                    path="/register"
-                    element={
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            transition={{ duration: 0.3 }}
-                        >
-                            <RegisterPage />
-                        </motion.div>
-                    }
-                />
+                
 
-                {/* Ruta para registro si la tienes */}
-                <Route path="/cart" element={<CartPage />} />
-
-                <Route
-                    path="/checkout"
-                    element={
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            transition={{ duration: 0.3 }}
-                        >
-                            <CheckoutPage />
-                        </motion.div>
-                    }
-                />
-
-                <Route
-                    path="/orders"
-                    element={
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            transition={{ duration: 0.3 }}
-                        >
-                            <Orders />
-                        </motion.div>
-                    }
-                />
-
-                {/* Repite para todas las rutas que necesites animar */}
+                {/* Rutas protegidas del dashboard */}
                 <Route
                     path="/dashboard"
                     element={
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            transition={{ duration: 0.3 }}
-                        >
-                            <AdminDashboard />
-                        </motion.div>
+                        <ProtectedRoute>
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                transition={{ duration: 0.3 }}
+                            >
+                                <AdminDashboard />
+                            </motion.div>
+                        </ProtectedRoute>
                     }
                 />
                 <Route
                     path="/categories"
                     element={
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            transition={{ duration: 0.3 }}
-                        >
-                            <CategoriesList />
-                        </motion.div>
+                        <ProtectedRoute>
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                transition={{ duration: 0.3 }}
+                            >
+                                <CategoriesList />
+                            </motion.div>
+                        </ProtectedRoute>
                     }
                 />
-
                 <Route
                     path="/products"
                     element={
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            transition={{ duration: 0.3 }}
-                        >
-                            <ProductsList />
-                        </motion.div>
+                        <ProtectedRoute>
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                transition={{ duration: 0.3 }}
+                            >
+                                <ProductsList />
+                            </motion.div>
+                        </ProtectedRoute>
                     }
                 />
-
-                <Route path="/search" element={<SearchResultsPage />} />
-                <Route path="/product/:slug" element={<ProductPage />} />
-                
-                {/* Ruta para ReportsList */}
+                <Route
+                    path="/profile"
+                    element={
+                        <ProtectedRoute>
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                transition={{ duration: 0.3 }}
+                            >
+                                <CustomerProfile />
+                            </motion.div>
+                        </ProtectedRoute>
+                    }
+                />
                 <Route
                     path="/reports"
                     element={
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            transition={{ duration: 0.3 }}
-                        >
-                            <ReportsPage />
-                        </motion.div>
+                        <ProtectedRoute>
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                transition={{ duration: 0.3 }}
+                            >
+                                <ReportsPage />
+                            </motion.div>
+                        </ProtectedRoute>
                     }
-                /> 
-
+                />
+                {/* Perfil del proveedor (protegida) */}
+                <Route
+                    path="/supplier/profile"
+                    element={
+                        <ProtectedRoute>
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                transition={{ duration: 0.3 }}
+                            >
+                                <SupplierProfile />
+                            </motion.div>
+                        </ProtectedRoute>
+                    }
+                />
                 <Route
                     path="/users"
                     element={
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            transition={{ duration: 0.3 }}
-                        >
-                            <UsersList />
-                        </motion.div>
+                        <ProtectedRoute>
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                transition={{ duration: 0.3 }}
+                            >
+                                <UsersList />
+                            </motion.div>
+                        </ProtectedRoute>
                     }
                 />
-
                 <Route
                     path="/security"
                     element={
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            transition={{ duration: 0.3 }}
-                        >
-                            <SecuritySettings />
-                        </motion.div>
+                        <ProtectedRoute>
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                transition={{ duration: 0.3 }}
+                            >
+                                <SecuritySettings />
+                            </motion.div>
+                        </ProtectedRoute>
                     }
                 />
-
                 <Route
                     path="/settings"
                     element={
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            transition={{ duration: 0.3 }}
-                        >
-                            <SiteSettings />
-                        </motion.div>
+                        <ProtectedRoute>
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                transition={{ duration: 0.3 }}
+                            >
+                                <SiteSettings />
+                            </motion.div>
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/orders"
+                    element={
+                        <ProtectedRoute>
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                transition={{ duration: 0.3 }}
+                            >
+                                <Orders />
+                            </motion.div>
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/orders/my-orders"
+                    element={
+                        <ProtectedRoute>
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                transition={{ duration: 0.3 }}
+                            >
+                                <Orders />
+                            </motion.div>
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/checkout"
+                    element={
+                        <ProtectedRoute>
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                transition={{ duration: 0.3 }}
+                            >
+                                <CheckoutPage />
+                            </motion.div>
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/order-confirmation"
+                    element={
+                        <ProtectedRoute>
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                transition={{ duration: 0.3 }}
+                            >
+                                <OrderConfirmationPage />
+                            </motion.div>
+                        </ProtectedRoute>
                     }
                 />
 
+                {/* Rutas públicas adicionales */}
+                <Route 
+                    path="/login" 
+                    element={
+                        <motion.div 
+                            initial={{ opacity: 0 }} 
+                            animate={{ opacity: 1 }} 
+                            exit={{ opacity: 0 }} 
+                            transition={{ duration: 0.3 }}
+                        >
+                            <LoginPage />
+                        </motion.div>
+                    } 
+                />
+                <Route 
+                    path="/register" 
+                    element={
+                        <motion.div 
+                            initial={{ opacity: 0 }} 
+                            animate={{ opacity: 1 }} 
+                            exit={{ opacity: 0 }} 
+                            transition={{ duration: 0.3 }}
+                        >
+                            <RegisterPage />
+                        </motion.div>
+                    } 
+                />
+                <Route path="/cart" element={<CartPage />} />
+                <Route path="/search" element={<SearchResultsPage />} />
+                <Route path="/product/:slug" element={<ProductPage />} />
             </Routes>
         </AnimatePresence>
     );

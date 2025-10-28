@@ -6,6 +6,10 @@ export const ProductService = {
         apiClient.get('/products')
             .then(response => response.data),
 
+    getPublic: () =>
+        apiClient.get('/products/public')
+            .then(response => response.data),
+
     getById: (id) =>
         apiClient.get(`/products/${id}`)
             .then(response => response.data),
@@ -20,13 +24,28 @@ export const ProductService = {
 
         formData.append('name', data.name);
         formData.append('description', data.description);
+        formData.append('shortDescription', data.shortDescription || '');
         formData.append('price', data.price);
+        formData.append('compareAtPrice', data.compareAtPrice || '');
         formData.append('stock', data.stock);
+        formData.append('brand', data.brand);
+        formData.append('sku', data.sku || '');
         formData.append('categoryId', data.categoryId);
         formData.append('identityId', data.identityId);
+        formData.append('expiryDate', data.expiryDate || '');
+        
+        // Serializar arrays y objetos para FormData
+        formData.append('features', JSON.stringify(data.features || []));
+        formData.append('specs', JSON.stringify(data.specs || {}));
+        formData.append('badges', JSON.stringify(data.badges || []));
+        
+        // Campos booleanos
+        formData.append('isPublished', data.isPublished);
+        formData.append('isFeatured', data.isFeatured);
+        formData.append('hasFreeShipping', data.hasFreeShipping);
 
         if (data.imageFile) {
-            formData.append('imageFile', data.imageFile); // <- clave para el backend
+            formData.append('imageFile', data.imageFile);
         }
 
         return apiClient.post('/products', formData, {
@@ -38,13 +57,29 @@ export const ProductService = {
 
     update: (id, data) => {
         const formData = new FormData();
-        formData.append('id', id); // ← Necesario si el modelo Product lo incluye
+        formData.append('id', id);
         formData.append('name', data.name);
         formData.append('description', data.description);
+        formData.append('shortDescription', data.shortDescription || ''); // ¡FALTABA ESTE!
         formData.append('price', data.price);
+        formData.append('compareAtPrice', data.compareAtPrice || ''); // ¡FALTABA ESTE!
         formData.append('stock', data.stock);
+        formData.append('brand', data.brand);
+        formData.append('sku', data.sku || ''); // ¡FALTABA ESTE!
         formData.append('categoryId', data.categoryId);
         formData.append('identityId', data.identityId);
+        formData.append('expiryDate', data.expiryDate || '');
+        
+        // Serializar arrays y objetos para FormData
+        formData.append('features', JSON.stringify(data.features || []));
+        formData.append('specs', JSON.stringify(data.specs || {}));
+        formData.append('badges', JSON.stringify(data.badges || []));
+        
+        // Campos booleanos
+        formData.append('isPublished', data.isPublished);
+        formData.append('isFeatured', data.isFeatured);
+        formData.append('hasFreeShipping', data.hasFreeShipping);
+      
         if (data.imageFile) {
             formData.append('imageFile', data.imageFile);
         }

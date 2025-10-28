@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import Sidebar from './Sidebar';
-import { CategoryService } from '../../api/endpoints/categories';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchCategories } from '../../features/reduxSlices/categories/categoriesSlice';
 import {
     Laptop,
     Book,
@@ -13,32 +14,20 @@ import {
     MusicNote,
     Camera,
     Gift,
-    PersonBadge // Icono alternativo para Moda
+    PersonBadge
 } from 'react-bootstrap-icons';
 
 const CategoriesSidebar = ({ isOpen, onClose, onNavigate }) => {
-    const [categories, setCategories] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const dispatch = useDispatch();
+    const categories = useSelector((state) => state.categories.items);
+    const loading = useSelector((state) => state.categories.loading);
+    const error = useSelector((state) => state.categories.error);
 
     useEffect(() => {
-        const fetchCategories = async () => {
-            try {
-                const response = await CategoryService.getAll();
-                if (response.success) {
-                    setCategories(response.data);
-                } else {
-                    setError(response.message || 'Error al cargar categorías');
-                }
-            } catch (err) {
-                setError(err.message || 'Error de conexión');
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchCategories();
-    }, []);
+        if (isOpen && categories.length === 0 && !loading) {
+            dispatch(fetchCategories());
+        }
+    }, [isOpen, dispatch]);
 
     // Mapeo flexible: si el nombre contiene la palabra clave, asigna el icono más representativo
     const getCategoryIcon = (categoryName) => {
@@ -51,7 +40,7 @@ const CategoriesSidebar = ({ isOpen, onClose, onNavigate }) => {
             { keywords: ['juguete', 'juego', 'consola'], icon: <Gift className="me-2" /> },
             { keywords: ['libro', 'música', 'cine', 'película', 'serie'], icon: <MusicNote className="me-2" /> },
             { keywords: ['automotriz', 'herramienta', 'vehículo', 'taller'], icon: <Tools className="me-2" /> },
-            { keywords: ['mascota', 'animal'], icon: <CarFront className="me-2" /> }, // Cambiado a CarFront como ejemplo
+            { keywords: ['mascota', 'animal'], icon: <CarFront className="me-2" /> },
         ];
         const lower = categoryName.toLowerCase();
         for (const { keywords, icon } of iconMap) {

@@ -1,11 +1,11 @@
 // src/Layout.js
 import { Outlet } from 'react-router-dom';
-import Home from '../pages/home/Home';
+
+import Hero from '../components/heroSection/Hero';
 
 const Layout = () => {
     return (
         <>  
-            <Home />
             <Outlet /> {/* Este es el lugar donde se renderizarán las rutas hijas */}
         </>
     );
