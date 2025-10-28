@@ -121,7 +121,7 @@ function Home() {
                     viewport={{ once: true, margin: "0px 0px -50px 0px" }}
                     variants={containerVariants}
                 >
-                    <Row className="mt-1">
+                    <Row className="mt-4">
                         {isLoading ? (
                             <Col className="text-center"><span>Cargando productos...</span></Col>
                         ) : error ? (

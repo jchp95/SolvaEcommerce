@@ -193,6 +193,88 @@ const ProductsList = () => {
         size: 100
       },
       {
+        header: 'Features',
+        accessorKey: 'features',
+        cell: info => {
+          const features = info.getValue();
+          if (!features) return <span className="text-muted">-</span>;
+          
+          try {
+            const featuresArray = JSON.parse(features);
+            return (
+              <div className="d-flex flex-column gap-1" style={{ maxWidth: '200px' }}>
+                {featuresArray.slice(0, 2).map((feature, idx) => (
+                  <Badge key={idx} bg="secondary" className="text-truncate" title={feature}>
+                    • {feature}
+                  </Badge>
+                ))}
+                {featuresArray.length > 2 && (
+                  <small className="text-muted">+{featuresArray.length - 2} más</small>
+                )}
+              </div>
+            );
+          } catch {
+            return <span className="text-muted">-</span>;
+          }
+        },
+        size: 220
+      },
+      {
+        header: 'Specs',
+        accessorKey: 'specs',
+        cell: info => {
+          const specs = info.getValue();
+          if (!specs) return <span className="text-muted">-</span>;
+          
+          try {
+            const specsObj = JSON.parse(specs);
+            const entries = Object.entries(specsObj);
+            return (
+              <div className="d-flex flex-column gap-1" style={{ maxWidth: '200px' }}>
+                {entries.slice(0, 2).map(([key, value], idx) => (
+                  <small key={idx} className="text-truncate" title={`${key}: ${value}`}>
+                    <strong>{key}:</strong> {value}
+                  </small>
+                ))}
+                {entries.length > 2 && (
+                  <small className="text-muted">+{entries.length - 2} más</small>
+                )}
+              </div>
+            );
+          } catch {
+            return <span className="text-muted">-</span>;
+          }
+        },
+        size: 220
+      },
+      {
+        header: 'Badges',
+        accessorKey: 'badges',
+        cell: info => {
+          const badges = info.getValue();
+          if (!badges) return <span className="text-muted">-</span>;
+          
+          try {
+            const badgesArray = JSON.parse(badges);
+            return (
+              <div className="d-flex flex-wrap gap-1" style={{ maxWidth: '150px' }}>
+                {badgesArray.slice(0, 3).map((badge, idx) => (
+                  <Badge key={idx} bg="primary" pill>
+                    {badge}
+                  </Badge>
+                ))}
+                {badgesArray.length > 3 && (
+                  <Badge bg="light" text="dark" pill>+{badgesArray.length - 3}</Badge>
+                )}
+              </div>
+            );
+          } catch {
+            return <span className="text-muted">-</span>;
+          }
+        },
+        size: 170
+      },
+      {
         header: 'Acciones',
         accessorKey: 'actions',
         cell: ({ row }) => (
@@ -493,3 +575,4 @@ const ProductsList = () => {
 };
 
 export default ProductsList;
+

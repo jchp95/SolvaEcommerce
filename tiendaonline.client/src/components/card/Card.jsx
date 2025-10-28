@@ -6,7 +6,9 @@ import defaultImage from '../../assets/images/register.jpg';
 import { FiInfo, FiShoppingCart } from 'react-icons/fi';
 import { useCart } from '../../context/CartContext';
 
-function RatingStars({ value = 4.3 }) {
+function RatingStars({ value = 0 }) {
+  if (!value || value === 0) return <span className="rating-value">Sin valoraciones</span>;
+  
   const full = Math.floor(value);
   const stars = Array.from({ length: 5 }, (_, i) => (i < full ? '★' : '☆'));
   return (
@@ -22,54 +24,116 @@ function Card({ product, onAddToCartSuccess }) {
   const [quantity, setQuantity] = React.useState(0);
   const [showModal, setShowModal] = React.useState(false);
 
-  // Datos base + fallbacks de “contenido de prueba”
+  // Extraer datos del producto con valores por defecto seguros
   const {
     id,
     imageUrl,
-    name ,
-    description,
+    name = 'Producto sin nombre',
+    description = 'Descripción no disponible',
+    shortDescription,
     price = 0,
-    brand,
-    supplierName = 'Distribuciones García',
-    rating = 4.4,
-    reviewCount = 1278,
+    compareAtPrice,
+    brand = 'Sin marca',
+    supplierName,
+    rating = 0,
+    reviewCount = 0,
     stock = 0,
-    sku = 'SKU-TEST-001',
+    sku,
     categoryName,
-    expiryDate, 
-    features = [],
-    specs = {},
-    shipping = {
-      type: 'Envío Prime 24h',
-      cost: 0,
-      eta: 'Mañana antes de las 22:00',
-    },
-    badges = [],
+    expiryDate,
+    features,
+    specs,
+    badges,
+    hasFreeShipping = false,
+    isInStock = false,
+    hasDiscount = false,
+    discountPercentage = 0,
   } = product || {};
 
-  // Si no hay fecha de vencimiento, generar una de prueba a +180 días
-  const computedExpiry = React.useMemo(() => {
-    if (expiryDate) return new Date(expiryDate);
-    const d = new Date();
-    d.setDate(d.getDate() + 180);
-    return d;
-  }, [expiryDate]);
+  // Parsear features si viene como string JSON
+  const featuresList = React.useMemo(() => {
+    if (!features) return [];
+    if (Array.isArray(features)) return features;
+    if (typeof features === 'string') {
+      try {
+        const parsed = JSON.parse(features);
+        return Array.isArray(parsed) ? parsed : [];
+      } catch {
+        return [];
+      }
+    }
+    return [];
+  }, [features]);
 
-  const formatDate = (d) =>
-    new Intl.DateTimeFormat('es-ES', { day: '2-digit', month: 'long', year: 'numeric' }).format(d);
+  // Parsear specs si viene como string JSON
+  const specsDictionary = React.useMemo(() => {
+    if (!specs) return {};
+    if (typeof specs === 'object' && !Array.isArray(specs)) return specs;
+    if (typeof specs === 'string') {
+      try {
+        const parsed = JSON.parse(specs);
+        return typeof parsed === 'object' && !Array.isArray(parsed) ? parsed : {};
+      } catch {
+        return {};
+      }
+    }
+    return {};
+  }, [specs]);
 
-  const formatMoney = (n) =>
-    (typeof n === 'number' ? n : Number(n || 0)).toFixed(2);
+  // Parsear badges si viene como string JSON
+  const badgesList = React.useMemo(() => {
+    if (!badges) return [];
+    if (Array.isArray(badges)) return badges;
+    if (typeof badges === 'string') {
+      try {
+        const parsed = JSON.parse(badges);
+        return Array.isArray(parsed) ? parsed : [];
+      } catch {
+        // Si no es JSON, dividir por comas
+        return badges.split(',').map(b => b.trim()).filter(b => b);
+      }
+    }
+    return [];
+  }, [badges]);
 
-  const handleIncrement = () => setQuantity((prev) => prev + 1);
+  const formatDate = (dateString) => {
+    if (!dateString) return 'No disponible';
+    try {
+      const date = new Date(dateString);
+      return new Intl.DateTimeFormat('es-ES', { 
+        day: '2-digit', 
+        month: 'long', 
+        year: 'numeric' 
+      }).format(date);
+    } catch {
+      return 'Fecha inválida';
+    }
+  };
+
+  const formatMoney = (n) => {
+    const num = typeof n === 'number' ? n : Number(n || 0);
+    return num.toFixed(2);
+  };
+
+  const handleIncrement = () => {
+    if (quantity < stock) {
+      setQuantity((prev) => prev + 1);
+    }
+  };
+  
   const handleDecrement = () => setQuantity((prev) => (prev > 0 ? prev - 1 : 0));
 
   const handleAddToCart = async () => {
-    if (quantity === 0) return;
-    const newCartItem = { productId: id, quantity };
-    await addItem(newCartItem);
-    setQuantity(0);
-    onAddToCartSuccess?.();
+    if (quantity === 0 || !isInStock) return;
+    try {
+      const newCartItem = { productId: id, quantity };
+      await addItem(newCartItem);
+      setQuantity(0);
+      onAddToCartSuccess?.();
+    } catch (error) {
+      console.error('Error al agregar al carrito:', error);
+      alert('Error al agregar el producto al carrito');
+    }
   };
 
   const getImageUrl = () => {
@@ -80,6 +144,22 @@ function Card({ product, onAddToCartSuccess }) {
     }
     return imageUrl;
   };
+
+  // Información de envío calculada
+  const shippingInfo = React.useMemo(() => {
+    if (hasFreeShipping) {
+      return {
+        type: 'Envío gratuito',
+        cost: 0,
+        eta: 'Entrega estimada en 3-5 días hábiles'
+      };
+    }
+    return {
+      type: 'Envío estándar',
+      cost: 5.99,
+      eta: 'Entrega estimada en 5-7 días hábiles'
+    };
+  }, [hasFreeShipping]);
 
   return (
     <>
@@ -110,45 +190,89 @@ function Card({ product, onAddToCartSuccess }) {
         <BootstrapCard.ImgOverlay className="card-overlay d-flex flex-column justify-content-end">
           <div className="card-content">
             <BootstrapCard.Title className="card-title">{name}</BootstrapCard.Title>
-            <BootstrapCard.Text className="card-description" title={description}>
-              {description}
+            <BootstrapCard.Text className="card-description" title={shortDescription || description}>
+              {shortDescription || description}
             </BootstrapCard.Text>
-            <div className="d-flex justify-content-between align-items-center">
-              <p className="card-price m-0">
-                <Badge className="badge-price">Price: ${formatMoney(price)}</Badge>
-              </p>
-              <div className="cart-control-container">
-                <Button
-                  variant="outline-secondary"
-                  onClick={handleDecrement}
-                  disabled={quantity === 0}
-                  className="quantity-btn decrement-btn"
-                >
-                  <span className="span-minus">-</span>
-                </Button>
-                <div className="spacer" />
-                <Button
-                  onClick={handleAddToCart}
-                  variant="light"
-                  className="cart-btn"
-                  data-tooltip-id="cart-tooltip"
-                  data-tooltip-content="Agregar al carrito"
-                >
-                  <FiShoppingCart className="card-icon-cart" />
-                  {quantity > 0 && (
-                    <Badge pill bg="danger" className="quantity-badge">
-                      {quantity}
-                    </Badge>
+            
+            {/* Precio con descuento mejorado */}
+            <div className="card-price-section">
+              {/* Descuento mostrado arriba para mayor visibilidad */}
+              {hasDiscount && compareAtPrice && (
+                <div className="discount-top">
+                  <Badge bg="danger" className="discount-badge">
+                    -{Math.round(discountPercentage)}%
+                  </Badge>
+                </div>
+              )}
+
+              {/* Fila con precio actual y precio anterior (inline) */}
+              <div className="price-row">
+                  {hasDiscount && compareAtPrice && (
+                      <span className="original-price original-price-inline ">
+                    ${formatMoney(compareAtPrice)}
+                  </span>
                   )}
-                </Button>
-                <div className="spacer" />
-                <Button
-                  variant="outline-secondary"
-                  onClick={handleIncrement}
-                  className="quantity-btn increment-btn"
-                >
-                  <span className="span-plus">+</span>
-                </Button>
+                <div className="current-price ms-2">
+                  <Badge className="badge-price">${formatMoney(price)}</Badge>
+                </div>
+              </div>
+            </div>
+
+            {/* Fila inferior: stock (start) y controles de carrito (end) */}
+            <div className="card-bottom-row">
+              <div className="card-stock-info">
+                {isInStock ? (
+                  <span className="stock-available">
+                    <span className="stock-dot"></span>
+                    {stock} disponibles
+                  </span>
+                ) : (
+                  <span className="stock-unavailable">
+                    <span className="stock-dot-out"></span>
+                    Sin stock
+                  </span>
+                )}
+              </div>
+
+              {/* Controles de carrito mejorados */}
+              <div className="cart-actions-wrapper">
+                <div className="cart-control-container">
+                  <Button
+                    variant="outline-secondary"
+                    onClick={handleDecrement}
+                    disabled={quantity === 0}
+                    className="quantity-btn decrement-btn"
+                    aria-label="Disminuir cantidad"
+                  >
+                    <span className="span-minus">-</span>
+                  </Button>
+                  <div className="spacer" />
+                  <Button
+                    onClick={handleAddToCart}
+                    variant="light"
+                    className="cart-btn"
+                    data-tooltip-id="cart-tooltip"
+                    data-tooltip-content={!isInStock ? "Sin stock" : "Agregar al carrito"}
+                    aria-label="Agregar al carrito"
+                  >
+                    <FiShoppingCart className="card-icon-cart" />
+                    {quantity > 0 && (
+                      <Badge pill bg="danger" className="quantity-badge">
+                        {quantity}
+                      </Badge>
+                    )}
+                  </Button>
+                  <div className="spacer" />
+                  <Button
+                    variant="outline-secondary"
+                    onClick={handleIncrement}
+                    className="quantity-btn increment-btn"
+                    disabled={!isInStock || quantity >= stock}
+                    aria-label="Aumentar cantidad"
+                  >
+                    <span className="span-plus">+</span>
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
@@ -156,106 +280,190 @@ function Card({ product, onAddToCartSuccess }) {
       </BootstrapCard>
 
       {/* Modal de detalles del producto */}
-     <Modal
-  show={showModal}
-  onHide={() => setShowModal(false)}
-  centered
-  size="xl"                               // MÁS ANCHO (bootstrap)
-  dialogClassName="product-modal"         // conserva tu clase
->
-  <Modal.Header closeButton className="product-modal-header">
-    <Modal.Title>{name}</Modal.Title>
-  </Modal.Header>
+      <Modal
+        show={showModal}
+        onHide={() => setShowModal(false)}
+        centered
+        size="xl"
+        dialogClassName="product-modal"
+      >
+        <Modal.Header closeButton className="product-modal-header">
+          <Modal.Title>{name}</Modal.Title>
+        </Modal.Header>
 
-  <Modal.Body className="product-modal-body">
-    {/* GRID 2 columnas: imagen fija + detalles */}
-    <div className="product-modal-image d-flex flex-column justify-content-between">
-      <img
-        src={getImageUrl()}
-        alt={name}
-        onError={(e) => { e.target.src = defaultImage; }}
-        style={{ marginBottom: '1.5rem', borderRadius: 8, background: '#23272b', border: 'none', boxShadow: 'none' }}
-      />
+        <Modal.Body className="product-modal-body">
+          {/* GRID 2 columnas: imagen + detalles */}
+          <div className="product-modal-image d-flex flex-column justify-content-between">
+            <img
+              src={getImageUrl()}
+              alt={name}
+              onError={(e) => { e.target.src = defaultImage; }}
+              style={{ 
+                marginBottom: '1.5rem', 
+                borderRadius: 8, 
+                background: '#23272b', 
+                border: 'none', 
+                boxShadow: 'none',
+                width: '100%',
+                objectFit: 'cover'
+              }}
+            />
 
-      {/* Datos del proveedor debajo de la imagen, mejor estructurados y sin botones */}
+            {/* Información del proveedor */}
+            <div className="provider-info">
+              <div className="provider-title">Información del proveedor</div>
+              <div className="provider-row">
+                <span className="provider-label">Nombre:</span> 
+                <span className="provider-value">{supplierName || 'No disponible'}</span>
+              </div>
+              <div className="provider-row">
+                <span className="provider-label">SKU:</span> 
+                <span className="provider-value">{sku || 'No disponible'}</span>
+              </div>
+              <div className="provider-row">
+                <span className="provider-label">Categoría:</span> 
+                <span className="provider-value">{categoryName || 'Sin categoría'}</span>
+              </div>
+            </div>
+          </div>
 
-      <div className="provider-info">
-        <div className="provider-title">Información del proveedor</div>
-        <div className="provider-row"><span className="provider-label">Nombre:</span> <span className="provider-value">{supplierName || 'Distribuciones García'}</span></div>
-        <div className="provider-row"><span className="provider-label">Dirección:</span> <span className="provider-value">Calle Falsa 123, Ciudad Ejemplo</span></div>
-        <div className="provider-row"><span className="provider-label">Teléfono:</span> <span className="provider-value">+34 600 123 456</span></div>
-        <div className="provider-row"><span className="provider-label">Email:</span> <span className="provider-value">proveedor@ejemplo.com</span></div>
-        <div className="provider-row"><span className="provider-label">Valoración:</span> <span className="provider-value" style={{ color: '#f59e0b', fontWeight: 600 }}>4.8/5</span> <span className="provider-value" style={{ color: '#bdbdbd' }}>(1,234 opiniones)</span></div>
-        <div className="provider-row"><span className="provider-label">Tiempo en la plataforma:</span> <span className="provider-value">3 años</span></div>
-      </div>
-    </div>
-
-    {/* Columna derecha: solo datos del producto */}
-    <div className="product-modal-details">
-      {/* BADGES individuales */}
-      <div className="product-badges" style={{ marginBottom: 12, display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-        {Array.isArray(badges) && badges.length > 0
-          ? badges.map((badge, i) => (
-              <span key={i} className="product-badge-chip">{badge}</span>
-            ))
-          : (typeof badges === 'string' && badges.trim() !== '' &&
-              badges.split(',').map((badge, i) => (
-                <span key={i} className="product-badge-chip">{badge.trim()}</span>
-              )))}
-      </div>
-      <div className="product-meta-row">
-        <span className="product-brand"><span style={{ color: '#f59e0b', fontWeight: 700 }}>Marca:</span> <strong style={{ color: '#fff', fontWeight: 700 }}>{brand}</strong></span>
-        <span className="product-rating">
-          <span style={{ color: '#f59e0b', fontWeight: 700 }}><RatingStars value={rating} /></span> <a href="#opiniones" className="reviews-link" style={{ color: '#f3f3f3', fontWeight: 600, textDecoration: 'underline' }}>{reviewCount != null ? reviewCount.toLocaleString() : '0'} reseñas</a>
-        </span>
-      </div>
-      <div className="product-price-block">
-        <span className="product-price">US$ {formatMoney(price)}</span>
-        <span className="product-shipping">
-          {shipping?.type} {shipping?.cost === 0 ? '(Gratis)' : `(+ US$ ${formatMoney(shipping?.cost)})`}
-        </span>
-        {shipping?.eta && <div className="product-eta" style={{ color: '#f59e0b', fontWeight: 700 }}>Llega: <strong style={{ color: '#fff', fontWeight: 700 }}>{shipping.eta}</strong></div>}
-      </div>
-      <div className="product-availability">
-        {stock > 0 ? <span className="in-stock">En stock ({stock} disponibles)</span> : <span className="out-of-stock">Sin stock</span>}
-      </div>
-      <div className="product-info-grid">
-        <div><span className="label">Vence:</span> {formatDate(computedExpiry)}</div>
-        <div><span className="label">SKU:</span> {sku}</div>
-        <div><span className="label">Categoría:</span> {categoryName}</div>
-      </div>
-      {/* Descripción, características y especificaciones a lo largo */}
-      <div className="product-details-block" style={{ marginTop: 24 }}>
-        <h5 style={{ color: '#f59e0b', fontWeight: 700 }}>Descripción</h5>
-        <p className="product-description" style={{ whiteSpace: 'pre-line', color: '#fff', marginLeft: 0, textAlign: 'justify' }}>{description || 'Descripción no disponible.'}</p>
-        <h5 style={{ color: '#f59e0b', fontWeight: 700, marginTop: 20 }}>Características</h5>
-        <div className="product-features" style={{ color: '#fff', marginLeft: 0 }}>
-          {Array.isArray(features) && features.length > 0
-            ? <ul style={{ paddingLeft: 0, marginLeft: 0, listStylePosition: 'inside', textAlign: 'justify' }}>{features.map((f, i) => <li key={i} style={{ marginLeft: 0 }}>{typeof f === 'string' ? f : JSON.stringify(f)}</li>)}</ul>
-            : (typeof features === 'string' && features.trim() !== ''
-                ? <p style={{ marginLeft: 0, textAlign: 'justify' }}>{features}</p>
-                : <span style={{ marginLeft: 0 }}>Características no disponibles.</span>)}
-        </div>
-        <h5 style={{ color: '#f59e0b', fontWeight: 700, marginTop: 20 }}>Especificaciones</h5>
-        <div className="product-specs" style={{ color: '#fff', marginLeft: 0 }}>
-          {specs && typeof specs === 'object' && Object.keys(specs).length > 0
-            ? <ul style={{ display: 'flex', flexWrap: 'wrap', gap: '1.5rem', paddingLeft: 0, margin: 0, listStyle: 'none' }}>
-                {Object.entries(specs).map(([k, v], i) => (
-                  <li key={i} className="spec-badge">
-                    <span className="spec-key">{k}:</span> <span className="spec-val">{v}</span>
-                  </li>
+          {/* Columna derecha: datos del producto */}
+          <div className="product-modal-details">
+            {/* BADGES */}
+            {badgesList.length > 0 && (
+              <div className="product-badges" style={{ marginBottom: 12, display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                {badgesList.map((badge, i) => (
+                  <span key={i} className="product-badge-chip">{badge}</span>
                 ))}
-              </ul>
-            : (typeof specs === 'string' && specs.trim() !== ''
-                ? <p style={{ marginLeft: 0, whiteSpace: 'pre-line', textAlign: 'justify' }}>{specs}</p>
-                : <span style={{ marginLeft: 0 }}>Especificaciones no disponibles.</span>)}
-        </div>
-      </div>
-      <div className="product-legal">Devoluciones gratis por 30 días · Garantía del fabricante por 12 meses.</div>
-    </div>
-  </Modal.Body>
-</Modal>
+              </div>
+            )}
 
+            {/* Metadata: Marca y Rating */}
+            <div className="product-meta-row">
+              <span className="product-brand">
+                <span style={{ color: '#f59e0b', fontWeight: 700 }}>Marca:</span> 
+                <strong style={{ color: '#fff', fontWeight: 700 }}>{brand}</strong>
+              </span>
+              <span className="product-rating">
+                <span style={{ color: '#f59e0b', fontWeight: 700 }}>
+                  <RatingStars value={rating} />
+                </span> 
+                {reviewCount > 0 && (
+                  <span style={{ color: '#f3f3f3', fontWeight: 600 }}>
+                    ({reviewCount.toLocaleString()} {reviewCount === 1 ? 'reseña' : 'reseñas'})
+                  </span>
+                )}
+              </span>
+            </div>
+
+            {/* Precio y descuento */}
+            <div className="product-price-block">
+              {/* Descuento arriba para mayor visibilidad */}
+              {hasDiscount && compareAtPrice && (
+                <div className="discount-top modal-discount-top" style={{ marginBottom: '0.5rem' }}>
+                  <Badge bg="danger" style={{ fontSize: '1rem' }}>
+                    -{Math.round(discountPercentage)}% OFF
+                  </Badge>
+                </div>
+              )}
+
+              {/* Fila con precio actual y precio anterior (inline) */}
+              <div className="price-row modal-price-row" style={{ display: 'flex', alignItems: 'baseline', gap: '1rem', marginBottom: '0.5rem' }}>
+                <span className="product-price">US$ {formatMoney(price)}</span>
+                {hasDiscount && compareAtPrice && (
+                  <span className="original-price original-price-inline">
+                    US$ {formatMoney(compareAtPrice)}
+                  </span>
+                )}
+              </div>
+
+              <span className="product-shipping">
+                {shippingInfo.type} {shippingInfo.cost === 0 ? '(Gratis)' : `(+ US$ ${formatMoney(shippingInfo.cost)})`}
+              </span>
+              {shippingInfo.eta && (
+                <div className="product-eta" style={{ color: '#f59e0b', fontWeight: 700 }}>
+                  {shippingInfo.eta}
+                </div>
+              )}
+            </div>
+
+            {/* Disponibilidad */}
+            <div className="product-availability">
+              {isInStock ? (
+                <span className="in-stock">✓ En stock ({stock} {stock === 1 ? 'unidad disponible' : 'unidades disponibles'})</span>
+              ) : (
+                <span className="out-of-stock">✗ Sin stock</span>
+              )}
+            </div>
+
+            {/* Información adicional */}
+            <div className="product-info-grid">
+              {expiryDate && (
+                <div><span className="label">Vence:</span> {formatDate(expiryDate)}</div>
+              )}
+              <div><span className="label">SKU:</span> {sku || 'No disponible'}</div>
+              <div><span className="label">Categoría:</span> {categoryName || 'Sin categoría'}</div>
+            </div>
+
+            {/* Descripción */}
+            <div className="product-details-block" style={{ marginTop: 24 }}>
+              <h5 style={{ color: '#f59e0b', fontWeight: 700 }}>Descripción</h5>
+              <p className="product-description" style={{ 
+                whiteSpace: 'pre-line', 
+                color: '#fff', 
+                marginLeft: 0, 
+                textAlign: 'justify' 
+              }}>
+                {description}
+              </p>
+
+              {/* Características */}
+              <h5 style={{ color: '#f59e0b', fontWeight: 700, marginTop: 20 }}>Características</h5>
+              <div className="product-features" style={{ color: '#fff', marginLeft: 0 }}>
+                {featuresList.length > 0 ? (
+                  <ul style={{ 
+                    paddingLeft: 20, 
+                    marginLeft: 0, 
+                    textAlign: 'justify' 
+                  }}>
+                    {featuresList.map((f, i) => (
+                      <li key={i} style={{ marginBottom: '0.5rem' }}>
+                        {typeof f === 'string' ? f : JSON.stringify(f)}
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <span style={{ marginLeft: 0, color: '#9e9e9e' }}>No hay características disponibles.</span>
+                )}
+              </div>
+
+              {/* Especificaciones */}
+              <h5 style={{ color: '#f59e0b', fontWeight: 700, marginTop: 20 }}>Especificaciones</h5>
+              <div className="product-specs" style={{ color: '#fff', marginLeft: 0 }}>
+                {Object.keys(specsDictionary).length > 0 ? (
+                  <ul style={{ 
+                    display: 'flex', 
+                    flexWrap: 'wrap', 
+                    gap: '1rem', 
+                    paddingLeft: 0, 
+                    margin: 0, 
+                    listStyle: 'none' 
+                  }}>
+                    {Object.entries(specsDictionary).map(([k, v], i) => (
+                      <li key={i} className="spec-badge">
+                        <span className="spec-key">{k}:</span> 
+                        <span className="spec-val">{v || 'N/A'}</span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <span style={{ marginLeft: 0, color: '#9e9e9e' }}>No hay especificaciones disponibles.</span>
+                )}
+              </div>
+            </div>
+          </div>
+        </Modal.Body>
+      </Modal>
 
       {/* Tooltips */}
       <Tooltip

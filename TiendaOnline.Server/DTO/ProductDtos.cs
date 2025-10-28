@@ -86,23 +86,22 @@ namespace TiendaOnline.Server.Models
         [Required]
         public int CategoryId { get; set; }
 
-        // REMOVER SupplierId - se asignará automáticamente
-        // [Required]
-        // public int SupplierId { get; set; }
-
         public IFormFile? ImageFile { get; set; }
         public string? Sku { get; set; }
         public DateTime? ExpiryDate { get; set; }
-        public List<string>? Features { get; set; }
-        public Dictionary<string, string>? Specs { get; set; }
-        public List<string>? Badges { get; set; }
+        
+        // Cambiar a string para recibir JSON serializado desde FormData
+        public string? Features { get; set; }
+        public string? Specs { get; set; }
+        public string? Badges { get; set; }
+        
         public bool IsPublished { get; set; } = false;
         public bool IsFeatured { get; set; } = false;
         public bool HasFreeShipping { get; set; } = false;
         public int IdentityId { get; set; }
 
         // Método para convertir a entidad (actualizado)
-        public Product ToEntity(int supplierId) // Ahora recibe el supplierId
+        public Product ToEntity(int supplierId)
         {
             return new Product
             {
@@ -117,9 +116,9 @@ namespace TiendaOnline.Server.Models
                 SupplierId = supplierId, 
                 Sku = Sku,
                 ExpiryDate = ExpiryDate,
-                Features = Features != null ? JsonSerializer.Serialize(Features) : null,
-                Specs = Specs != null ? JsonSerializer.Serialize(Specs) : null,
-                Badges = Badges != null ? JsonSerializer.Serialize(Badges) : null,
+                Features = Features, 
+                Specs = Specs,       
+                Badges = Badges,     
                 IsPublished = IsPublished,
                 IsFeatured = IsFeatured,
                 HasFreeShipping = HasFreeShipping,
@@ -167,9 +166,12 @@ namespace TiendaOnline.Server.Models
         public IFormFile? ImageFile { get; set; }
         public string? Sku { get; set; }
         public DateTime? ExpiryDate { get; set; }
-        public List<string>? Features { get; set; }
-        public Dictionary<string, string>? Specs { get; set; }
-        public List<string>? Badges { get; set; }
+        
+        // Cambiar a string para recibir JSON serializado desde FormData
+        public string? Features { get; set; }
+        public string? Specs { get; set; }
+        public string? Badges { get; set; }
+        
         public bool IsPublished { get; set; }
         public bool IsFeatured { get; set; }
         public bool HasFreeShipping { get; set; }
@@ -192,9 +194,9 @@ namespace TiendaOnline.Server.Models
                 SupplierId = supplierId,
                 Sku = Sku,
                 ExpiryDate = ExpiryDate,
-                Features = Features != null ? JsonSerializer.Serialize(Features) : null,
-                Specs = Specs != null ? JsonSerializer.Serialize(Specs) : null,
-                Badges = Badges != null ? JsonSerializer.Serialize(Badges) : null,
+                Features = Features, // Ya viene como string JSON
+                Specs = Specs,       // Ya viene como string JSON
+                Badges = Badges,     // Ya viene como string JSON
                 IsPublished = IsPublished,
                 IsFeatured = IsFeatured,
                 HasFreeShipping = HasFreeShipping,

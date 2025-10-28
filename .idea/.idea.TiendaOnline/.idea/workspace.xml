@@ -11,10 +11,14 @@
   <component name="ChangeListManager">
     <list default="true" id="d31e5276-1060-46d5-ade9-526dcc5cef39" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.TiendaOnline/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.TiendaOnline/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TiendaOnline.Server/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/appsettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/TiendaOnline.Server/appsettings.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tiendaonline.client/src/components/heroSection/Hero.css" beforeDir="false" afterPath="$PROJECT_DIR$/tiendaonline.client/src/components/heroSection/Hero.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tiendaonline.client/src/components/search/Search.css" beforeDir="false" afterPath="$PROJECT_DIR$/tiendaonline.client/src/components/search/Search.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/DTO/ProductDtos.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TiendaOnline.Server/DTO/ProductDtos.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/wwwroot/uploads/products/1bad01a3-9c06-4edc-9ece-e804d60c1cd9_Airpods.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tiendaonline.client/src/components/card/Card.css" beforeDir="false" afterPath="$PROJECT_DIR$/tiendaonline.client/src/components/card/Card.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tiendaonline.client/src/components/card/Card.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/tiendaonline.client/src/components/card/Card.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tiendaonline.client/src/components/footer/Footer.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/tiendaonline.client/src/components/footer/Footer.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tiendaonline.client/src/components/modal/ModalProducts.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/tiendaonline.client/src/components/modal/ModalProducts.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tiendaonline.client/src/pages/dashboard/product/ProductsList.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/tiendaonline.client/src/pages/dashboard/product/ProductsList.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tiendaonline.client/src/pages/home/Home.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/tiendaonline.client/src/pages/home/Home.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,18 +31,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "jchp95"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;jchp95&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/jchp95/SolvaEcommerce.git",
-    "accountId": "1cdf7be6-8af6-48e5-af0f-ea884452df45"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/jchp95/SolvaEcommerce.git&quot;,
+    &quot;accountId&quot;: &quot;1cdf7be6-8af6-48e5-af0f-ea884452df45&quot;
   }
-}]]></component>
+}</component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/TiendaOnline.Server/Models/Catalog/ProductCategory.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TiendaOnline.Server/Models/Catalog/Service.cs" root0="FORCE_HIGHLIGHTING" />
@@ -58,6 +62,7 @@
     <setting file="file://$PROJECT_DIR$/TiendaOnline.Server/Models/Supplier/Supplier.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/8a7e52d89a2d41daba4ec377152881ff1a910/ff/ecf504c7/IdentityDbContext`8.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
+  <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="CurrentFile" />
   </component>
@@ -69,24 +74,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;.NET Launch Settings Profile.TiendaOnline.Server: http.executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    ".NET Launch Settings Profile.TiendaOnline.Server: http.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main",
+    "junie.onboarding.icon.badge.shown": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "to.speed.mode.migration.done": "true",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected=".NET Launch Settings Profile.TiendaOnline.Server: http">
     <configuration name="TiendaOnline.Server: http" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
       <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/TiendaOnline.Server/TiendaOnline.Server.csproj" />
@@ -141,13 +146,24 @@
       <workItem from="1759435484181" duration="13000" />
       <workItem from="1760748098281" duration="1502000" />
       <workItem from="1760886153766" duration="9119000" />
-      <workItem from="1761670597465" duration="1158000" />
+      <workItem from="1761670597465" duration="6708000" />
+      <workItem from="1761688025121" duration="6893000" />
     </task>
+    <task id="LOCAL-00001" summary="ajustes de estilos">
+      <option name="closed" value="true" />
+      <created>1761671769006</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1761671769006</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -162,6 +178,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+    <MESSAGE value="ajustes de estilos" />
+    <option name="LAST_COMMIT_MESSAGE" value="ajustes de estilos" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -178,6 +196,12 @@
           <properties exception="System.Threading.ThreadAbortException" breakIfHandledByOtherCode="false" displayValue="System.Threading.ThreadAbortException" />
           <option name="timeStamp" value="3" />
         </breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/tiendaonline.client/src/components/card/Card.jsx</url>
+          <line>221</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>

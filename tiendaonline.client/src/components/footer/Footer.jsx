@@ -135,7 +135,7 @@ function Footer() {
 
                         <Form onSubmit={handleSubmit(onSubmit)} className="vendor-form">
                             <Row>
-                                <Col md={6} className="form-group">
+                                <Col className="form-group">
                                     <Form.Control
                                         type="text"
                                         placeholder="Name"
@@ -144,7 +144,7 @@ function Footer() {
                                     />
                                     {errors.name && <div className="invalid-feedback">{errors.name.message}</div>}
                                 </Col>
-                                <Col md={6} className="form-group">
+                                <Col className="form-group">
                                     <Form.Control
                                         type="email"
                                         placeholder="Email"
