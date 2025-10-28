@@ -21,24 +21,25 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
     flex-grow: 1;
-    gap: 4rem;
+    gap: 3rem;
 }
 
 .hero-main {
-    margin-top: 2rem;
+    margin-top: 1rem;
 }
 
     .hero-main h1 {
-        font-size: 4rem;
+        font-size: 3.5rem;
         font-weight: 700;
         margin-bottom: 1.5rem;
         line-height: 1.1;
     }
 
     .hero-subtitle {
-        font-size: 1.6rem;
-        margin-bottom: 2.5rem;
+        font-size: 1.4rem;
+        margin-bottom: 2rem;
         opacity: 0.95;
         font-weight: 300;
         letter-spacing: 0.5px;
@@ -235,11 +236,15 @@
 /* Responsive Design */
 @media (max-width: 768px) {
     .hero-main h1 {
-        font-size: 2.5rem;
+        font-size: 2.2rem;
     }
     
     .hero-subtitle {
-        font-size: 1.2rem;
+        font-size: 1.1rem;
+    }
+    
+    .hero-content {
+        gap: 2rem;
     }
     
     .supplier-promo-card {

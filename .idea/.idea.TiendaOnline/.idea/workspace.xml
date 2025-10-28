@@ -10,91 +10,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d31e5276-1060-46d5-ade9-526dcc5cef39" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/TiendaOnline.Server/Models/Catalog/Category.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TiendaOnline.Server/Models/Catalog/Product.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TiendaOnline.Server/Models/Catalog/ProductCategory.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TiendaOnline.Server/Models/Catalog/Service.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TiendaOnline.Server/Models/Catalog/ServiceBooking.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TiendaOnline.Server/Models/Catalog/ServiceCategory.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TiendaOnline.Server/Models/Customers/Address.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TiendaOnline.Server/Models/Customers/CartItem.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TiendaOnline.Server/Models/Customers/Customer.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TiendaOnline.Server/Models/Customers/CustomerReview.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TiendaOnline.Server/Models/Customers/Wishlist.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TiendaOnline.Server/Models/Identity/ApplicationRole.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TiendaOnline.Server/Models/Identity/ApplicationUser.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TiendaOnline.Server/Models/Identity/UserRole.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TiendaOnline.Server/Models/Inventory/InventoryHistory.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TiendaOnline.Server/Models/Orders/AddressSnapshot.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TiendaOnline.Server/Models/Orders/Order.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TiendaOnline.Server/Models/Orders/OrderItem.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TiendaOnline.Server/Models/Orders/OrderStatusHistory.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TiendaOnline.Server/Models/Payments/Payment.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TiendaOnline.Server/Models/Shared/AppConstants.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TiendaOnline.Server/Models/Supplier/Supplier.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TiendaOnline.Server/Models/Supplier/SupplierManager.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.TiendaOnline/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.TiendaOnline/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/Context/ApplicationDbContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TiendaOnline.Server/Context/ApplicationDbContext.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/Controllers/CategoriesController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TiendaOnline.Server/Controllers/CategoriesController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/Controllers/ProductsController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TiendaOnline.Server/Controllers/ProductsController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/Controllers/ReportsController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TiendaOnline.Server/Controllers/ReportsController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/Controllers/SearchController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TiendaOnline.Server/Controllers/SearchController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/Controllers/SiteSettingsController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TiendaOnline.Server/Controllers/SiteSettingsController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/Controllers/UploadController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TiendaOnline.Server/Controllers/UploadController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/Controllers/UsersController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TiendaOnline.Server/Controllers/UsersController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/DTO/ApiResponse.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TiendaOnline.Server/DTO/ApiResponse.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/DTO/ProductCreateDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TiendaOnline.Server/DTO/ProductCreateDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/DTO/ProductReadDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TiendaOnline.Server/DTO/ProductReadDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/Migrations/ApplicationDbContextModelSnapshot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TiendaOnline.Server/Migrations/ApplicationDbContextModelSnapshot.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/Models/AppConstants.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/Models/CartItem.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/Models/Category.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/Models/Permissions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TiendaOnline.Server/Models/Shared/Permissions.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/Models/Product.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/Models/Report.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TiendaOnline.Server/Models/Reports/Report.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/Models/SiteSettings.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TiendaOnline.Server/Models/Settings/SiteSettings.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TiendaOnline.Server/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/TiendaOnline.Server.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/TiendaOnline.Server/TiendaOnline.Server.csproj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/appsettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/TiendaOnline.Server/appsettings.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/wwwroot/uploads/products/14b4cdca-1bc3-454f-ae9f-d4d0ff81e93b_macbook-pro.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/wwwroot/uploads/products/18478ef9-15c9-4275-80ae-f2f86538ea5c_iphone.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/wwwroot/uploads/products/58f8974e-c674-4076-a1ff-bb6ddcd36da0_airpods.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/wwwroot/uploads/products/5b1ce355-544a-4dfa-b853-00f7a86c41b9_iphone.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/wwwroot/uploads/products/d75aa520-11c2-4f8c-ac0c-724dbff5067b_airpods.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/wwwroot/uploads/products/d913c5c0-0d9a-4e7b-92d3-382cb283b02d_airpods.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/wwwroot/uploads/products/e617bcb4-f913-4aa0-b257-a505f6fd8453_cable-tipo-c-a-lightning.webp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/wwwroot/uploads/products/e94dae49-57d7-4ea1-8e16-76ef6a048c04_Iphone.webp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/wwwroot/uploads/qr/2b163326-99ef-4a30-a320-a114d7ab006c.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/wwwroot/uploads/qr/2f85cfe2-bfb3-47cd-b22d-befffa8c2be3.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/wwwroot/uploads/qr/359fe653-57dc-4b0b-a91f-293911d2f118.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/wwwroot/uploads/qr/45f930e4-34f4-4e63-9e46-2344c6b44457.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/wwwroot/uploads/qr/763a5f6a-6d3a-49d4-97c5-d7e722520d2e.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/wwwroot/uploads/qr/78a14489-f662-4355-b12a-ee9f04053701.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tiendaonline.client/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/tiendaonline.client/src/App.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tiendaonline.client/src/RouterPages.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/tiendaonline.client/src/RouterPages.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tiendaonline.client/src/api/endpoints/products.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/tiendaonline.client/src/api/endpoints/products.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tiendaonline.client/src/components/card/Card.css" beforeDir="false" afterPath="$PROJECT_DIR$/tiendaonline.client/src/components/card/Card.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tiendaonline.client/src/components/card/Card.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/tiendaonline.client/src/components/card/Card.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tiendaonline.client/src/components/footer/Footer.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/tiendaonline.client/src/components/footer/Footer.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tiendaonline.client/src/components/modal/ModalCategories.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/tiendaonline.client/src/components/modal/ModalCategories.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tiendaonline.client/src/components/modal/ModalProducts.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/tiendaonline.client/src/components/modal/ModalProducts.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tiendaonline.client/src/components/navbar/Navbar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/tiendaonline.client/src/components/navbar/Navbar.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tiendaonline.client/src/components/search/Search.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/tiendaonline.client/src/components/search/Search.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tiendaonline.client/src/components/sidebar/CategoriesSidebar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/tiendaonline.client/src/components/sidebar/CategoriesSidebar.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tiendaonline.client/src/components/sidebar/DashboardSidebar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/tiendaonline.client/src/components/sidebar/DashboardSidebar.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tiendaonline.client/src/context/SpinnerContext.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/tiendaonline.client/src/context/SpinnerContext.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tiendaonline.client/src/features/products/hooks/useProducts.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/tiendaonline.client/src/features/products/hooks/useProducts.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tiendaonline.client/src/layout/Layout.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/tiendaonline.client/src/layout/Layout.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tiendaonline.client/src/main.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/tiendaonline.client/src/main.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tiendaonline.client/src/pages/dashboard/AdminDashboard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/tiendaonline.client/src/pages/dashboard/AdminDashboard.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tiendaonline.client/src/pages/dashboard/category/CategoriesList.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/tiendaonline.client/src/pages/dashboard/category/CategoriesList.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tiendaonline.client/src/pages/dashboard/product/ProductsList.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/tiendaonline.client/src/pages/dashboard/product/ProductsList.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tiendaonline.client/src/pages/dashboard/reports/ReportsList.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/tiendaonline.client/src/pages/dashboard/reports/ReportsList.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tiendaonline.client/src/pages/dashboard/users/UsersList.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/tiendaonline.client/src/pages/dashboard/users/UsersList.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tiendaonline.client/src/pages/home/Home.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/tiendaonline.client/src/pages/home/Home.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tiendaonline.client/src/pages/login/LoginPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/tiendaonline.client/src/pages/login/LoginPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tiendaonline.client/src/pages/register/Register.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/tiendaonline.client/src/pages/register/Register.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tiendaonline.client/src/store/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/tiendaonline.client/src/store/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tiendaonline.client/src/components/heroSection/Hero.css" beforeDir="false" afterPath="$PROJECT_DIR$/tiendaonline.client/src/components/heroSection/Hero.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tiendaonline.client/src/components/search/Search.css" beforeDir="false" afterPath="$PROJECT_DIR$/tiendaonline.client/src/components/search/Search.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -107,6 +27,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "jchp95"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/jchp95/SolvaEcommerce.git",
+    "accountId": "1cdf7be6-8af6-48e5-af0f-ea884452df45"
+  }
+}]]></component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/TiendaOnline.Server/Models/Catalog/ProductCategory.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TiendaOnline.Server/Models/Catalog/Service.cs" root0="FORCE_HIGHLIGHTING" />
@@ -209,6 +141,7 @@
       <workItem from="1759435484181" duration="13000" />
       <workItem from="1760748098281" duration="1502000" />
       <workItem from="1760886153766" duration="9119000" />
+      <workItem from="1761670597465" duration="1158000" />
     </task>
     <servers />
   </component>
@@ -216,6 +149,17 @@
     <option name="version" value="3" />
   </component>
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
   </component>

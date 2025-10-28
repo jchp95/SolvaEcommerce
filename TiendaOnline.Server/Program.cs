@@ -367,8 +367,9 @@ public class AuthResponsesOperationFilter : IOperationFilter
                 .Select(a => a.Roles ?? a.Policy)
                 .ToList();
 
-            operation.Responses.Add("401", new OpenApiResponse { Description = "Unauthorized" });
-            operation.Responses.Add("403", new OpenApiResponse { Description = "Forbidden" });
+            // Usar TryAdd para evitar duplicados
+            operation.Responses.TryAdd("401", new OpenApiResponse { Description = "Unauthorized" });
+            operation.Responses.TryAdd("403", new OpenApiResponse { Description = "Forbidden" });
 
             if (roles.Any())
             {
