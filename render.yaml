@@ -1,8 +1,9 @@
-# render.yaml para desplegar todo en Render usando Docker
-# Servicios:
+# render.yaml para desplegar servicios en Render usando Docker
+# Servicios configurados aquí:
 #  - tiendaonline-server : backend (.NET 9) público
 #  - tiendaonline-meilisearch : Meilisearch (internal)
-#  - tiendaonline-mssql : SQL Server (internal) — opcional pero incluido para despliegue "todo en Render"
+# Nota: El despliegue de SQL Server en contenedor en Render suele fallar por permisos/limitaciones de la plataforma.
+# Recomendación: usar una base de datos gestionada (Azure SQL, RDS, Render Database) en producción.
 
 services:
   - type: web
@@ -10,14 +11,17 @@ services:
     env: docker
     dockerfilePath: TiendaOnline.Server/Dockerfile
     plan: free
-    # Variables sensibles: configúralas en el panel de Render (no en repo).
     envVars:
       - key: ASPNETCORE_ENVIRONMENT
         value: Production
       - key: DOTNET_RUNNING_IN_CONTAINER
         value: "true"
-      # ConnectionStrings__DefaultConnection, Jwt__SecretKey, Meilisearch__ServerUrl, Meilisearch__MasterKey, CorsSettings__AllowedOrigins
-      # deben configurarse en Render UI como Environment Variables.
+      # Configura estas variables en la UI de Render (no en el repo):
+      # ConnectionStrings__DefaultConnection (ej. Azure SQL o Render DB)
+      # Meilisearch__ServerUrl (ej. http://tiendaonline-meilisearch:7700 si usas Meilisearch interno)
+      # Meilisearch__MasterKey
+      # Jwt__SecretKey
+      # CorsSettings__AllowedOrigins
 
   - type: web
     name: tiendaonline-meilisearch
@@ -31,25 +35,16 @@ services:
       - key: MEILI_HTTP_ADDR
         value: 0.0.0.0:7700
 
-  - type: web
-    name: tiendaonline-mssql
-    env: docker
-    dockerfilePath: deploy/mssql/Dockerfile
-    plan: starter
-    internal: true
-    # SQL Server suele necesitar más recursos; si falla, considera usar una DB gestionada y cambiar EF provider.
-    envVars:
-      - key: ACCEPT_EULA
-        value: "Y"
-      - key: SA_PASSWORD
-        value: YourStrong!Passw0rd
+# Discos y detalles de la DB:
+# - Si necesitas Meilisearch persistente, crea un Persistent Disk y móntalo en /data.ms para el servicio tiendaonline-meilisearch.
+# - Para la base de datos, en lugar de crear un servicio MSSQL en Render (no recomendado), crea un servicio de base de datos gestionada
+#   y configura en el servicio `tiendaonline-server` la env var `ConnectionStrings__DefaultConnection` con la cadena adecuada.
+# Ejemplos de ConnectionString:
+#  - Azure SQL:
+#    Server=tcp:<your-server>.database.windows.net,1433;Initial Catalog=TiendaOnline;Persist Security Info=False;User ID=<user>;Password=<password>;Encrypt=True;Connection Timeout=30;
+#  - Render Postgres (si migras a Postgres):
+#    Host=<host>;Port=5432;Database=tiendaonline;Username=<user>;Password=<password>
 
-# Notas:
-# - Los servicios internos (internal: true) sólo estarán accesibles desde otros servicios del mismo repo en Render.
-# - En Render, define las siguientes env vars para el servicio `tiendaonline-server`:
-#     ConnectionStrings__DefaultConnection = Server=tiendaonline-mssql:1433;Database=tiendaonline;User Id=sa;Password=YourStrong!Passw0rd;
-#     Meilisearch__ServerUrl = http://tiendaonline-meilisearch:7700
-#     Meilisearch__MasterKey = masterKey
-#     Jwt__SecretKey = <tu secreto>
-#     CorsSettings__AllowedOrigins = https://tu-front.vercel.app
-# - Si prefieres usar una base de datos gestionada (Postgres en Render), deberás migrar EF a Npgsql (cambio en el código).
+# Notas finales:
+# - No guardes secretos en el repo. Define SA/DB/JWT/Meili keys en Settings -> Environment of the specific service in Render.
+# - Si quieres que gestione la migración a Postgres o que quite el servicio MSSQL del repo render.yaml para que no intente desplegarlo, dímelo y lo actualizo.
