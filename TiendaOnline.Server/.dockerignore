@@ -1,0 +1,32 @@
+# Ignorar artefactos locales
+bin/
+obj/
+.vs/
+*.user
+*.suo
+*.cache
+
+# Controles de versiones y editores
+.git
+.gitignore
+.vscode/
+.idea/
+
+# Node / client
+node_modules/
+tiendaonline.client/node_modules/
+
+# Datos y dumps locales
+data.ms/
+dumps/
+
+# Otros
+**/bin/
+**/obj/
+**/*.log
+**/*.db
+**/*.sqlite
+
+# Publicaciones previas
+publish/
+

@@ -1,0 +1,55 @@
+# render.yaml para desplegar todo en Render usando Docker
+# Servicios:
+#  - tiendaonline-server : backend (.NET 9) público
+#  - tiendaonline-meilisearch : Meilisearch (internal)
+#  - tiendaonline-mssql : SQL Server (internal) — opcional pero incluido para despliegue "todo en Render"
+
+services:
+  - type: web
+    name: tiendaonline-server
+    env: docker
+    dockerfilePath: TiendaOnline.Server/Dockerfile
+    plan: free
+    # Variables sensibles: configúralas en el panel de Render (no en repo).
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: DOTNET_RUNNING_IN_CONTAINER
+        value: "true"
+      # ConnectionStrings__DefaultConnection, Jwt__SecretKey, Meilisearch__ServerUrl, Meilisearch__MasterKey, CorsSettings__AllowedOrigins
+      # deben configurarse en Render UI como Environment Variables.
+
+  - type: web
+    name: tiendaonline-meilisearch
+    env: docker
+    dockerfilePath: deploy/meilisearch/Dockerfile
+    plan: free
+    internal: true
+    envVars:
+      - key: MEILI_MASTER_KEY
+        value: masterKey
+      - key: MEILI_HTTP_ADDR
+        value: 0.0.0.0:7700
+
+  - type: web
+    name: tiendaonline-mssql
+    env: docker
+    dockerfilePath: deploy/mssql/Dockerfile
+    plan: starter
+    internal: true
+    # SQL Server suele necesitar más recursos; si falla, considera usar una DB gestionada y cambiar EF provider.
+    envVars:
+      - key: ACCEPT_EULA
+        value: "Y"
+      - key: SA_PASSWORD
+        value: YourStrong!Passw0rd
+
+# Notas:
+# - Los servicios internos (internal: true) sólo estarán accesibles desde otros servicios del mismo repo en Render.
+# - En Render, define las siguientes env vars para el servicio `tiendaonline-server`:
+#     ConnectionStrings__DefaultConnection = Server=tiendaonline-mssql:1433;Database=tiendaonline;User Id=sa;Password=YourStrong!Passw0rd;
+#     Meilisearch__ServerUrl = http://tiendaonline-meilisearch:7700
+#     Meilisearch__MasterKey = masterKey
+#     Jwt__SecretKey = <tu secreto>
+#     CorsSettings__AllowedOrigins = https://tu-front.vercel.app
+# - Si prefieres usar una base de datos gestionada (Postgres en Render), deberás migrar EF a Npgsql (cambio en el código).
