@@ -1,14 +1,5 @@
 import { useState, useEffect } from 'react';
-import {
-    Container,
-    Row,
-    Col,
-    Card,
-    Form,
-    Button,
-    Image,
-    InputGroup
-} from 'react-bootstrap';
+import { Row, Col, Card, Form, Button, InputGroup } from 'react-bootstrap';
 import {
     Building,
     Envelope,
@@ -28,6 +19,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchSiteSettings, updateSiteSettings } from '../../../features/reduxSlices/siteSettings/siteSettingsSlice';
 import './SiteSettings.css';
+import apiClient from '../../../api/client';
 
 const SiteSettings = () => {
     const navigate = useNavigate();
@@ -52,7 +44,7 @@ const SiteSettings = () => {
     const [qrFile, setQrFile] = useState(null);
 
     const dispatch = useDispatch();
-    const { data: siteSettings, loading: reduxLoading } = useSelector(state => state.siteSettings);
+    const { data: siteSettings } = useSelector(state => state.siteSettings);
 
     useEffect(() => {
         dispatch(fetchSiteSettings());
@@ -75,10 +67,6 @@ const SiteSettings = () => {
             });
         }
     }, [siteSettings]);
-
-    const loadSiteSettings = () => {
-        dispatch(fetchSiteSettings());
-    };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -137,8 +125,7 @@ const SiteSettings = () => {
             // Subir logo si hay un archivo nuevo
             if (logoFile) {
                 try {
-                    const logoUrl = await uploadFile(logoFile, 'logo');
-                    updatedFormData.logoUrl = logoUrl;
+                    updatedFormData.logoUrl = await uploadFile(logoFile, 'logo');
                 } catch (error) {
                     await AlertService.error({
                         title: 'Error al subir Logo',
@@ -152,8 +139,7 @@ const SiteSettings = () => {
             // Subir QR si hay un archivo nuevo
             if (qrFile) {
                 try {
-                    const qrUrl = await uploadFile(qrFile, 'qr');
-                    updatedFormData.qrCodeUrl = qrUrl;
+                    updatedFormData.qrCodeUrl = await uploadFile(qrFile, 'qr');
                 } catch (error) {
                     await AlertService.error({
                         title: 'Error al subir Código QR',
@@ -202,19 +188,6 @@ const SiteSettings = () => {
         }
     };
 
-    const showAlert = async (type, message) => {
-        if (type === 'success') {
-            await AlertService.success({
-                title: '¡Éxito!',
-                text: message
-            });
-        } else if (type === 'error') {
-            await AlertService.error({
-                title: 'Error',
-                text: message
-            });
-        }
-    };
 
     const handleFileChange = async (e, fileType) => {
         const file = e.target.files[0];
@@ -257,23 +230,21 @@ const SiteSettings = () => {
         formDataToUpload.append('type', fileType);
 
         try {
-            const response = await fetch('/api/upload', {
-                method: 'POST',
-                body: formDataToUpload
+            // Usar apiClient para que incluya Authorization y withCredentials
+            const response = await apiClient.post('/upload', formDataToUpload, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
             });
 
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.message || 'Error al subir el archivo');
-            }
-
-            const data = await response.json();
-            if (data.success && data.data) {
+            const data = response.data;
+            if (data && data.success && data.data) {
                 return data.data.url;
             } else {
-                throw new Error(data.message || 'Error en la respuesta del servidor');
+                throw new Error(data?.message || 'Error en la respuesta del servidor');
             }
         } catch (error) {
+            // Re-lanzar para que el llamador lo maneje
             throw error;
         }
     };
@@ -496,15 +467,6 @@ const SiteSettings = () => {
                                             ) : (
                                                 'Guardar Configuración'
                                             )}
-                                        </Button>
-                                        <Button
-                                            variant="outline-secondary"
-                                            type="button"
-                                            onClick={loadSiteSettings}
-                                            disabled={loading}
-                                            className="ms-3"
-                                        >
-                                            Recargar
                                         </Button>
                                     </div>
                                 </Form>

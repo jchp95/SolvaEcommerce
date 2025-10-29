@@ -11,14 +11,8 @@
   <component name="ChangeListManager">
     <list default="true" id="d31e5276-1060-46d5-ade9-526dcc5cef39" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.TiendaOnline/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.TiendaOnline/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/DTO/ProductDtos.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TiendaOnline.Server/DTO/ProductDtos.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/wwwroot/uploads/products/1bad01a3-9c06-4edc-9ece-e804d60c1cd9_Airpods.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tiendaonline.client/src/components/card/Card.css" beforeDir="false" afterPath="$PROJECT_DIR$/tiendaonline.client/src/components/card/Card.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tiendaonline.client/src/components/card/Card.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/tiendaonline.client/src/components/card/Card.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tiendaonline.client/src/components/footer/Footer.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/tiendaonline.client/src/components/footer/Footer.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tiendaonline.client/src/components/modal/ModalProducts.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/tiendaonline.client/src/components/modal/ModalProducts.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tiendaonline.client/src/pages/dashboard/product/ProductsList.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/tiendaonline.client/src/pages/dashboard/product/ProductsList.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tiendaonline.client/src/pages/home/Home.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/tiendaonline.client/src/pages/home/Home.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tiendaonline.client/src/pages/dashboard/settings/SiteSettings.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/tiendaonline.client/src/pages/dashboard/settings/SiteSettings.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tiendaonline.client/vite.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/tiendaonline.client/vite.config.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -147,7 +141,7 @@
       <workItem from="1760748098281" duration="1502000" />
       <workItem from="1760886153766" duration="9119000" />
       <workItem from="1761670597465" duration="6708000" />
-      <workItem from="1761688025121" duration="6893000" />
+      <workItem from="1761688025121" duration="8679000" />
     </task>
     <task id="LOCAL-00001" summary="ajustes de estilos">
       <option name="closed" value="true" />
@@ -157,7 +151,15 @@
       <option name="project" value="LOCAL" />
       <updated>1761671769006</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="ajustes de estilos">
+      <option name="closed" value="true" />
+      <created>1761695119963</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1761695119963</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
