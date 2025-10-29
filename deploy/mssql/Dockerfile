@@ -3,7 +3,7 @@ FROM mcr.microsoft.com/mssql/server:2022-latest
 
 # Variables obligatorias para la imagen oficial
 ENV ACCEPT_EULA=Y
-ENV SA_PASSWORD=YourStrong!Passw0rd
+ENV SA_PASSWORD=MyStrongPass123
 
 EXPOSE 1433
 

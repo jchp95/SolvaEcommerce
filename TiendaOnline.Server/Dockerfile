@@ -2,6 +2,17 @@
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
 
+# Instalar Node.js (LTS 18) y herramientas necesarias para compilar el SPA
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends ca-certificates curl gnupg2 lsb-release \
+    && curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
+    && apt-get install -y --no-install-recommends nodejs \
+    && node --version \
+    && npm --version \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
 # Copiar csproj(s) y restaurar dependencias
 COPY ["TiendaOnline.Server/TiendaOnline.Server.csproj", "TiendaOnline.Server/"]
 COPY ["tiendaonline.client/tiendaonline.client.esproj", "tiendaonline.client/"]
@@ -30,4 +41,3 @@ RUN chmod +x /app/wait-for-db.sh
 
 # Por defecto, el script esperará por tiendaonline-mssql:1433 (puedes ajustar con DB_HOST/DB_PORT env vars)
 ENTRYPOINT ["/app/wait-for-db.sh"]
-
