@@ -10,9 +10,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d31e5276-1060-46d5-ade9-526dcc5cef39" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.TiendaOnline/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.TiendaOnline/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/wait-for-db.sh" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/wait-for-db.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/render.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/render.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/.dockerignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/Dockerfile" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -144,7 +143,7 @@
       <workItem from="1760748098281" duration="1502000" />
       <workItem from="1760886153766" duration="9119000" />
       <workItem from="1761670597465" duration="6708000" />
-      <workItem from="1761688025121" duration="16473000" />
+      <workItem from="1761688025121" duration="16792000" />
     </task>
     <task id="LOCAL-00001" summary="ajustes de estilos">
       <option name="closed" value="true" />
@@ -186,7 +185,15 @@
       <option name="project" value="LOCAL" />
       <updated>1761702164665</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="update">
+      <option name="closed" value="true" />
+      <created>1761704779808</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1761704779808</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
