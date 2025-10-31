@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CopilotDiffPersistence">
+    <option name="pendingDiffs">
+      <map>
+        <entry key="$PROJECT_DIR$/TiendaOnline.Server/DTO/StripePaymentRequest.cs">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/TiendaOnline.Server/DTO/StripePaymentRequest.cs" />
+              <option name="updatedContent" value="namespace TiendaOnline.Server.DTO&#10;{&#10;    // DTO para recibir datos de pago desde el cliente&#10;    public class StripePaymentRequest&#10;    {&#10;        public string StripeToken { get; set; }&#10;        public string Name { get; set; }&#10;        public decimal Amount { get; set; }&#10;        public string Email { get; set; }&#10;        // Opcional: moneda (por defecto &quot;usd&quot;)&#10;        public string Currency { get; set; } = &quot;usd&quot;;&#10;    }&#10;}&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>

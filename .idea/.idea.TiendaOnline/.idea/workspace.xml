@@ -10,73 +10,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d31e5276-1060-46d5-ade9-526dcc5cef39" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/STRIPE_CONNECT_RESUMEN.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/STRIPE_CONNECT_SETUP.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TiendaOnline.Server/Controllers/DashboardController.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TiendaOnline.Server/Controllers/StripeController.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TiendaOnline.Server/DTO/Payment/StripePaymentRequest.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TiendaOnline.Server/DTO/Payment/StripePaymentResponse.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TiendaOnline.Server/DTO/SupplierDto/SupplierDashboardDto.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TiendaOnline.Server/Interfaces/IStripeService.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TiendaOnline.Server/Interfaces/ISupplierDashboardService.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TiendaOnline.Server/Models/Supplier/SupplierSettlement.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TiendaOnline.Server/Services/StripeService.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TiendaOnline.Server/Services/SupplierDashboardService.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiendaonline.client/.env.example" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiendaonline.client/src/components/Stripe/CheckoutForm.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiendaonline.client/src/pages/dashboard/SupplierDashboard.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tiendaonline.client/src/pages/dashboard/SupplierDashboard.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.TiendaOnline/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.TiendaOnline/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/.env.example" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/Context/ApplicationDbContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TiendaOnline.Server/Context/ApplicationDbContext.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/Controllers/Auth/AuthController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TiendaOnline.Server/Controllers/AuthController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/Controllers/Categories/CategoriesController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TiendaOnline.Server/Controllers/CategoriesController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/Controllers/OrdersController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TiendaOnline.Server/Controllers/OrdersController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/Controllers/Products/ProductsController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TiendaOnline.Server/Controllers/ProductsController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/Controllers/Suppliers/SuppliersController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TiendaOnline.Server/Controllers/ProveedoresController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/DTO/Supplier/SupplierDtos.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TiendaOnline.Server/DTO/SupplierDto/SupplierDtos.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/Interfaces/Auth/IAuthService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TiendaOnline.Server/Interfaces/IAuthService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/Interfaces/Categories/ICategoryService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TiendaOnline.Server/Interfaces/ICategoryService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/Interfaces/Products/IProductService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TiendaOnline.Server/Interfaces/IProductService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/Interfaces/Supplier/ISupplierService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TiendaOnline.Server/Interfaces/IProveedoresService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/Migrations/ApplicationDbContextModelSnapshot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TiendaOnline.Server/Migrations/ApplicationDbContextModelSnapshot.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/Models/Catalog/Service.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TiendaOnline.Server/Models/ServiceSupplier/Service.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/Models/Catalog/ServiceBooking.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TiendaOnline.Server/Models/ServiceSupplier/ServiceBooking.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/Models/Catalog/ServiceCategory.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TiendaOnline.Server/Models/ServiceSupplier/ServiceCategory.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/Models/Customers/Address.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TiendaOnline.Server/Models/Address.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/Models/Customers/CartItem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TiendaOnline.Server/Models/CartItem.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/Models/Customers/Customer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TiendaOnline.Server/Models/Customer/Customer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/Models/Customers/CustomerReview.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TiendaOnline.Server/Models/Customer/CustomerReview.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/Models/Customers/Wishlist.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TiendaOnline.Server/Models/Wishlist.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/Models/Identity/ApplicationRole.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TiendaOnline.Server/Models/Identity/ApplicationRole.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/Models/Identity/UserRole.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TiendaOnline.Server/Models/Identity/UserRole.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/Models/Inventory/InventoryHistory.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TiendaOnline.Server/Models/InventoryHistory.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/Models/Orders/AddressSnapshot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TiendaOnline.Server/Models/AddressSnapshot.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/Models/Orders/Order.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TiendaOnline.Server/Models/Order/Order.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/Models/Orders/OrderItem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TiendaOnline.Server/Models/Order/OrderItem.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/Models/Orders/OrderStatusHistory.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TiendaOnline.Server/Models/Order/OrderStatusHistory.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/Models/Payments/Payment.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TiendaOnline.Server/Models/Payment.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/Models/Reports/Report.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TiendaOnline.Server/Models/Report.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/Models/Supplier/Supplier.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TiendaOnline.Server/Models/Supplier/Supplier.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TiendaOnline.Server/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/Services/Authentication/AuthService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TiendaOnline.Server/Services/AuthService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/Services/Categories/CategoryService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TiendaOnline.Server/Services/CategoryService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/Services/Meilisearch/MeiliProductIndexService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TiendaOnline.Server/Services/MeiliProductIndexService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/Services/Products/ProductService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TiendaOnline.Server/Services/ProductsService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/Services/Supplier/SupplierService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TiendaOnline.Server/Services/ProveedoresService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/Services/Token/TokenService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TiendaOnline.Server/Services/TokenService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/TiendaOnline.Server.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/TiendaOnline.Server/TiendaOnline.Server.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/appsettings.Development.json" beforeDir="false" afterPath="$PROJECT_DIR$/TiendaOnline.Server/appsettings.Development.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TiendaOnline.Server/appsettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/TiendaOnline.Server/appsettings.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tiendaonline.client/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/tiendaonline.client/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tiendaonline.client/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/tiendaonline.client/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tiendaonline.client/src/RouterPages.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/tiendaonline.client/src/RouterPages.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tiendaonline.client/src/api/endpoints/supplier.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/tiendaonline.client/src/api/endpoints/supplier.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tiendaonline.client/src/main.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/tiendaonline.client/src/main.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tiendaonline.client/src/pages/checkoutPage/CheckoutPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/tiendaonline.client/src/pages/checkoutPage/CheckoutPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tiendaonline.client/src/pages/dashboard/supplier/SupplierProfile.css" beforeDir="false" afterPath="$PROJECT_DIR$/tiendaonline.client/src/pages/dashboard/supplier/SupplierProfile.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tiendaonline.client/src/pages/dashboard/supplier/SupplierProfile.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/tiendaonline.client/src/pages/dashboard/supplier/SupplierProfile.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tiendaonline.client/src/pages/supplierRegister/SupplierRegistration.css" beforeDir="false" afterPath="$PROJECT_DIR$/tiendaonline.client/src/pages/supplierRegister/SupplierRegistration.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tiendaonline.client/src/pages/supplierRegister/SupplierRegistration.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/tiendaonline.client/src/pages/supplierRegister/SupplierRegistration.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -228,7 +164,7 @@
       <workItem from="1761688025121" duration="17072000" />
       <workItem from="1761713710782" duration="63236000" />
       <workItem from="1761865559738" duration="1380000" />
-      <workItem from="1761868526542" duration="14113000" />
+      <workItem from="1761868526542" duration="14643000" />
     </task>
     <task id="LOCAL-00001" summary="ajustes de estilos">
       <option name="closed" value="true" />
@@ -286,7 +222,15 @@
       <option name="project" value="LOCAL" />
       <updated>1761705117866</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Integracion de Stripe falta cuenta real para terminar stripe connect">
+      <option name="closed" value="true" />
+      <created>1761920790098</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1761920790098</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -312,7 +256,8 @@
     <MESSAGE value="pruebas de docker" />
     <MESSAGE value="update" />
     <MESSAGE value="Delete" />
-    <option name="LAST_COMMIT_MESSAGE" value="Delete" />
+    <MESSAGE value="Integracion de Stripe falta cuenta real para terminar stripe connect" />
+    <option name="LAST_COMMIT_MESSAGE" value="Integracion de Stripe falta cuenta real para terminar stripe connect" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

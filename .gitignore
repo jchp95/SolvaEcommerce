@@ -15,5 +15,10 @@ obj/
 *.db
 *.log
 
+# Configuration files with secrets
+**/appsettings.Development.json
+**/appsettings.*.json
+!**/appsettings.json
+
 # MacOS
 .DS_Store
