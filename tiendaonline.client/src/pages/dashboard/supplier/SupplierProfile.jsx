@@ -650,33 +650,6 @@ import AlertService from '../../../services/AlertService';
                                                     'Guardar Cambios'
                                                 )}
                                             </Button>
-                                            <Button
-                                                variant="outline-secondary"
-                                                type="button"
-                                                onClick={() => {
-                                                    setIsEditing(false);
-                                                    // Reset form data
-                                                    if (profile) {
-                                                        setFormData({
-                                                            companyName: profile.companyName || '',
-                                                            legalName: profile.legalName || '',
-                                                            description: profile.description || '',
-                                                            contactEmail: profile.contactEmail || '',
-                                                            contactPhone: profile.contactPhone || '',
-                                                            address: profile.address || '',
-                                                            city: profile.city || '',
-                                                            country: profile.country || 'Cuba',
-                                                            postalCode: profile.postalCode || '',
-                                                            businessRegistration: profile.businessRegistration || ''
-                                                        });
-                                                    }
-                                                    setLogoFile(null);
-                                                    setBannerFile(null);
-                                                    setErrors({});
-                                                }}
-                                            >
-                                                Cancelar
-                                            </Button>
                                         </div>
                                     )}
                                 </Form>

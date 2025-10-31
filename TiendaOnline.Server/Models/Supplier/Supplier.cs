@@ -79,6 +79,14 @@ namespace TiendaOnline.Server.Models
         [StringLength(100)]
         public string? PaymentAccount { get; set; }
 
+        // Stripe Connect
+        [StringLength(100)]
+        public string? StripeAccountId { get; set; }
+        
+        public bool StripeAccountEnabled { get; set; } = false;
+        
+        public DateTime? StripeAccountCreatedAt { get; set; }
+
         // Métricas
         [Column(TypeName = "decimal(18,2)")]
         public decimal TotalSales { get; set; } = 0;
@@ -107,6 +115,9 @@ namespace TiendaOnline.Server.Models
         public virtual ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
         public virtual ICollection<Payment> Payments { get; set; } = new List<Payment>();
         public virtual ICollection<InventoryHistory> InventoryHistories { get; set; } = new List<InventoryHistory>();
+
+        // Settlements con la plataforma
+        public virtual ICollection<SupplierSettlement> SupplierSettlements { get; set; } = new List<SupplierSettlement>();
 
         // PROPIEDADES CALCULADAS [NotMapped]
         [NotMapped]

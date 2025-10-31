@@ -104,7 +104,7 @@ const SupplierRegistration = () => {
                     title: '¡Solicitud Enviada!',
                     text: 'Tu solicitud ha sido enviada para revisión. Te notificaremos por email cuando sea aprobada.'
                 });
-                navigate('/dashboard');
+                navigate('/supplier/dashboard');
             } else {
                 throw new Error(resultAction.payload || 'Error al enviar la solicitud');
             }

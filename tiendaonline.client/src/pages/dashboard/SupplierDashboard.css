@@ -1,0 +1,418 @@
+/* Supplier Dashboard Styles - Glass Morphism Premium */
+.supplier-dashboard {
+    padding: 2rem 0;
+    min-height: 100vh;
+    background-color: #0a0a0c;
+    background-image:
+        radial-gradient(circle at 10% 20%, rgba(67, 97, 238, 0.15) 0%, transparent 20%),
+        radial-gradient(circle at 90% 80%, rgba(72, 149, 239, 0.15) 0%, transparent 20%);
+    color: #e0e0e0;
+}
+
+.col-header-dashboard {
+    display: flex;
+    align-items: center;
+}
+
+/* Header Styles */
+.dashboard-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 0.5rem;
+}
+
+.supplier-name {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: #4895ef;
+    margin-left: 0.5rem;
+}
+
+.period-selector {
+    background: rgba(26, 26, 33, 0.8) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 10px;
+    padding: 0.5rem 1rem;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    color: #e0e0e0 !important;
+    transition: all 0.3s ease;
+}
+
+.period-selector:focus {
+    background: rgba(33, 33, 43, 0.9) !important;
+    border-color: rgba(67, 97, 238, 0.4) !important;
+    box-shadow: 0 0 0 0.2rem rgba(67, 97, 238, 0.25), 0 4px 16px rgba(0, 0, 0, 0.3);
+    outline: none;
+}
+
+/* Summary Cards - Glass Morphism Premium */
+.summary-card {
+    border: none;
+    border-radius: 15px;
+    background: rgba(26, 26, 33, 0.8) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.summary-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+    pointer-events: none;
+    z-index: 0;
+}
+
+.summary-card:hover {
+    transform: translateY(-8px);
+    background: rgba(33, 33, 43, 0.9) !important;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(67, 97, 238, 0.2);
+    border-color: rgba(67, 97, 238, 0.3);
+}
+
+.earnings-card {
+    background: rgba(26, 26, 33, 0.8) !important;
+    border-left: 4px solid #00b894;
+    color: white;
+}
+
+.earnings-card .dashboard-card-icon {
+    color: #00b894;
+}
+
+.products-card {
+    background: rgba(26, 26, 33, 0.8) !important;
+    border-left: 4px solid #4895ef;
+    color: white;
+}
+
+.products-card .dashboard-card-icon {
+    color: #4895ef;
+}
+
+.stock-card {
+    background: rgba(26, 26, 33, 0.8) !important;
+    border-left: 4px solid #0984e3;
+    color: white;
+}
+
+.stock-card .dashboard-card-icon {
+    color: #0984e3;
+}
+
+.rating-card {
+    background: rgba(26, 26, 33, 0.8) !important;
+    border-left: 4px solid #f39c12;
+    color: white;
+}
+
+.rating-card .dashboard-card-icon {
+    color: #f39c12;
+}
+
+.completed-card {
+    background: rgba(26, 26, 33, 0.8) !important;
+    border-left: 4px solid #00b894;
+    color: white;
+}
+
+.completed-card .dashboard-card-icon {
+    color: #00b894;
+}
+
+.pending-card {
+    background: rgba(26, 26, 33, 0.8) !important;
+    border-left: 4px solid #fdcb6e;
+    color: white;
+}
+
+.pending-card .dashboard-card-icon {
+    color: #fdcb6e;
+}
+
+.cancelled-card {
+    background: rgba(26, 26, 33, 0.8) !important;
+    border-left: 4px solid #d63031;
+    color: white;
+}
+
+.cancelled-card .dashboard-card-icon {
+    color: #d63031;
+}
+
+.card-title {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.9;
+    margin-bottom: 0.5rem;
+    position: relative;
+    z-index: 1;
+}
+
+.card-value {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0;
+    position: relative;
+    z-index: 1;
+}
+
+/* Dashboard Card Icon */
+.dashboard-card-icon {
+    font-size: 3.5rem;
+    opacity: 0.18;
+    position: absolute;
+    top: 0.5rem;
+    right: 1.5rem;
+    pointer-events: none;
+    transition: transform 0.5s cubic-bezier(.68,-0.55,.27,1.55), opacity 0.3s;
+    z-index: 1;
+}
+
+.summary-card:hover .dashboard-card-icon {
+    transform: translateY(-12px) scale(1.15) rotate(-8deg);
+    opacity: 0.32;
+    filter: drop-shadow(0 4px 16px rgba(0,0,0,0.18));
+}
+
+/* Progress Bar */
+.progress {
+    height: 6px;
+    border-radius: 3px;
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.progress-bar {
+    border-radius: 3px;
+}
+
+/* Chart Card - Glass Morphism */
+.chart-card {
+    border: none;
+    border-radius: 15px;
+    background: rgba(26, 26, 33, 0.8) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.chart-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+    pointer-events: none;
+    z-index: 0;
+}
+
+.chart-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(67, 97, 238, 0.2);
+}
+
+.chart-title {
+    color: #ffffff;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 1;
+}
+
+.table-title {
+    color: #ffffff;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 1;
+}
+
+.chart-container {
+    height: 300px;
+    position: relative;
+    z-index: 1;
+}
+
+.no-data-message {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: #6d6d6d;
+}
+
+.no-data-message i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+/* Table Card - Glass Morphism */
+.table-card {
+    border: none;
+    border-radius: 15px;
+    background: rgba(26, 26, 33, 0.8) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.table-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+    pointer-events: none;
+    z-index: 0;
+}
+
+.table-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* Tables */
+.low-stock-table,
+.top-products-table {
+    color: #e0e0e0;
+    position: relative;
+    z-index: 1;
+}
+
+.low-stock-table thead th,
+.top-products-table thead th {
+    border-bottom: 2px solid #333;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+    color: #b0b0b0;
+    background: transparent;
+}
+
+.low-stock-table tbody tr,
+.top-products-table tbody tr {
+    transition: background-color 0.2s ease;
+    background: transparent;
+}
+
+.low-stock-table tbody tr:hover,
+.top-products-table tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.low-stock-table td,
+.top-products-table td {
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.product-name {
+    font-weight: 500;
+    color: #e0e0e0;
+}
+
+.ranking-badge {
+    display: inline-block;
+    width: 28px;
+    height: 28px;
+    line-height: 28px;
+    text-align: center;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    font-weight: 700;
+    font-size: 0.75rem;
+}
+
+/* Stripe Connect Card Styles */
+.stripe-connect-card {
+    background: linear-gradient(135deg, rgba(26, 26, 33, 0.95) 0%, rgba(33, 33, 43, 0.95) 100%) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    transition: all 0.3s ease;
+}
+
+.stripe-connect-card:hover {
+    box-shadow: 0 12px 40px rgba(72, 149, 239, 0.2);
+    border-color: rgba(72, 149, 239, 0.3) !important;
+}
+
+.stripe-status-item {
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.3s ease;
+}
+
+.stripe-status-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(72, 149, 239, 0.2);
+    transform: translateY(-2px);
+}
+
+.stripe-status-item small {
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.stripe-status-item strong {
+    font-size: 1.1rem;
+    display: block;
+    margin-top: 0.5rem;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .dashboard-title {
+        font-size: 1.5rem;
+    }
+
+    .supplier-name {
+        font-size: 1.2rem;
+    }
+
+    .card-value {
+        font-size: 1.5rem;
+    }
+
+    .col-header-dashboard {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .sidebar-toggle-btn {
+        margin-bottom: 1rem;
+    }
+}

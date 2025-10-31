@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Stripe;
 
 namespace TiendaOnline.Server.Models
 {
@@ -47,5 +48,7 @@ namespace TiendaOnline.Server.Models
         public virtual ICollection<Wishlist>? Wishlists { get; set; }
         public virtual ICollection<CustomerReview> Reviews { get; set; } = new List<CustomerReview>();
         public virtual ICollection<ServiceBooking> ServiceBookings { get; set; } = new List<ServiceBooking>();
+
+        
     }
 }

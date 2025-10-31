@@ -17,6 +17,7 @@ import { Image } from 'react-bootstrap';
 import { formatImageUrl } from '../../utils/Images';
 import { OrderService } from '../../api/endpoints/orders';
 import AlertService from '../../services/AlertService';
+import CheckoutForm from '../../components/Stripe/CheckoutForm';
 
 const CheckoutPage = () => {
   const { cartItems, clearCart } = useCart();
@@ -62,6 +63,8 @@ const CheckoutPage = () => {
 
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [paymentOrder, setPaymentOrder] = useState(null); // Orden creada antes del pago
+  const [showPaymentForm, setShowPaymentForm] = useState(false);
 
   // Verificar autenticación
   useEffect(() => {
@@ -79,7 +82,8 @@ const CheckoutPage = () => {
     return sum + itemTotal;
   }, 0);
   
-  const taxTotal = subtotal * 0.10; // 10% de impuestos
+  // Sin impuestos (por ahora no se aplica IVA)
+  const taxTotal = 0; // 0% de impuestos
   const shippingTotal = subtotal > 50 ? 0 : 5.99; // Envío gratis si >$50
   const total = subtotal + taxTotal + shippingTotal;
 
@@ -177,43 +181,25 @@ const CheckoutPage = () => {
         customerNotes: formData.customerNotes
       };
 
-      // Crear la orden
+      // Crear la orden en el backend
       const response = await OrderService.createFromCart(orderData);
       
-      if (response.success) {
-        // Limpiar el carrito después del éxito
-        await clearCart();
-        
-        // Mostrar alerta de éxito con AlertService
-        await AlertService.success({
-          title: '¡Pedido creado exitosamente! 🎉',
-          html: `
-            <div class="text-start">
-              <p><strong>Número de orden:</strong> ${response.data.orderNumber}</p>
-              <p><strong>Total:</strong> $${response.data.orderTotal.toFixed(2)}</p>
-              <p class="text-muted">Serás redirigido a la página de confirmación...</p>
-            </div>
-          `,
-          timer: 3000,
-          timerProgressBar: true
-        });
-        
-        // Navegar a la página de confirmación con los datos de la orden
-        navigate('/order-confirmation', { 
-          state: { 
-            order: response.data,
-            successMessage: '¡Tu pedido fue realizado con éxito!' 
-          } 
-        });
+      if (response && response.success) {
+        // Mostrar formulario de pago con los datos de la orden
+        setPaymentOrder(response.data);
+        setShowPaymentForm(true);
+
+        // No limpiar el carrito hasta que el pago sea exitoso
+        // Navegación posterior al pago
+      } else {
+        throw new Error(response?.message || 'Error creando la orden');
       }
       
     } catch (error) {
       console.error('Error al crear la orden:', error);
-      
-      // Mostrar alerta de error con AlertService
       await AlertService.error({
         title: 'Error al procesar el pedido',
-        text: error.response?.data?.message || 'Ha ocurrido un error inesperado. Por favor, inténtalo de nuevo.',
+        text: error.response?.data?.message || error.message || 'Ha ocurrido un error inesperado. Por favor, inténtalo de nuevo.',
         confirmButtonText: 'Intentar de nuevo'
       });
     } finally {
@@ -293,7 +279,7 @@ const CheckoutPage = () => {
                   <span>${subtotal.toFixed(2)}</span>
                 </ListGroup.Item>
                 <ListGroup.Item className="d-flex justify-content-between align-items-center bg-transparent border-0 text-light">
-                  <span>Impuestos (10%):</span>
+                  <span>Impuestos (0%):</span>
                   <span>${taxTotal.toFixed(2)}</span>
                 </ListGroup.Item>
                 <ListGroup.Item className="d-flex justify-content-between align-items-center bg-transparent border-0 text-light">
@@ -313,6 +299,47 @@ const CheckoutPage = () => {
               >
                 Volver al Carrito
               </Button>
+
+              {/* Mostrar el formulario de Stripe en la columna izquierda (debajo del resumen del pedido) */}
+              {showPaymentForm && paymentOrder && (
+                (() => {
+                  const stripeKey = typeof import.meta !== 'undefined' ? import.meta.env?.VITE_STRIPE_PUBLISHABLE_KEY : undefined;
+                  if (!stripeKey) {
+                    return (
+                      <div className="mt-4">
+                        <h5 className="text-light mb-3">Pagar con tarjeta</h5>
+                        <div className="alert alert-warning">Stripe no está configurado en el entorno. Añade <code>VITE_STRIPE_PUBLISHABLE_KEY</code> en tu .env para habilitar pagos con tarjeta.</div>
+                      </div>
+                    )
+                  }
+
+                  return (
+                    <div className="mt-4">
+                      <h5 className="text-light mb-3">Pagar con tarjeta</h5>
+                      <CheckoutForm
+                        orderId={paymentOrder.id}
+                        supplierId={cartItems[0]?.supplierId || paymentOrder.items?.[0]?.supplierId || 1}
+                        amount={paymentOrder.orderTotal || total}
+                        email={formData.email}
+                        name={formData.fullName}
+                        onSuccess={async (paymentResponse) => {
+                          await clearCart();
+                          await AlertService.success({
+                            title: 'Pago realizado',
+                            html: `<p>Transacción: ${paymentResponse.data?.transactionId || paymentResponse.transactionId || ''}</p>`,
+                            timer: 2000
+                          });
+                          navigate('/order-confirmation', { state: { order: paymentOrder, payment: paymentResponse.data || paymentResponse } });
+                        }}
+                        onError={(err) => {
+                          console.error('Pago fallido', err);
+                          AlertService.error({ title: 'Pago fallido', text: err?.message || 'No se pudo procesar el pago' });
+                        }}
+                      />
+                    </div>
+                  )
+                })()
+              )}
             </Card.Body>
           </Card>
         </Col>
@@ -322,7 +349,7 @@ const CheckoutPage = () => {
           <Card className="mb-4 checkout-subcard">
             <Card.Body>
               <Card.Title className="mb-3">Información de Envío y Pago</Card.Title>
-              
+
               <Form onSubmit={handleSubmit}>
                 {/* Información Personal */}
                 <Card className="mb-4 checkout-subcard">
@@ -372,7 +399,7 @@ const CheckoutPage = () => {
                 <Card className="mb-4 checkout-subcard">
                   <Card.Body>
                     <Card.Title as="h5" className="mb-3">Dirección de Envío</Card.Title>
-                    
+
                     <Form.Check
                       type="checkbox"
                       id="sameAsBilling"
@@ -454,28 +481,31 @@ const CheckoutPage = () => {
                   </Card.Body>
                 </Card>
 
-                <Button 
-                  variant="primary" 
-                  type="submit" 
+                <Button
+                  variant="primary"
+                  type="submit"
                   className="w-100 checkout-button"
-                  disabled={isLoading || cartItems.length === 0}
+                  disabled={isLoading || cartItems.length === 0 || showPaymentForm}
                 >
                   {isLoading ? (
                     <>
                       <Spinner animation="border" size="sm" className="me-2" />
                       Procesando pedido...
                     </>
+                  ) : showPaymentForm ? (
+                    'Pago pendiente: complete el formulario de tarjeta abajo'
                   ) : (
                     `Confirmar Pedido - $${total.toFixed(2)}`
                   )}
                 </Button>
-              </Form>
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
-    </Container>
-  );
+
+                </Form>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
+    );
 };
 
 export default CheckoutPage;

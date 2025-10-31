@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using TiendaOnline.Server.Models;
+using TiendaOnline.Server.Models; 
 
 namespace TiendaOnline.Server.Context
 {
@@ -46,6 +46,9 @@ namespace TiendaOnline.Server.Context
         // Reports & Settings
         public DbSet<Report> Reports { get; set; }
         public DbSet<SiteSettings> SiteSettings { get; set; }
+
+        // Supplier settlements
+        public DbSet<SupplierSettlement> SupplierSettlements { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)

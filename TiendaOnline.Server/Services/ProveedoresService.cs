@@ -1,21 +1,22 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using TiendaOnline.Server.Context;
 using TiendaOnline.Server.Interfaces;
+using SupplierModel = TiendaOnline.Server.Models.Supplier;
 using TiendaOnline.Server.Models;
 using Microsoft.AspNetCore.Identity;
 
+
 namespace TiendaOnline.Server.Services
 {
-    public class SupplierService : ISupplierService
+    public class ProveedoresService : IProveedoresService
     {
         private readonly ApplicationDbContext _context;
-        private readonly ILogger<SupplierService> _logger;
+        private readonly ILogger<ProveedoresService> _logger;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public SupplierService(
+        public ProveedoresService(
             ApplicationDbContext context, 
-            ILogger<SupplierService> logger,
+            ILogger<ProveedoresService> logger,
             UserManager<ApplicationUser> userManager)
         {
             _context = context;
@@ -23,7 +24,7 @@ namespace TiendaOnline.Server.Services
             _userManager = userManager;
         }
 
-        public async Task<ApiResponse<IEnumerable<Supplier>>> GetAllSuppliersAsync()
+        public async Task<ApiResponse<IEnumerable<SupplierModel>>> GetAllSuppliersAsync()
         {
             const string operation = "ObtenerTodosProveedores";
             _logger.LogInformation("{Operation}: Iniciando", operation);
@@ -41,16 +42,16 @@ namespace TiendaOnline.Server.Services
                 _logger.LogInformation("{Operation}: Completado exitosamente. Encontrados {Count} proveedores", 
                     operation, suppliers.Count);
                 
-                return new ApiResponse<IEnumerable<Supplier>>(true, "Proveedores obtenidos con éxito", suppliers);
+                return new ApiResponse<IEnumerable<SupplierModel>>(true, "Proveedores obtenidos con éxito", suppliers);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "{Operation}: Error al obtener proveedores", operation);
-                return new ApiResponse<IEnumerable<Supplier>>(false, $"Error al obtener proveedores: {ex.Message}", default);
+                return new ApiResponse<IEnumerable<SupplierModel>>(false, $"Error al obtener proveedores: {ex.Message}", default);
             }
         }
 
-        public async Task<ApiResponse<Supplier>> GetSupplierByIdAsync(int id)
+        public async Task<ApiResponse<SupplierModel>> GetSupplierByIdAsync(int id)
         {
             const string operation = "ObtenerProveedorPorId";
             _logger.LogInformation("{Operation}: Buscando proveedor ID {SupplierId}", operation, id);
@@ -68,22 +69,22 @@ namespace TiendaOnline.Server.Services
                 if (supplier == null)
                 {
                     _logger.LogWarning("{Operation}: Proveedor ID {SupplierId} no encontrado", operation, id);
-                    return new ApiResponse<Supplier>(false, $"Proveedor con ID {id} no encontrado", default);
+                    return new ApiResponse<SupplierModel>(false, $"Proveedor con ID {id} no encontrado", null);
                 }
 
                 _logger.LogInformation("{Operation}: Proveedor encontrado - {CompanyName} (ID: {SupplierId})", 
                     operation, supplier.CompanyName, id);
                 
-                return new ApiResponse<Supplier>(true, "Proveedor obtenido con éxito", supplier);
+                return new ApiResponse<SupplierModel>(true, "Proveedor obtenido con éxito", supplier);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "{Operation}: Error al obtener proveedor ID {SupplierId}", operation, id);
-                return new ApiResponse<Supplier>(false, $"Error al obtener proveedor: {ex.Message}", default);
+                return new ApiResponse<SupplierModel>(false, $"Error al obtener proveedor: {ex.Message}", null);
             }
         }
 
-        public async Task<ApiResponse<Supplier>> GetSupplierByUserIdAsync(string userId)
+        public async Task<ApiResponse<SupplierModel>> GetSupplierByUserIdAsync(string userId)
         {
             const string operation = "ObtenerProveedorPorUsuario";
             _logger.LogInformation("{Operation}: Buscando proveedor para usuario ID {UserId}", operation, userId);
@@ -98,22 +99,22 @@ namespace TiendaOnline.Server.Services
                 if (supplier == null)
                 {
                     _logger.LogInformation("{Operation}: No se encontró proveedor para el usuario ID {UserId}", operation, userId);
-                    return new ApiResponse<Supplier>(false, "No se encontró un proveedor para este usuario", default);
+                    return new ApiResponse<SupplierModel>(false, "No se encontró un proveedor para este usuario", null);
                 }
 
                 _logger.LogInformation("{Operation}: Proveedor encontrado para usuario - {CompanyName} (Usuario: {UserId})", 
                     operation, supplier.CompanyName, userId);
                 
-                return new ApiResponse<Supplier>(true, "Proveedor obtenido con éxito", supplier);
+                return new ApiResponse<SupplierModel>(true, "Proveedor obtenido con éxito", supplier);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "{Operation}: Error al obtener proveedor para usuario ID {UserId}", operation, userId);
-                return new ApiResponse<Supplier>(false, $"Error al obtener proveedor: {ex.Message}", default);
+                return new ApiResponse<SupplierModel>(false, $"Error al obtener proveedor: {ex.Message}", null);
             }
         }
 
-        public async Task<ApiResponse<Supplier>> CreateSupplierAsync(Supplier supplier)
+        public async Task<ApiResponse<SupplierModel>> CreateSupplierAsync(SupplierModel supplier)
         {
             const string operation = "CrearProveedor";
             _logger.LogInformation("{Operation}: Iniciando creación para {CompanyName}", 
@@ -131,7 +132,7 @@ namespace TiendaOnline.Server.Services
                 {
                     _logger.LogWarning("{Operation}: Ya existe un proveedor con el nombre {CompanyName}", 
                         operation, supplier.CompanyName);
-                    return new ApiResponse<Supplier>(false, "Ya existe un proveedor con este nombre", default);
+                    return new ApiResponse<SupplierModel>(false, "Ya existe un proveedor con este nombre", null);
                 }
 
                 _logger.LogDebug("{Operation}: Validando usuario {UserId}", 
@@ -144,7 +145,7 @@ namespace TiendaOnline.Server.Services
                 {
                     _logger.LogWarning("{Operation}: El usuario {UserId} ya tiene un proveedor registrado", 
                         operation, supplier.OwnerUserId);
-                    return new ApiResponse<Supplier>(false, "Este usuario ya tiene un proveedor registrado", default);
+                    return new ApiResponse<SupplierModel>(false, "Este usuario ya tiene un proveedor registrado", null);
                 }
 
                 // Validar documentos
@@ -154,7 +155,7 @@ namespace TiendaOnline.Server.Services
                 {
                     _logger.LogWarning("{Operation}: Faltan documentos requeridos para {CompanyName}", 
                         operation, supplier.CompanyName);
-                    return new ApiResponse<Supplier>(false, "Todos los documentos son requeridos", default);
+                    return new ApiResponse<SupplierModel>(false, "Todos los documentos son requeridos", null);
                 }
 
                 // Asignar valores por defecto
@@ -172,17 +173,17 @@ namespace TiendaOnline.Server.Services
                 // NOTA: NO creamos SupplierManager aquí - se crea solo cuando se aprueba la solicitud
                 // El usuario mantiene su rol de Cliente hasta que el SuperAdmin apruebe la solicitud
 
-                return new ApiResponse<Supplier>(true, "Solicitud de proveedor enviada con éxito. Mantén tu rol actual hasta la aprobación del administrador.", supplier);
+                return new ApiResponse<SupplierModel>(true, "Solicitud de proveedor enviada con éxito. Mantén tu rol actual hasta la aprobación del administrador.", supplier);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "{Operation}: ERROR al crear proveedor {CompanyName}", 
                     operation, supplier.CompanyName);
-                return new ApiResponse<Supplier>(false, $"Error al crear proveedor: {ex.Message}", default);
+                return new ApiResponse<SupplierModel>(false, $"Error al crear proveedor: {ex.Message}", null);
             }
         }
 
-        public async Task<ApiResponse<Supplier>> UpdateSupplierAsync(int id, Supplier supplier)
+        public async Task<ApiResponse<SupplierModel>> UpdateSupplierAsync(int id, SupplierModel supplier)
         {
             const string operation = "ActualizarProveedor";
             _logger.LogInformation("{Operation}: Iniciando actualización para proveedor ID {SupplierId}", 
@@ -194,7 +195,7 @@ namespace TiendaOnline.Server.Services
                 {
                     _logger.LogWarning("{Operation}: ID de proveedor no coincide. Esperado: {ExpectedId}, Recibido: {ReceivedId}", 
                         operation, id, supplier.Id);
-                    return new ApiResponse<Supplier>(false, "ID de proveedor no coincide", null);
+                    return new ApiResponse<SupplierModel>(false, "ID de proveedor no coincide", null);
                 }
 
                 var existingSupplier = await _context.Suppliers
@@ -203,7 +204,7 @@ namespace TiendaOnline.Server.Services
                 if (existingSupplier == null)
                 {
                     _logger.LogWarning("{Operation}: Proveedor con ID {SupplierId} no encontrado", operation, id);
-                    return new ApiResponse<Supplier>(false, $"Proveedor con ID {id} no encontrado", null);
+                    return new ApiResponse<SupplierModel>(false, $"Proveedor con ID {id} no encontrado", null);
                 }
 
                 _logger.LogDebug("{Operation}: Validando nombre único para {CompanyName}", 
@@ -217,7 +218,7 @@ namespace TiendaOnline.Server.Services
                 {
                     _logger.LogWarning("{Operation}: Ya existe otro proveedor con el nombre {CompanyName}", 
                         operation, supplier.CompanyName);
-                    return new ApiResponse<Supplier>(false, "Ya existe otro proveedor con este nombre", null);
+                    return new ApiResponse<SupplierModel>(false, "Ya existe otro proveedor con este nombre", null);
                 }
 
                 _logger.LogDebug("{Operation}: Actualizando propiedades del proveedor ID {SupplierId}", operation, id);
@@ -246,12 +247,12 @@ namespace TiendaOnline.Server.Services
                 _logger.LogInformation("{Operation}: Proveedor ID {SupplierId} actualizado exitosamente", 
                     operation, id);
 
-                return new ApiResponse<Supplier>(true, "Proveedor actualizado con éxito", existingSupplier);
+                return new ApiResponse<SupplierModel>(true, "Proveedor actualizado con éxito", existingSupplier);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "{Operation}: Error al actualizar proveedor ID {SupplierId}", operation, id);
-                return new ApiResponse<Supplier>(false, $"Error al actualizar proveedor: {ex.Message}", null);
+                return new ApiResponse<SupplierModel>(false, $"Error al actualizar proveedor: {ex.Message}", null);
             }
         }
 
@@ -343,7 +344,7 @@ namespace TiendaOnline.Server.Services
             }
         }
 
-        public async Task<ApiResponse<IEnumerable<Supplier>>> GetActiveSuppliersAsync()
+        public async Task<ApiResponse<IEnumerable<SupplierModel>>> GetActiveSuppliersAsync()
         {
             const string operation = "ObtenerProveedoresActivos";
             _logger.LogInformation("{Operation}: Iniciando", operation);
@@ -360,16 +361,16 @@ namespace TiendaOnline.Server.Services
                 _logger.LogInformation("{Operation}: Completado exitosamente. Encontrados {Count} proveedores activos", 
                     operation, suppliers.Count);
                 
-                return new ApiResponse<IEnumerable<Supplier>>(true, "Proveedores activos obtenidos con éxito", suppliers);
+                return new ApiResponse<IEnumerable<SupplierModel>>(true, "Proveedores activos obtenidos con éxito", suppliers);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "{Operation}: Error al obtener proveedores activos", operation);
-                return new ApiResponse<IEnumerable<Supplier>>(false, $"Error al obtener proveedores activos: {ex.Message}", null);
+                return new ApiResponse<IEnumerable<SupplierModel>>(false, $"Error al obtener proveedores activos: {ex.Message}", null);
             }
         }
 
-        public async Task<ApiResponse<IEnumerable<Supplier>>> SearchSuppliersAsync(string searchTerm)
+        public async Task<ApiResponse<IEnumerable<SupplierModel>>> SearchSuppliersAsync(string searchTerm)
         {
             const string operation = "BuscarProveedores";
             _logger.LogInformation("{Operation}: Buscando con término '{SearchTerm}'", operation, searchTerm);
@@ -379,7 +380,7 @@ namespace TiendaOnline.Server.Services
                 if (string.IsNullOrWhiteSpace(searchTerm))
                 {
                     _logger.LogWarning("{Operation}: Término de búsqueda vacío", operation);
-                    return new ApiResponse<IEnumerable<Supplier>>(false, "Término de búsqueda requerido", null);
+                    return new ApiResponse<IEnumerable<SupplierModel>>(false, "Término de búsqueda requerido", null);
                 }
 
                 var suppliers = await _context.Suppliers
@@ -394,16 +395,16 @@ namespace TiendaOnline.Server.Services
                 _logger.LogInformation("{Operation}: Búsqueda completada. Encontrados {Count} proveedores", 
                     operation, suppliers.Count);
                 
-                return new ApiResponse<IEnumerable<Supplier>>(true, "Proveedores encontrados con éxito", suppliers);
+                return new ApiResponse<IEnumerable<SupplierModel>>(true, "Proveedores encontrados con éxito", suppliers);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "{Operation}: Error al buscar proveedores con término '{SearchTerm}'", operation, searchTerm);
-                return new ApiResponse<IEnumerable<Supplier>>(false, $"Error al buscar proveedores: {ex.Message}", null);
+                return new ApiResponse<IEnumerable<SupplierModel>>(false, $"Error al buscar proveedores: {ex.Message}", null);
             }
         }
 
-        public async Task<ApiResponse<Supplier>> VerifySupplierAsync(int id)
+        public async Task<ApiResponse<SupplierModel>> VerifySupplierAsync(int id)
         {
             const string operation = "VerificarProveedor";
             _logger.LogInformation("{Operation}: Verificando proveedor ID {SupplierId}", operation, id);
@@ -417,7 +418,7 @@ namespace TiendaOnline.Server.Services
                 if (supplier == null)
                 {
                     _logger.LogWarning("{Operation}: Proveedor con ID {SupplierId} no encontrado", operation, id);
-                    return new ApiResponse<Supplier>(false, $"Proveedor con ID {id} no encontrado", null);
+                    return new ApiResponse<SupplierModel>(false, $"Proveedor con ID {id} no encontrado", null);
                 }
 
                 // Verificar el proveedor
@@ -463,16 +464,16 @@ namespace TiendaOnline.Server.Services
 
                 _logger.LogInformation("{Operation}: Proveedor ID {SupplierId} verificado exitosamente. Usuario {UserId} ahora es Proveedor", 
                     operation, id, supplier.OwnerUserId);
-                return new ApiResponse<Supplier>(true, "Proveedor verificado con éxito. El usuario ahora puede gestionar productos.", supplier);
+                return new ApiResponse<SupplierModel>(true, "Proveedor verificado con éxito. El usuario ahora puede gestionar productos.", supplier);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "{Operation}: Error al verificar proveedor ID {SupplierId}", operation, id);
-                return new ApiResponse<Supplier>(false, $"Error al verificar proveedor: {ex.Message}", null);
+                return new ApiResponse<SupplierModel>(false, $"Error al verificar proveedor: {ex.Message}", null);
             }
         }
 
-        public async Task<ApiResponse<Supplier>> SuspendSupplierAsync(int id)
+        public async Task<ApiResponse<SupplierModel>> SuspendSupplierAsync(int id)
         {
             const string operation = "SuspenderProveedor";
             _logger.LogInformation("{Operation}: Suspender proveedor ID {SupplierId}", operation, id);
@@ -486,7 +487,7 @@ namespace TiendaOnline.Server.Services
                 if (supplier == null)
                 {
                     _logger.LogWarning("{Operation}: Proveedor con ID {SupplierId} no encontrado", operation, id);
-                    return new ApiResponse<Supplier>(false, $"Proveedor con ID {id} no encontrado", null);
+                    return new ApiResponse<SupplierModel>(false, $"Proveedor con ID {id} no encontrado", null);
                 }
 
                 supplier.Suspend();
@@ -498,16 +499,16 @@ namespace TiendaOnline.Server.Services
                 _logger.LogInformation("{Operation}: Proveedor ID {SupplierId} suspendido exitosamente. Rol removido del usuario {UserId}", 
                     operation, id, supplier.OwnerUserId);
                     
-                return new ApiResponse<Supplier>(true, "Proveedor suspendido con éxito", supplier);
+                return new ApiResponse<SupplierModel>(true, "Proveedor suspendido con éxito", supplier);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "{Operation}: Error al suspender proveedor ID {SupplierId}", operation, id);
-                return new ApiResponse<Supplier>(false, $"Error al suspender proveedor: {ex.Message}", null);
+                return new ApiResponse<SupplierModel>(false, $"Error al suspender proveedor: {ex.Message}", null);
             }
         }
 
-        public async Task<ApiResponse<Supplier>> ActivateSupplierAsync(int id)
+        public async Task<ApiResponse<SupplierModel>> ActivateSupplierAsync(int id)
         {
             const string operation = "ActivarProveedor";
             _logger.LogInformation("{Operation}: Activando proveedor ID {SupplierId}", operation, id);
@@ -521,7 +522,7 @@ namespace TiendaOnline.Server.Services
                 if (supplier == null)
                 {
                     _logger.LogWarning("{Operation}: Proveedor con ID {SupplierId} no encontrado", operation, id);
-                    return new ApiResponse<Supplier>(false, $"Proveedor con ID {id} no encontrado", null);
+                    return new ApiResponse<SupplierModel>(false, $"Proveedor con ID {id} no encontrado", null);
                 }
 
                 supplier.Activate();
@@ -533,12 +534,12 @@ namespace TiendaOnline.Server.Services
                 _logger.LogInformation("{Operation}: Proveedor ID {SupplierId} activado exitosamente. Rol asignado al usuario {UserId}",
                     operation, id, supplier.OwnerUserId);
 
-                return new ApiResponse<Supplier>(true, "Proveedor activado con éxito", supplier);
+                return new ApiResponse<SupplierModel>(true, "Proveedor activado con éxito", supplier);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "{Operation}: Error al activar proveedor ID {SupplierId}", operation, id);
-                return new ApiResponse<Supplier>(false, $"Error al activar proveedor: {ex.Message}", null);
+                return new ApiResponse<SupplierModel>(false, $"Error al activar proveedor: {ex.Message}", null);
             }
         }
 

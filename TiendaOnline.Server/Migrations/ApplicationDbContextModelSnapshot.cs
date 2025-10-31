@@ -128,44 +128,6 @@ namespace TiendaOnline.Server.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("TiendaOnline.Server.Context.ApplicationRole", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("NormalizedName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("RoleType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedName")
-                        .IsUnique()
-                        .HasDatabaseName("RoleNameIndex")
-                        .HasFilter("[NormalizedName] IS NOT NULL");
-
-                    b.ToTable("AspNetRoles", (string)null);
-                });
-
             modelBuilder.Entity("TiendaOnline.Server.Models.Address", b =>
                 {
                     b.Property<int>("Id")
@@ -256,6 +218,44 @@ namespace TiendaOnline.Server.Migrations
                     b.HasIndex("CustomerId", "IsDefaultShipping");
 
                     b.ToTable("Addresses");
+                });
+
+            modelBuilder.Entity("TiendaOnline.Server.Models.ApplicationRole", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("RoleType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.ToTable("AspNetRoles", (string)null);
                 });
 
             modelBuilder.Entity("TiendaOnline.Server.Models.ApplicationUser", b =>
@@ -1157,7 +1157,7 @@ namespace TiendaOnline.Server.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<int>("SupplierId")
+                    b.Property<int?>("SupplierId")
                         .HasColumnType("int");
 
                     b.Property<string>("TransactionId")
@@ -1847,6 +1847,16 @@ namespace TiendaOnline.Server.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
+                    b.Property<DateTime?>("StripeAccountCreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("StripeAccountEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("StripeAccountId")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<string>("TaxCertificate")
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
@@ -1958,6 +1968,61 @@ namespace TiendaOnline.Server.Migrations
                     b.ToTable("SupplierManagers");
                 });
 
+            modelBuilder.Entity("TiendaOnline.Server.Models.SupplierSettlement", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("CommissionAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("GrossAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("NetAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PaymentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ReferenceTransactionId")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("SettlementDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("SupplierId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("PaymentId");
+
+                    b.HasIndex("SupplierId");
+
+                    b.ToTable("SupplierSettlements");
+                });
+
             modelBuilder.Entity("TiendaOnline.Server.Models.Wishlist", b =>
                 {
                     b.Property<int>("Id")
@@ -2016,7 +2081,7 @@ namespace TiendaOnline.Server.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
-                    b.HasOne("TiendaOnline.Server.Context.ApplicationRole", null)
+                    b.HasOne("TiendaOnline.Server.Models.ApplicationRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2043,7 +2108,7 @@ namespace TiendaOnline.Server.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
-                    b.HasOne("TiendaOnline.Server.Context.ApplicationRole", null)
+                    b.HasOne("TiendaOnline.Server.Models.ApplicationRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2282,8 +2347,7 @@ namespace TiendaOnline.Server.Migrations
                     b.HasOne("TiendaOnline.Server.Models.Supplier", "Supplier")
                         .WithMany("Payments")
                         .HasForeignKey("SupplierId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Order");
 
@@ -2427,6 +2491,31 @@ namespace TiendaOnline.Server.Migrations
                     b.Navigation("Supplier");
                 });
 
+            modelBuilder.Entity("TiendaOnline.Server.Models.SupplierSettlement", b =>
+                {
+                    b.HasOne("TiendaOnline.Server.Models.Order", "Order")
+                        .WithMany()
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TiendaOnline.Server.Models.Payment", "Payment")
+                        .WithMany()
+                        .HasForeignKey("PaymentId");
+
+                    b.HasOne("TiendaOnline.Server.Models.Supplier", "Supplier")
+                        .WithMany("SupplierSettlements")
+                        .HasForeignKey("SupplierId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Payment");
+
+                    b.Navigation("Supplier");
+                });
+
             modelBuilder.Entity("TiendaOnline.Server.Models.Wishlist", b =>
                 {
                     b.HasOne("TiendaOnline.Server.Models.Customer", "Customer")
@@ -2542,6 +2631,8 @@ namespace TiendaOnline.Server.Migrations
                     b.Navigation("Products");
 
                     b.Navigation("Services");
+
+                    b.Navigation("SupplierSettlements");
                 });
 #pragma warning restore 612, 618
         }

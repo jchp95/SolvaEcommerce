@@ -4,11 +4,11 @@ using TiendaOnline.Server.Models;
 
 namespace TiendaOnline.Server.Services
 {
-    public class ProductService : IProductService
+    public class ProductsService : IProductService
     {
         private readonly ApplicationDbContext _context;
 
-        public ProductService(ApplicationDbContext context)
+        public ProductsService(ApplicationDbContext context)
         {
             _context = context;
         }

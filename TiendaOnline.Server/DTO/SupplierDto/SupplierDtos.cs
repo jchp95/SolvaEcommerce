@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace TiendaOnline.Server.DTO.Supplier
+namespace TiendaOnline.Server.DTO.SupplierDto
 {
     public class SupplierCreateDto
     {

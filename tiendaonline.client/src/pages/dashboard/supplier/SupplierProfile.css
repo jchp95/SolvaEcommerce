@@ -401,10 +401,6 @@
         font-size: 1.5rem !important;
     }
     
-    .profile-actions {
-        flex-direction: column !important;
-    }
-    
     .document-card-body {
         flex-direction: column;
         text-align: center;

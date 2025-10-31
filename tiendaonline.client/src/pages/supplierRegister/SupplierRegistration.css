@@ -24,6 +24,7 @@
 }
 
 .registration-header {
+    display: block;
     background: rgba(30, 30, 39, 0.8) !important;
     backdrop-filter: blur(12px) !important;
     -webkit-backdrop-filter: blur(12px) !important;

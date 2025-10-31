@@ -6,7 +6,7 @@ using TiendaOnline.Server.Context;
 using TiendaOnline.Server.Interfaces.Categories;
 using TiendaOnline.Server.Models;
 
-namespace TiendaOnline.Server.Services.Categories
+namespace TiendaOnline.Server.Services
 {
     public class CategoryService : ICategoryService
     {

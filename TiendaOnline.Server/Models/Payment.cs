@@ -12,8 +12,8 @@ namespace TiendaOnline.Server.Models
         [Required]
         public int OrderId { get; set; }
 
-        [Required]
-        public int SupplierId { get; set; }
+        // En el modelo de marketplace (pago único a la plataforma) el Payment puede no estar asociado a un supplier
+        public int? SupplierId { get; set; }
 
         // INFORMACIÓN DEL PAGO
         [Required]
@@ -76,7 +76,7 @@ namespace TiendaOnline.Server.Models
 
         // PROPIEDADES DE NAVEGACIÓN
         public virtual Order Order { get; set; } = null!;
-        public virtual Supplier Supplier { get; set; } = null!;
+        public virtual Supplier? Supplier { get; set; } = null!;
 
         // PROPIEDADES CALCULADAS [NotMapped]
         [NotMapped]

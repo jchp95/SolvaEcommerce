@@ -6,7 +6,7 @@ using TiendaOnline.Server.Interfaces.Categories;
 using TiendaOnline.Server.Models;
 using TiendaOnline.Server.Services;
 
-namespace TiendaOnline.Server.Controllers.Categories
+namespace TiendaOnline.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

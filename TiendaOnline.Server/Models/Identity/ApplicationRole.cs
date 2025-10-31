@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 
-namespace TiendaOnline.Server.Context;
+namespace TiendaOnline.Server.Models;
 public class ApplicationRole : IdentityRole
 {
     public string Description { get; set; }

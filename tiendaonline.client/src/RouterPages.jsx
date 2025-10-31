@@ -23,6 +23,7 @@ import ContactUs from './pages/contact/ContactUs';
 import About from './pages/about/About';
 import SupplierRegistration from './pages/supplierRegister/SupplierRegistration';
 import SupplierProfile from './pages/dashboard/supplier/SupplierProfile';
+import SupplierDashboard from './pages/dashboard/SupplierDashboard';
 import CustomerProfile from './pages/profile/CustomerProfile';
 
 
@@ -182,6 +183,22 @@ const AnimatedRoutes = () => {
                                 transition={{ duration: 0.3 }}
                             >
                                 <SupplierProfile />
+                            </motion.div>
+                        </ProtectedRoute>
+                    }
+                />
+                {/* Dashboard del proveedor (protegida) */}
+                <Route
+                    path="/supplier/dashboard"
+                    element={
+                        <ProtectedRoute>
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                transition={{ duration: 0.3 }}
+                            >
+                                <SupplierDashboard />
                             </motion.div>
                         </ProtectedRoute>
                     }

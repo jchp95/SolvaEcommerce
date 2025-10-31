@@ -1,23 +1,22 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TiendaOnline.Server.DTO.SupplierDto;
 using TiendaOnline.Server.Interfaces;
 using TiendaOnline.Server.Models;
-using Microsoft.Extensions.Logging;
-using TiendaOnline.Server.DTO.Supplier;
 
 namespace TiendaOnline.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     [Produces("application/json")]
-    public class SuppliersController : ControllerBase
+    public class ProveedoresController : ControllerBase
     {
-        private readonly ISupplierService _supplierService;
-        private readonly ILogger<SuppliersController> _logger;
+        private readonly IProveedoresService _proveedoresService;
+        private readonly ILogger<ProveedoresController> _logger;
 
-        public SuppliersController(ISupplierService supplierService, ILogger<SuppliersController> logger)
+        public ProveedoresController(IProveedoresService proveedoresService, ILogger<ProveedoresController> logger)
         {
-            _supplierService = supplierService;
+            _proveedoresService = proveedoresService;
             _logger = logger;
         }
 
@@ -35,7 +34,7 @@ namespace TiendaOnline.Server.Controllers
             
             try
             {
-                var result = await _supplierService.GetAllSuppliersAsync();
+                var result = await _proveedoresService.GetAllSuppliersAsync();
                 
                 if (!result.Success)
                 {
@@ -68,7 +67,7 @@ namespace TiendaOnline.Server.Controllers
             
             try
             {
-                var result = await _supplierService.GetSupplierByIdAsync(id);
+                var result = await _proveedoresService.GetSupplierByIdAsync(id);
                 
                 if (!result.Success)
                 {
@@ -107,7 +106,7 @@ namespace TiendaOnline.Server.Controllers
             
             try
             {
-                var result = await _supplierService.GetSupplierByUserIdAsync(userId);
+                var result = await _proveedoresService.GetSupplierByUserIdAsync(userId);
                 
                 if (!result.Success)
                 {
@@ -257,7 +256,7 @@ namespace TiendaOnline.Server.Controllers
                 IsVerified = false
             };
 
-            var result = await _supplierService.CreateSupplierAsync(supplier);
+            var result = await _proveedoresService.CreateSupplierAsync(supplier);
 
             if (!result.Success)
             {
@@ -300,7 +299,7 @@ namespace TiendaOnline.Server.Controllers
             
             try
             {
-                var supplierResult = await _supplierService.GetSupplierByIdAsync(id);
+                var supplierResult = await _proveedoresService.GetSupplierByIdAsync(id);
                 if (!supplierResult.Success)
                 {
                     _logger.LogWarning("Proveedor no encontrado al solicitar documento: ID {SupplierId}", id);
@@ -375,7 +374,7 @@ namespace TiendaOnline.Server.Controllers
             try
             {
                 // Obtener el proveedor existente
-                var existingSupplierResult = await _supplierService.GetSupplierByIdAsync(id);
+                var existingSupplierResult = await _proveedoresService.GetSupplierByIdAsync(id);
                 if (!existingSupplierResult.Success)
                 {
                     _logger.LogWarning("Proveedor no encontrado para actualización: ID {SupplierId}", id);
@@ -430,7 +429,7 @@ namespace TiendaOnline.Server.Controllers
                     IdDocument = existingSupplier.IdDocument
                 };
 
-                var result = await _supplierService.UpdateSupplierAsync(id, supplierToUpdate);
+                var result = await _proveedoresService.UpdateSupplierAsync(id, supplierToUpdate);
 
                 if (!result.Success)
                 {
@@ -513,7 +512,7 @@ namespace TiendaOnline.Server.Controllers
             
             try
             {
-                var result = await _supplierService.DeleteSupplierAsync(id);
+                var result = await _proveedoresService.DeleteSupplierAsync(id);
                 
                 if (!result.Success)
                 {
@@ -547,7 +546,7 @@ namespace TiendaOnline.Server.Controllers
             
             try
             {
-                var result = await _supplierService.CheckSupplierExistsAsync(companyName, currentId);
+                var result = await _proveedoresService.CheckSupplierExistsAsync(companyName, currentId);
                 
                 if (result.Data)
                 {
@@ -577,7 +576,7 @@ namespace TiendaOnline.Server.Controllers
             
             try
             {
-                var result = await _supplierService.GetActiveSuppliersAsync();
+                var result = await _proveedoresService.GetActiveSuppliersAsync();
                 
                 if (!result.Success)
                 {
@@ -615,7 +614,7 @@ namespace TiendaOnline.Server.Controllers
 
             try
             {
-                var result = await _supplierService.SearchSuppliersAsync(term);
+                var result = await _proveedoresService.SearchSuppliersAsync(term);
                 
                 if (!result.Success)
                 {
@@ -648,7 +647,7 @@ namespace TiendaOnline.Server.Controllers
             
             try
             {
-                var result = await _supplierService.VerifySupplierAsync(id);
+                var result = await _proveedoresService.VerifySupplierAsync(id);
                 
                 if (!result.Success)
                 {
@@ -681,7 +680,7 @@ namespace TiendaOnline.Server.Controllers
             
             try
             {
-                var result = await _supplierService.SuspendSupplierAsync(id);
+                var result = await _proveedoresService.SuspendSupplierAsync(id);
                 
                 if (!result.Success)
                 {
@@ -738,7 +737,7 @@ namespace TiendaOnline.Server.Controllers
 
             try
             {
-                var result = await _supplierService.ActivateSupplierAsync(id);
+                var result = await _proveedoresService.ActivateSupplierAsync(id);
                 
                 if (!result.Success)
                 {
@@ -769,7 +768,7 @@ namespace TiendaOnline.Server.Controllers
             
             try
             {
-                var result = await _supplierService.GetSupplierProductsAsync(id);
+                var result = await _proveedoresService.GetSupplierProductsAsync(id);
                 
                 if (!result.Success)
                 {
@@ -802,7 +801,7 @@ namespace TiendaOnline.Server.Controllers
             
             try
             {
-                var result = await _supplierService.GetSupplierManagersAsync(id);
+                var result = await _proveedoresService.GetSupplierManagersAsync(id);
                 
                 if (!result.Success)
                 {
@@ -850,7 +849,7 @@ namespace TiendaOnline.Server.Controllers
 
             try
             {
-                var result = await _supplierService.AddManagerToSupplierAsync(id, manager);
+                var result = await _proveedoresService.AddManagerToSupplierAsync(id, manager);
                 
                 if (!result.Success)
                 {
@@ -884,7 +883,7 @@ namespace TiendaOnline.Server.Controllers
 
             try
             {
-                var result = await _supplierService.RemoveManagerFromSupplierAsync(supplierId, managerUserId);
+                var result = await _proveedoresService.RemoveManagerFromSupplierAsync(supplierId, managerUserId);
 
                 if (!result.Success)
                 {

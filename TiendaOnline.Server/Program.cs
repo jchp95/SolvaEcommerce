@@ -8,18 +8,23 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Text;
-using TiendaOnline;
 using TiendaOnline.Server.Context;
-using TiendaOnline.Server.Models; // ← AGREGAR este using
+using TiendaOnline.Server.Models; 
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.AspNetCore.Http.Features;
 using TiendaOnline.Server.Services;
+using TiendaOnline.Server.Interfaces;
+using Stripe;
 using TiendaOnline.Interfaces;
 using TiendaOnline.Server.Interfaces.Categories;
-using TiendaOnline.Server.Services.Categories;
-using TiendaOnline.Server.Interfaces;
+using TiendaOnline.Server.Interfaces.Payments;
+using TiendaOnline.Server.Interfaces.Supplier;
+
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Configuración de Stripe
+StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
 
 // Configuración robusta de Meilisearch
 var meilisearchConfig = builder.Configuration.GetSection("Meilisearch");
@@ -66,8 +71,11 @@ builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<MeiliProductIndexService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
-builder.Services.AddScoped<IProductService, ProductService>();
-builder.Services.AddScoped<ISupplierService, SupplierService>();
+// Desambiguar: especificar la implementación del proyecto para IProductService
+builder.Services.AddScoped<IProductService, ProductsService>();
+builder.Services.AddScoped<IProveedoresService, ProveedoresService>();
+builder.Services.AddScoped<ISupplierDashboardService, SupplierDashboardService>();
+builder.Services.AddScoped<IStripeService, StripeService>();
 
 // Configurar el tamaño máximo de archivos para uploads
 builder.Services.Configure<IISServerOptions>(options =>

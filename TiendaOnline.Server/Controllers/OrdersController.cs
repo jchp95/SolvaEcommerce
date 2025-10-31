@@ -112,8 +112,9 @@ namespace TiendaOnline.Server.Controllers
 
                 // 3. Calcular totales
                 var subtotal = cartItems.Sum(item => item.UnitPrice * item.Quantity);
-                var taxTotal = subtotal * 0.10m; // 10% de impuestos
-                var shippingTotal = subtotal > 50 ? 0 : 5.99m; // Envío gratis si >$50
+                // No aplicamos impuestos al cliente por ahora (0%)
+                var taxTotal = 0m;
+                var shippingTotal = subtotal > 50 ? 0 : 2.99m; // Envío gratis si >$50
                 var discountTotal = 0m; // Por ahora sin descuentos
                 var orderTotal = subtotal + taxTotal + shippingTotal - discountTotal;
 
@@ -143,7 +144,7 @@ namespace TiendaOnline.Server.Controllers
                 {
                     OrderNumber = GenerateOrderNumber(),
                     OrderType = "product",
-                    CustomerId = customer?.Id ?? 1, // ID por defecto para usuarios anónimos
+                    CustomerId = customer?.Id ?? 1, // ID por defecto para usuario
                     OwnerUserId = userId, // ID del usuario autenticado (null para anónimos)
                     CustomerEmail = dto.CustomerEmail,
                     CustomerPhone = dto.CustomerPhone ?? "",
@@ -196,7 +197,8 @@ namespace TiendaOnline.Server.Controllers
                         // Cantidades y precios
                         Quantity = cartItem.Quantity,
                         UnitPrice = cartItem.UnitPrice,
-                        TaxAmount = cartItem.UnitPrice * cartItem.Quantity * 0.10m,
+                        // Sin impuestos al cliente por ahora
+                        TaxAmount = 0m,
                         DiscountAmount = 0m,
                         TotalPrice = cartItem.UnitPrice * cartItem.Quantity,
                         

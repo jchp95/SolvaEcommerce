@@ -35,7 +35,7 @@ export const SupplierService = {
 
   // Obtener el proveedor del usuario actual
    getMySupplier: () =>
-    apiClient.get('/Suppliers/my-supplier')
+    apiClient.get('/Proveedores/my-supplier')
       .then(response => {
         console.log('Supplier API Response:', response.data); // Para debug
         return response.data.data; // Acceder a response.data.data
@@ -91,5 +91,33 @@ export const SupplierService = {
   // Eliminar manager del proveedor
   removeManager: (supplierId, managerUserId) =>
     apiClient.delete(`/Suppliers/${supplierId}/managers/${managerUserId}`)
+      .then(response => response.data),
+
+  // Obtener dashboard del proveedor
+  getDashboard: (supplierId) =>
+    apiClient.get(`/suppliers/Dashboard/${supplierId}/dashboard`)
+      .then(response => response.data),
+
+  // ==================== STRIPE CONNECT ====================
+  
+  // Crear cuenta de Stripe Connect
+  createStripeAccount: () =>
+    apiClient.post('/Stripe/connect/create-account')
+      .then(response => response.data),
+
+  // Obtener link de onboarding de Stripe
+  getStripeOnboardingLink: (returnUrl, refreshUrl) =>
+    apiClient.get('/Stripe/connect/onboarding-link', {
+      params: { returnUrl, refreshUrl }
+    }).then(response => response.data),
+
+  // Obtener estado de cuenta de Stripe
+  getStripeAccountStatus: () =>
+    apiClient.get('/Stripe/connect/account-status')
+      .then(response => response.data),
+
+  // Obtener link al dashboard de Stripe
+  getStripeDashboardLink: () =>
+    apiClient.post('/Stripe/connect/dashboard-link')
       .then(response => response.data),
 };
